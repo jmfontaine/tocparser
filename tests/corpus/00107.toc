@@ -1,0 +1,9 @@
+CD_ROM_XA
+
+CATALOG "0000000000000"
+
+// Track 1
+TRACK MODE2_FORM_MIX
+NO COPY
+DATAFILE "track_1" 07:34:66 // length in bytes: 79694976
+

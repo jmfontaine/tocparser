@@ -1,0 +1,240 @@
+CD_DA
+
+CD_TEXT {
+  LANGUAGE_MAP {
+    0: 9
+  }
+  LANGUAGE 0 {
+    TITLE "The Killer - Score "
+    PERFORMER "Trent Reznor and Atticus Ross"
+    COMPOSER "Trent Reznor and Atticus Ross"
+    SIZE_INFO { 0,  1, 15,  0, 22, 40,  0, 40,  0,  0,  0,  0,
+                0,  0,  0,  0,  0,  0,  0,  3, 104,  0,  0,  0,
+                0,  0,  0,  0,  9,  0,  0,  0,  0,  0,  0,  0}
+  }
+}
+
+// Track 1
+TRACK AUDIO
+NO COPY
+NO PRE_EMPHASIS
+TWO_CHANNEL_AUDIO
+CD_TEXT {
+  LANGUAGE 0 {
+    TITLE "The Killer"
+    PERFORMER "Trent Reznor and Atticus Ross"
+    COMPOSER "Trent Reznor and Atticus Ross"
+  }
+}
+FILE "track.wav" 0 00:47:00
+
+
+// Track 2
+TRACK AUDIO
+NO COPY
+NO PRE_EMPHASIS
+TWO_CHANNEL_AUDIO
+CD_TEXT {
+  LANGUAGE 0 {
+    TITLE "Fuck."
+    PERFORMER "Trent Reznor and Atticus Ross"
+    COMPOSER "Trent Reznor and Atticus Ross"
+  }
+}
+FILE "track.wav" 00:47:00 05:14:71
+
+
+// Track 3
+TRACK AUDIO
+NO COPY
+NO PRE_EMPHASIS
+TWO_CHANNEL_AUDIO
+CD_TEXT {
+  LANGUAGE 0 {
+    TITLE "The Hideout"
+    PERFORMER "Trent Reznor and Atticus Ross"
+    COMPOSER "Trent Reznor and Atticus Ross"
+  }
+}
+FILE "track.wav" 06:01:71 02:20:00
+
+
+// Track 4
+TRACK AUDIO
+NO COPY
+NO PRE_EMPHASIS
+TWO_CHANNEL_AUDIO
+CD_TEXT {
+  LANGUAGE 0 {
+    TITLE "Stick to the Plan"
+    PERFORMER "Trent Reznor and Atticus Ross"
+    COMPOSER "Trent Reznor and Atticus Ross"
+  }
+}
+FILE "track.wav" 08:21:71 03:45:11
+
+
+// Track 5
+TRACK AUDIO
+NO COPY
+NO PRE_EMPHASIS
+TWO_CHANNEL_AUDIO
+CD_TEXT {
+  LANGUAGE 0 {
+    TITLE "The Sunshine State"
+    PERFORMER "Trent Reznor and Atticus Ross"
+    COMPOSER "Trent Reznor and Atticus Ross"
+  }
+}
+FILE "track.wav" 12:07:07 03:07:71
+
+
+// Track 6
+TRACK AUDIO
+NO COPY
+NO PRE_EMPHASIS
+TWO_CHANNEL_AUDIO
+CD_TEXT {
+  LANGUAGE 0 {
+    TITLE "Consequences are Automatic"
+    PERFORMER "Trent Reznor and Atticus Ross"
+    COMPOSER "Trent Reznor and Atticus Ross"
+  }
+}
+FILE "track.wav" 15:15:03 04:57:15
+
+
+// Track 7
+TRACK AUDIO
+NO COPY
+NO PRE_EMPHASIS
+TWO_CHANNEL_AUDIO
+CD_TEXT {
+  LANGUAGE 0 {
+    TITLE "Empathy Is Weakness"
+    PERFORMER "Trent Reznor and Atticus Ross"
+    COMPOSER "Trent Reznor and Atticus Ross"
+  }
+}
+FILE "track.wav" 20:12:18 02:27:07
+
+
+// Track 8
+TRACK AUDIO
+NO COPY
+NO PRE_EMPHASIS
+TWO_CHANNEL_AUDIO
+CD_TEXT {
+  LANGUAGE 0 {
+    TITLE "Never Hesitate"
+    PERFORMER "Trent Reznor and Atticus Ross"
+    COMPOSER "Trent Reznor and Atticus Ross"
+  }
+}
+FILE "track.wav" 22:39:25 04:25:33
+
+
+// Track 9
+TRACK AUDIO
+NO COPY
+NO PRE_EMPHASIS
+TWO_CHANNEL_AUDIO
+CD_TEXT {
+  LANGUAGE 0 {
+    TITLE "The Brute, pt 1"
+    PERFORMER "Trent Reznor and Atticus Ross"
+    COMPOSER "Trent Reznor and Atticus Ross"
+  }
+}
+FILE "track.wav" 27:04:58 01:33:22
+
+
+// Track 10
+TRACK AUDIO
+NO COPY
+NO PRE_EMPHASIS
+TWO_CHANNEL_AUDIO
+CD_TEXT {
+  LANGUAGE 0 {
+    TITLE "The Brute, pt 2"
+    PERFORMER "Trent Reznor and Atticus Ross"
+    COMPOSER "Trent Reznor and Atticus Ross"
+  }
+}
+FILE "track.wav" 28:38:05 04:15:63
+
+
+// Track 11
+TRACK AUDIO
+NO COPY
+NO PRE_EMPHASIS
+TWO_CHANNEL_AUDIO
+CD_TEXT {
+  LANGUAGE 0 {
+    TITLE "Intruder"
+    PERFORMER "Trent Reznor and Atticus Ross"
+    COMPOSER "Trent Reznor and Atticus Ross"
+  }
+}
+FILE "track.wav" 32:53:68 04:25:71
+
+
+// Track 12
+TRACK AUDIO
+NO COPY
+NO PRE_EMPHASIS
+TWO_CHANNEL_AUDIO
+CD_TEXT {
+  LANGUAGE 0 {
+    TITLE "The Expert"
+    PERFORMER "Trent Reznor and Atticus Ross"
+    COMPOSER "Trent Reznor and Atticus Ross"
+  }
+}
+FILE "track.wav" 37:19:64 05:31:22
+
+
+// Track 13
+TRACK AUDIO
+NO COPY
+NO PRE_EMPHASIS
+TWO_CHANNEL_AUDIO
+CD_TEXT {
+  LANGUAGE 0 {
+    TITLE "Gonna Have to Call You Back, Marvin"
+    PERFORMER "Trent Reznor and Atticus Ross"
+    COMPOSER "Trent Reznor and Atticus Ross"
+  }
+}
+FILE "track.wav" 42:51:11 01:31:60
+
+
+// Track 14
+TRACK AUDIO
+NO COPY
+NO PRE_EMPHASIS
+TWO_CHANNEL_AUDIO
+CD_TEXT {
+  LANGUAGE 0 {
+    TITLE "One of the Many"
+    PERFORMER "Trent Reznor and Atticus Ross"
+    COMPOSER "Trent Reznor and Atticus Ross"
+  }
+}
+FILE "track.wav" 44:22:71 06:41:63
+
+
+// Track 15
+TRACK AUDIO
+NO COPY
+NO PRE_EMPHASIS
+TWO_CHANNEL_AUDIO
+CD_TEXT {
+  LANGUAGE 0 {
+    TITLE "Trailer"
+    PERFORMER "Trent Reznor and Atticus Ross"
+    COMPOSER "Trent Reznor and Atticus Ross"
+  }
+}
+FILE "track.wav" 51:04:59 01:26:11
+

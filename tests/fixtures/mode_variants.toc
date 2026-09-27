@@ -1,0 +1,26 @@
+// Every track mode plus both sub-channel modes.
+CD_ROM_XA
+
+// Track 1
+TRACK MODE1_RAW
+DATAFILE "t1" 04:00:00
+
+// Track 2
+TRACK MODE2 RW
+DATAFILE "t2" 04:00:00
+
+// Track 3
+TRACK MODE2_RAW RW_RAW
+DATAFILE "t3" 04:00:00
+
+// Track 4
+TRACK MODE2_FORM1
+DATAFILE "t4" 04:00:00
+
+// Track 5
+TRACK MODE2_FORM2
+DATAFILE "t5" 04:00:00
+
+// Track 6
+TRACK MODE2_FORM_MIX
+DATAFILE "t6" #2048 04:00:00

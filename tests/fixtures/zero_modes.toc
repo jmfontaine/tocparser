@@ -1,0 +1,13 @@
+// ZERO with an explicit data mode and sub-channel mode, including MODE0,
+// which cdrdao's grammar only reaches here.
+CD_ROM
+
+// Track 1
+TRACK MODE1
+DATAFILE "t1" 04:00:00
+ZERO MODE0 00:02:00
+
+// Track 2
+TRACK MODE2
+DATAFILE "t2" 04:00:00
+ZERO MODE2 RW 00:02:00

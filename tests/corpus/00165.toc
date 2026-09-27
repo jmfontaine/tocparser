@@ -1,0 +1,176 @@
+CD_DA
+
+CD_TEXT {
+  LANGUAGE 0 {
+    TITLE "Pastors of Muppets"
+    PERFORMER "Pastors of Muppets"
+    UPC_EAN ""
+    SIZE_INFO { 0,  1, 11,  0, 16, 19,  0,  0,  0,  0,  0,  0,
+                0,  0,  0,  0,  0,  0,  1,  3, 38,  0,  0,  0,
+                0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0}
+  }
+}
+
+// Track 1
+TRACK AUDIO
+NO COPY
+NO PRE_EMPHASIS
+TWO_CHANNEL_AUDIO
+CD_TEXT {
+  LANGUAGE 0 {
+    TITLE " 1-Blind"
+    PERFORMER "Pastors of Muppets"
+  }
+}
+FILE "track.wav" 0 03:44:65
+
+
+// Track 2
+TRACK AUDIO
+NO COPY
+NO PRE_EMPHASIS
+TWO_CHANNEL_AUDIO
+CD_TEXT {
+  LANGUAGE 0 {
+    TITLE "2-Master of Puppets"
+    PERFORMER "Pastors of Muppets"
+  }
+}
+FILE "track.wav" 03:44:65 05:48:21
+START 00:00:33
+
+
+// Track 3
+TRACK AUDIO
+NO COPY
+NO PRE_EMPHASIS
+TWO_CHANNEL_AUDIO
+CD_TEXT {
+  LANGUAGE 0 {
+    TITLE "3-Them Bones"
+    PERFORMER "Pastors of Muppets"
+  }
+}
+FILE "track.wav" 09:33:11 02:37:03
+START 00:01:11
+
+
+// Track 4
+TRACK AUDIO
+NO COPY
+NO PRE_EMPHASIS
+TWO_CHANNEL_AUDIO
+CD_TEXT {
+  LANGUAGE 0 {
+    TITLE "4-Duality"
+    PERFORMER "Pastors of Muppets"
+  }
+}
+FILE "track.wav" 12:10:14 03:31:12
+START 00:01:23
+
+
+// Track 5
+TRACK AUDIO
+NO COPY
+NO PRE_EMPHASIS
+TWO_CHANNEL_AUDIO
+CD_TEXT {
+  LANGUAGE 0 {
+    TITLE "5-In Bloom"
+    PERFORMER "Pastors of Muppets"
+  }
+}
+FILE "track.wav" 15:41:26 03:43:20
+START 00:02:00
+
+
+// Track 6
+TRACK AUDIO
+NO COPY
+NO PRE_EMPHASIS
+TWO_CHANNEL_AUDIO
+CD_TEXT {
+  LANGUAGE 0 {
+    TITLE "6-Toxicity"
+    PERFORMER "Pastors of Muppets"
+  }
+}
+FILE "track.wav" 19:24:46 03:38:50
+START 00:02:00
+
+
+// Track 7
+TRACK AUDIO
+NO COPY
+NO PRE_EMPHASIS
+TWO_CHANNEL_AUDIO
+CD_TEXT {
+  LANGUAGE 0 {
+    TITLE "7-Fear of the Dark"
+    PERFORMER "Pastors of Muppets"
+  }
+}
+FILE "track.wav" 23:03:21 05:20:09
+START 00:03:67
+
+
+// Track 8
+TRACK AUDIO
+NO COPY
+NO PRE_EMPHASIS
+TWO_CHANNEL_AUDIO
+CD_TEXT {
+  LANGUAGE 0 {
+    TITLE "8-Symphony of Desttruction"
+    PERFORMER "Pastors of Muppets"
+  }
+}
+FILE "track.wav" 28:23:30 03:56:37
+START 00:01:25
+
+
+// Track 9
+TRACK AUDIO
+NO COPY
+NO PRE_EMPHASIS
+TWO_CHANNEL_AUDIO
+CD_TEXT {
+  LANGUAGE 0 {
+    TITLE "9-Thunderstruck"
+    PERFORMER "Pastors of Muppets"
+  }
+}
+FILE "track.wav" 32:19:67 04:32:73
+START 00:02:00
+
+
+// Track 10
+TRACK AUDIO
+NO COPY
+NO PRE_EMPHASIS
+TWO_CHANNEL_AUDIO
+CD_TEXT {
+  LANGUAGE 0 {
+    TITLE "10-You could be mine"
+    PERFORMER "Pastors of Muppets"
+  }
+}
+FILE "track.wav" 36:52:65 04:44:12
+START 00:00:74
+
+
+// Track 11
+TRACK AUDIO
+NO COPY
+NO PRE_EMPHASIS
+TWO_CHANNEL_AUDIO
+CD_TEXT {
+  LANGUAGE 0 {
+    TITLE "11-One"
+    PERFORMER "Pastors of Muppets"
+  }
+}
+FILE "track.wav" 41:37:02 06:18:17
+START 00:02:00
+

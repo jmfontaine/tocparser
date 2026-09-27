@@ -1,0 +1,9 @@
+CD_ROM
+
+CATALOG "0044004414128"
+
+// Track 1
+TRACK MODE1
+NO COPY
+DATAFILE "track_1" 24:47:14 // length in bytes: 228431872
+

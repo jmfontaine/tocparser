@@ -1,0 +1,6 @@
+// cdrdao(1) "Track with 10 second pre-gap containing audio data from a raw
+// file". The MSF fields are not zero padded, which cdrdao accepts.
+CD_DA
+TRACK AUDIO
+FILE "raw.cdr" 0
+START 0:10:0

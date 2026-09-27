@@ -1,0 +1,24 @@
+// ENCODING_MS_JIS (cdrdao 1.2.5 and later) on the disc's CD-TEXT block, which
+// its tracks follow. The title is UTF-8 text; the performer is the same text
+// written as CP932 bytes with octal escapes.
+CD_DA
+
+CD_TEXT {
+  LANGUAGE_MAP {
+    0: 105
+  }
+  LANGUAGE 0 {
+    ENCODING_MS_JIS
+    TITLE "日本"
+    PERFORMER "\223\372\226\173"
+  }
+}
+
+// Track 1
+TRACK AUDIO
+CD_TEXT {
+  LANGUAGE 0 {
+    TITLE "東京"
+  }
+}
+FILE "a.wav" 0 04:00:00

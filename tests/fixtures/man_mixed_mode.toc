@@ -1,0 +1,14 @@
+// cdrdao(1) "Mixed mode CD with a data track as first track followed by two
+// audio tracks".
+CD_ROM
+ TRACK MODE1
+ DATAFILE "d"
+ ZERO 00:02:00 // post-gap
+
+TRACK AUDIO
+ SILENCE 00:02:00 // pre-gap
+ START
+ FILE "a.wav" 0
+
+TRACK AUDIO
+ FILE "a.wav" 0

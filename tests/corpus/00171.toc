@@ -1,0 +1,180 @@
+CD_DA
+
+CATALOG "0039841551921"
+CD_TEXT {
+  LANGUAGE_MAP {
+    0: 9
+  }
+  LANGUAGE 0 {
+    TITLE "Savage Sinusoid"
+    PERFORMER "Igorrr"
+    SIZE_INFO { 0,  1, 11,  0, 13,  3,  0,  0,  0,  0,  0,  0,
+                0,  0,  0,  0,  0,  0,  0,  3, 18,  0,  0,  0,
+                0,  0,  0,  0,  9,  0,  0,  0,  0,  0,  0,  0}
+  }
+}
+
+// Track 1
+TRACK AUDIO
+COPY
+NO PRE_EMPHASIS
+TWO_CHANNEL_AUDIO
+ISRC "USMBR1712372"
+CD_TEXT {
+  LANGUAGE 0 {
+    TITLE "Viande"
+    PERFORMER "	"
+  }
+}
+FILE "track.wav" 0 01:55:16
+
+
+// Track 2
+TRACK AUDIO
+COPY
+NO PRE_EMPHASIS
+TWO_CHANNEL_AUDIO
+ISRC "USMBR1712373"
+CD_TEXT {
+  LANGUAGE 0 {
+    TITLE "ieuD"
+    PERFORMER "	"
+  }
+}
+FILE "track.wav" 01:55:16 03:55:25
+
+
+// Track 3
+TRACK AUDIO
+COPY
+NO PRE_EMPHASIS
+TWO_CHANNEL_AUDIO
+ISRC "USMBR1712374"
+CD_TEXT {
+  LANGUAGE 0 {
+    TITLE "Houmous"
+    PERFORMER "	"
+  }
+}
+FILE "track.wav" 05:50:41 03:31:42
+
+
+// Track 4
+TRACK AUDIO
+COPY
+NO PRE_EMPHASIS
+TWO_CHANNEL_AUDIO
+ISRC "USMBR1712375"
+CD_TEXT {
+  LANGUAGE 0 {
+    TITLE "Opus Brain"
+    PERFORMER "	"
+  }
+}
+FILE "track.wav" 09:22:08 05:25:53
+
+
+// Track 5
+TRACK AUDIO
+COPY
+NO PRE_EMPHASIS
+TWO_CHANNEL_AUDIO
+ISRC "USMBR1712376"
+CD_TEXT {
+  LANGUAGE 0 {
+    TITLE "Probleme d'emotion"
+    PERFORMER "	"
+  }
+}
+FILE "track.wav" 14:47:61 04:38:00
+
+
+// Track 6
+TRACK AUDIO
+COPY
+NO PRE_EMPHASIS
+TWO_CHANNEL_AUDIO
+ISRC "USMBR1712377"
+CD_TEXT {
+  LANGUAGE 0 {
+    TITLE "Spaghetti Forever"
+    PERFORMER "	"
+  }
+}
+FILE "track.wav" 19:25:61 04:24:00
+
+
+// Track 7
+TRACK AUDIO
+COPY
+NO PRE_EMPHASIS
+TWO_CHANNEL_AUDIO
+ISRC "USMBR1712378"
+CD_TEXT {
+  LANGUAGE 0 {
+    TITLE "Cheval"
+    PERFORMER "	"
+  }
+}
+FILE "track.wav" 23:49:61 03:06:22
+
+
+// Track 8
+TRACK AUDIO
+COPY
+NO PRE_EMPHASIS
+TWO_CHANNEL_AUDIO
+ISRC "USMBR1712379"
+CD_TEXT {
+  LANGUAGE 0 {
+    TITLE "Apopathodiaphulatophobie"
+    PERFORMER "	"
+  }
+}
+FILE "track.wav" 26:56:08 02:02:16
+
+
+// Track 9
+TRACK AUDIO
+COPY
+NO PRE_EMPHASIS
+TWO_CHANNEL_AUDIO
+ISRC "USMBR1712380"
+CD_TEXT {
+  LANGUAGE 0 {
+    TITLE "Va te Foutre"
+    PERFORMER "	"
+  }
+}
+FILE "track.wav" 28:58:24 01:45:34
+
+
+// Track 10
+TRACK AUDIO
+COPY
+NO PRE_EMPHASIS
+TWO_CHANNEL_AUDIO
+ISRC "USMBR1712381"
+CD_TEXT {
+  LANGUAGE 0 {
+    TITLE "Robert"
+    PERFORMER "	"
+  }
+}
+FILE "track.wav" 30:43:58 03:19:15
+
+
+// Track 11
+TRACK AUDIO
+COPY
+NO PRE_EMPHASIS
+TWO_CHANNEL_AUDIO
+ISRC "USMBR1712382"
+CD_TEXT {
+  LANGUAGE 0 {
+    TITLE "Au Revoir"
+    PERFORMER "	"
+  }
+}
+FILE "track.wav" 34:02:73 05:26:40
+

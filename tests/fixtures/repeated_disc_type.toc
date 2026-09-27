@@ -1,0 +1,5 @@
+// If multiple flags are given the last one will take effect.
+CD_ROM
+CD_DA
+TRACK AUDIO
+FILE "a.wav" 0

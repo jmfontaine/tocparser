@@ -1,0 +1,144 @@
+CD_DA
+
+CATALOG "3760053843067"
+CD_TEXT {
+  LANGUAGE_MAP {
+    0: 9
+  }
+  LANGUAGE 0 {
+    TITLE "Providence EP"
+    PERFORMER "Mars Red Sky"
+    SONGWRITER ""
+    COMPOSER ""
+    ARRANGER ""
+    MESSAGE ""
+    GENRE { 0,  0, 72, 101, 97, 118, 121, 32, 82, 111, 99, 107,
+               32, 80, 115, 121, 99, 104, 101, 100, 101, 108, 105, 99,
+                0}
+    SIZE_INFO { 0,  1,  7,  0, 12,  2,  6, 26, 26,  3,  0,  3,
+                0,  0,  0,  0,  0,  0,  0,  3, 80,  0,  0,  0,
+                0,  0,  0,  0,  9,  0,  0,  0,  0,  0,  0,  0}
+  }
+}
+
+// Track 1
+TRACK AUDIO
+NO COPY
+NO PRE_EMPHASIS
+TWO_CHANNEL_AUDIO
+ISRC "FR1PP1501580"
+CD_TEXT {
+  LANGUAGE 0 {
+    TITLE "Shot In Providence"
+    SONGWRITER "Julien Pras"
+    COMPOSER "Julien Pras, Jimmy Kinast, Mathieu Gazeau  "
+    ARRANGER "Julien Pras, Jimmy Kinast, Mathieu Gazeau  "
+  }
+}
+FILE "track.wav" 0 08:11:29
+
+
+// Track 2
+TRACK AUDIO
+NO COPY
+NO PRE_EMPHASIS
+TWO_CHANNEL_AUDIO
+ISRC "FR1PP1501590"
+CD_TEXT {
+  LANGUAGE 0 {
+    TITLE "The Homesick Deaf"
+    COMPOSER "Julien Pras, Jimmy Kinast, Mathieu Gazeau  "
+    ARRANGER "Julien Pras, Jimmy Kinast, Mathieu Gazeau  "
+    MESSAGE "Featuring Julia Al Abed "
+  }
+}
+FILE "track.wav" 08:11:29 04:35:39
+START 00:02:00
+
+
+// Track 3
+TRACK AUDIO
+NO COPY
+NO PRE_EMPHASIS
+TWO_CHANNEL_AUDIO
+ISRC "FR1PP1501600"
+CD_TEXT {
+  LANGUAGE 0 {
+    TITLE "Sapphire Vessel"
+    SONGWRITER "Julien Pras"
+    COMPOSER "Julien Pras, Jimmy Kinast, Mathieu Gazeau  "
+    ARRANGER "Julien Pras, Jimmy Kinast, Mathieu Gazeau  "
+  }
+}
+FILE "track.wav" 12:46:68 06:48:28
+
+
+// Track 4
+TRACK AUDIO
+NO COPY
+NO PRE_EMPHASIS
+TWO_CHANNEL_AUDIO
+ISRC "FR1PP1502060"
+CD_TEXT {
+  LANGUAGE 0 {
+    TITLE "Falls (Live)"
+    COMPOSER "Julien Pras, Jimmy Kinast, Benoit Busser "
+    ARRANGER "Julien Pras, Jimmy Kinast, Benoit Busser "
+  }
+}
+FILE "track.wav" 19:35:21 06:40:70
+START 00:01:44
+
+
+// Track 5
+TRACK AUDIO
+NO COPY
+NO PRE_EMPHASIS
+TWO_CHANNEL_AUDIO
+ISRC "FR1PP1502070"
+CD_TEXT {
+  LANGUAGE 0 {
+    TITLE "Be My Guide (Live)"
+    SONGWRITER "Julien Pras"
+    COMPOSER "Julien Pras, Jimmy Kinast, Mathieu Gazeau  "
+    ARRANGER "Julien Pras, Jimmy Kinast, Mathieu Gazeau  "
+  }
+}
+FILE "track.wav" 26:16:16 05:29:57
+
+
+// Track 6
+TRACK AUDIO
+NO COPY
+NO PRE_EMPHASIS
+TWO_CHANNEL_AUDIO
+ISRC "FR1PP1502080"
+CD_TEXT {
+  LANGUAGE 0 {
+    TITLE "Marble Sky (Live)"
+    SONGWRITER "Jimmy Kinast"
+    COMPOSER "Julien Pras, Jimmy Kinast, Benoit Busser"
+    ARRANGER "Julien Pras, Jimmy Kinast, Benoit Busser "
+  }
+}
+FILE "track.wav" 31:45:73 06:51:52
+START 00:01:20
+
+
+// Track 7
+TRACK AUDIO
+NO COPY
+NO PRE_EMPHASIS
+TWO_CHANNEL_AUDIO
+ISRC "FR1PP1502090"
+CD_TEXT {
+  LANGUAGE 0 {
+    TITLE "The Light Beyond (Live)"
+    SONGWRITER "Julien Pras"
+    COMPOSER "Julien Pras, Jimmy Kinast, Mathieu Gazeau  "
+    ARRANGER "Julien Pras, Jimmy Kinast, Mathieu Gazeau  "
+  }
+}
+FILE "track.wav" 38:37:50 09:35:29
+START 00:01:50
+

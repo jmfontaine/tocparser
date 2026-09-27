@@ -1,0 +1,12 @@
+// cdrdao(1) "Composed track with data from different files". A bare START
+// means "at the current accumulated length", so the order of these statements
+// carries meaning.
+CD_DA
+TRACK AUDIO
+FILE "a.wav" 0
+START
+FILE "raw.cdr" 1:0:0 1:0:0
+SILENCE 0:2:0
+FILE "raw.cdr" 2:0:0
+INDEX 2:0:0
+INDEX 4:0:0

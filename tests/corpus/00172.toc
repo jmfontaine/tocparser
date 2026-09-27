@@ -1,0 +1,168 @@
+CD_DA
+
+CATALOG "0190758764429"
+CD_TEXT {
+  LANGUAGE_MAP {
+    0: 8
+  }
+  LANGUAGE 0 {
+    TITLE "Jean-Michel Jarre - Equinoxe Infinity"
+    PERFORMER "Jean-Michel Jarre"
+    DISC_ID "19075 87644 2"
+    CLOSED "Mastered using SADiE v6.1.1"
+    SIZE_INFO { 0,  1, 10,  0, 29, 17,  0,  0,  0,  0,  2,  0,
+                0,  0,  0,  0,  0,  4,  0,  3, 54,  0,  0,  0,
+                0,  0,  0,  0,  8,  0,  0,  0,  0,  0,  0,  0}
+  }
+}
+
+// Track 1
+TRACK AUDIO
+NO COPY
+NO PRE_EMPHASIS
+TWO_CHANNEL_AUDIO
+ISRC "FR0LO1800024"
+CD_TEXT {
+  LANGUAGE 0 {
+    TITLE "THE WATCHERS (movement 1)"
+    PERFORMER "Jean-Michel Jarre"
+  }
+}
+FILE "track.wav" 0 02:58:09
+
+
+// Track 2
+TRACK AUDIO
+NO COPY
+NO PRE_EMPHASIS
+TWO_CHANNEL_AUDIO
+ISRC "FR0LO1800025"
+CD_TEXT {
+  LANGUAGE 0 {
+    TITLE "FLYING TOTEMS (movement 2)"
+    PERFORMER "Jean-Michel Jarre"
+  }
+}
+FILE "track.wav" 02:58:09 03:53:68
+
+
+// Track 3
+TRACK AUDIO
+NO COPY
+NO PRE_EMPHASIS
+TWO_CHANNEL_AUDIO
+ISRC "FR0LO1800026"
+CD_TEXT {
+  LANGUAGE 0 {
+    TITLE "ROBOTS DON'T CRY (movement 3)"
+    PERFORMER "Jean-Michel Jarre"
+  }
+}
+FILE "track.wav" 06:52:02 05:43:72
+
+
+// Track 4
+TRACK AUDIO
+NO COPY
+NO PRE_EMPHASIS
+TWO_CHANNEL_AUDIO
+ISRC "FR0LO1800027"
+CD_TEXT {
+  LANGUAGE 0 {
+    TITLE "ALL THAT YOU LEAVE BEHIND (movement 4)"
+    PERFORMER "Jean-Michel Jarre"
+  }
+}
+FILE "track.wav" 12:35:74 04:00:63
+
+
+// Track 5
+TRACK AUDIO
+NO COPY
+NO PRE_EMPHASIS
+TWO_CHANNEL_AUDIO
+ISRC "FR0LO1800034"
+CD_TEXT {
+  LANGUAGE 0 {
+    TITLE "IF THE WIND COULD SPEAK (movement 5)"
+    PERFORMER "Jean-Michel Jarre"
+  }
+}
+FILE "track.wav" 16:36:62 01:32:13
+
+
+// Track 6
+TRACK AUDIO
+NO COPY
+NO PRE_EMPHASIS
+TWO_CHANNEL_AUDIO
+ISRC "FR0LO1800029"
+CD_TEXT {
+  LANGUAGE 0 {
+    TITLE "INFINITY (movement 6)"
+    PERFORMER "Jean-Michel Jarre"
+  }
+}
+FILE "track.wav" 18:09:00 04:13:60
+
+
+// Track 7
+TRACK AUDIO
+NO COPY
+NO PRE_EMPHASIS
+TWO_CHANNEL_AUDIO
+ISRC "FR0LO1800030"
+CD_TEXT {
+  LANGUAGE 0 {
+    TITLE "MACHINES ARE LEARNING (movement 7)"
+    PERFORMER "Jean-Michel Jarre"
+  }
+}
+FILE "track.wav" 22:22:60 02:07:19
+
+
+// Track 8
+TRACK AUDIO
+NO COPY
+NO PRE_EMPHASIS
+TWO_CHANNEL_AUDIO
+ISRC "FR0LO1800031"
+CD_TEXT {
+  LANGUAGE 0 {
+    TITLE "THE OPENING (movement 8)"
+    PERFORMER "Jean-Michel Jarre"
+  }
+}
+FILE "track.wav" 24:30:04 04:16:15
+
+
+// Track 9
+TRACK AUDIO
+NO COPY
+NO PRE_EMPHASIS
+TWO_CHANNEL_AUDIO
+ISRC "FR0LO1800032"
+CD_TEXT {
+  LANGUAGE 0 {
+    TITLE "DON'T LOOK BACK (movement 9)"
+    PERFORMER "Jean-Michel Jarre"
+    CLOSED ""
+  }
+}
+FILE "track.wav" 28:46:19 03:35:63
+
+
+// Track 10
+TRACK AUDIO
+NO COPY
+NO PRE_EMPHASIS
+TWO_CHANNEL_AUDIO
+ISRC "FR0LO1800033"
+CD_TEXT {
+  LANGUAGE 0 {
+    TITLE "EQUINOXE INFINITY (movement 10)"
+    PERFORMER "Jean-Michel Jarre"
+  }
+}
+FILE "track.wav" 32:22:07 07:32:68
+

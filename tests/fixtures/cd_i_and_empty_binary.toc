@@ -1,0 +1,13 @@
+// CD_I disc type and an empty binary CD-TEXT value.
+CD_I
+
+CD_TEXT {
+  LANGUAGE 0 {
+    TITLE "x"
+    TOC_INFO1 {}
+  }
+}
+
+// Track 1
+TRACK AUDIO
+FILE "a.wav" 0 04:00:00

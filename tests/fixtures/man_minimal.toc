@@ -1,0 +1,5 @@
+// cdrdao(1) "Simple track without pre-gap with all audio data from a WAVE
+// file". Kept here rather than in data/, which holds real cdrdao output.
+CD_DA
+TRACK AUDIO
+FILE "a.wav" 0

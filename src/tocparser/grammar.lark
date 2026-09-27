@@ -1,0 +1,89 @@
+// Grammar for cdrdao TOC files.
+//
+// Derived from cdrdao's own ANTLR grammar, trackdb/TocParser.g at tag
+// rel_1_2_6, and the TOC FILES section of cdrdao(1). Where the two disagree
+// the grammar is the authority: FIRST_TRACK_NO, END, CD_I, MODE0, SWAP,
+// #offset, RESERVED1..RESERVED4, CLOSED, ENCODING_* and the string escapes are
+// all missing from the man page. Rule and token names follow TocParser.g so the
+// two can be compared side by side.
+
+toc: (catalog | disc_type)* first_track_no? cd_text_global? track+
+
+catalog:        "CATALOG" STRING
+disc_type:      DISC_TYPE
+first_track_no: "FIRST_TRACK_NO" INT
+
+track: "TRACK" MODE SUB_CHANNEL_MODE? track_flag* cd_text_track? pregap? \
+       track_statement+ index*
+
+track_flag:         isrc | copy | pre_emphasis | channels
+isrc:               "ISRC" STRING
+copy:               NO? "COPY"
+pre_emphasis:       NO? "PRE_EMPHASIS"
+channels:           CHANNELS
+
+pregap:             "PREGAP" msf
+index:              "INDEX" msf
+
+track_statement:    file | datafile | fifo | silence | zero | start | end
+
+file:               FILE_KEYWORD STRING SWAP? offset? time time?
+datafile:           "DATAFILE" STRING offset? time?
+fifo:               "FIFO" STRING time
+silence:            "SILENCE" time
+zero:               "ZERO" MODE? SUB_CHANNEL_MODE? time
+start:              "START" msf?
+end:                "END" msf?
+
+offset:             "#" INT
+msf:                MSF
+time:               MSF | INT
+
+// A global CD_TEXT block may open with a language map; a track one may not.
+cd_text_global:     "CD_TEXT" "{" language_map? cd_text_block* "}"
+cd_text_track:      "CD_TEXT" "{" cd_text_block* "}"
+
+language_map:       "LANGUAGE_MAP" "{" language_map_entry+ "}"
+language_map_entry: INT ":" language_code
+language_code:      INT | LANGUAGE_EN
+
+// cdrdao 1.2.5 added an optional encoding at the top of a language block.
+cd_text_block:      "LANGUAGE" INT "{" CD_TEXT_ENCODING? cd_text_item* "}"
+cd_text_item:       CD_TEXT_ITEM cd_text_value
+cd_text_value:      STRING | binary_data
+binary_data:        "{" (INT ("," INT)*)? "}"
+
+NO:                 "NO"
+SWAP:               "SWAP"
+LANGUAGE_EN:        "EN"
+CHANNELS:           "TWO_CHANNEL_AUDIO" | "FOUR_CHANNEL_AUDIO"
+FILE_KEYWORD:       "AUDIOFILE" | "FILE"
+DISC_TYPE:          "CD_DA" | "CD_ROM_XA" | "CD_ROM" | "CD_I"
+
+CD_TEXT_ENCODING: "ENCODING_ISO_8859_1" | "ENCODING_ASCII" | "ENCODING_MS_JIS" \
+                | "ENCODING_KOREAN" | "ENCODING_MANDARIN"
+
+// MODE0 is only legal after ZERO; the transformer rejects it as a track mode.
+MODE: "MODE1_RAW" | "MODE1" | "MODE2_FORM_MIX" | "MODE2_FORM1" | "MODE2_FORM2" \
+    | "MODE2_RAW" | "MODE2" | "MODE0" | "AUDIO"
+
+SUB_CHANNEL_MODE:   "RW_RAW" | "RW"
+
+CD_TEXT_ITEM: "TITLE" | "PERFORMER" | "SONGWRITER" | "COMPOSER" | "ARRANGER" \
+            | "MESSAGE" | "DISC_ID" | "GENRE" | "TOC_INFO1" | "TOC_INFO2" \
+            | "RESERVED1" | "RESERVED2" | "RESERVED3" | "RESERVED4" \
+            | "CLOSED" \
+            | "UPC_EAN" | "ISRC" | "SIZE_INFO"
+
+// Inside a string a backslash may only introduce another backslash, a quote,
+// or three digits; cdrdao rejects any other use of one. Raw newlines and tabs
+// are accepted, as cdrdao accepts them.
+STRING: /"(?:\\[0-9][0-9][0-9]|\\["\\]|[^"\\])*"/
+
+MSF.2:   /[0-9]+:[0-9]+:[0-9]+/
+INT:     /[0-9]+/
+COMMENT: /\/\/[^\n]*/
+
+%import common.WS
+%ignore WS
+%ignore COMMENT

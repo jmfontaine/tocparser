@@ -1,0 +1,7 @@
+// Sample and byte counts that are not frame aligned, so they have no MSF form.
+CD_DA
+
+// Track 1
+TRACK AUDIO
+FILE "a.wav" 1234567 7654321
+SILENCE 999

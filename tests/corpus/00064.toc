@@ -1,0 +1,170 @@
+CD_DA
+
+CATALOG "0602527567730"
+CD_TEXT {
+  LANGUAGE_MAP {
+    0: 9
+  }
+  LANGUAGE 0 {
+    TITLE "Pretty Hate Machine"
+    PERFORMER "Nine Inch Nails"
+    SIZE_INFO { 0,  1, 11,  1, 16,  3,  0,  0,  0,  0,  0,  0,
+                0,  0,  0,  0,  0,  0,  0,  3, 21,  0,  0,  0,
+                0,  0,  0,  0,  9,  0,  0,  0,  0,  0,  0,  0}
+  }
+}
+
+// Track 1
+TRACK AUDIO
+NO COPY
+NO PRE_EMPHASIS
+TWO_CHANNEL_AUDIO
+ISRC "TCAAS1032130"
+CD_TEXT {
+  LANGUAGE 0 {
+    TITLE "Head Like A Hole"
+  }
+}
+FILE "track.wav" 0 05:00:12
+
+
+// Track 2
+TRACK AUDIO
+NO COPY
+NO PRE_EMPHASIS
+TWO_CHANNEL_AUDIO
+ISRC "TCAAS1032131"
+CD_TEXT {
+  LANGUAGE 0 {
+    TITLE "Terrible Lie"
+  }
+}
+FILE "track.wav" 05:00:12 04:38:54
+
+
+// Track 3
+TRACK AUDIO
+NO COPY
+NO PRE_EMPHASIS
+TWO_CHANNEL_AUDIO
+ISRC "TCAAS1032132"
+CD_TEXT {
+  LANGUAGE 0 {
+    TITLE "Down In It"
+  }
+}
+FILE "track.wav" 09:38:66 03:46:35
+
+
+// Track 4
+TRACK AUDIO
+NO COPY
+NO PRE_EMPHASIS
+TWO_CHANNEL_AUDIO
+ISRC "TCAAS1032133"
+CD_TEXT {
+  LANGUAGE 0 {
+    TITLE "Sanctified"
+  }
+}
+FILE "track.wav" 13:25:26 05:47:58
+
+
+// Track 5
+TRACK AUDIO
+NO COPY
+NO PRE_EMPHASIS
+TWO_CHANNEL_AUDIO
+ISRC "TCAAS1032134"
+CD_TEXT {
+  LANGUAGE 0 {
+    TITLE "Something I Can Never Have"
+  }
+}
+FILE "track.wav" 19:13:09 05:55:35
+
+
+// Track 6
+TRACK AUDIO
+NO COPY
+NO PRE_EMPHASIS
+TWO_CHANNEL_AUDIO
+ISRC "TCAAS1032135"
+CD_TEXT {
+  LANGUAGE 0 {
+    TITLE "Kinda I Want To"
+  }
+}
+FILE "track.wav" 25:08:44 04:33:10
+
+
+// Track 7
+TRACK AUDIO
+NO COPY
+NO PRE_EMPHASIS
+TWO_CHANNEL_AUDIO
+ISRC "TCAAS1032136"
+CD_TEXT {
+  LANGUAGE 0 {
+    TITLE "Sin"
+  }
+}
+FILE "track.wav" 29:41:54 04:06:27
+
+
+// Track 8
+TRACK AUDIO
+NO COPY
+NO PRE_EMPHASIS
+TWO_CHANNEL_AUDIO
+ISRC "TCAAS1032137"
+CD_TEXT {
+  LANGUAGE 0 {
+    TITLE "That's What I Get"
+  }
+}
+FILE "track.wav" 33:48:06 04:30:49
+
+
+// Track 9
+TRACK AUDIO
+NO COPY
+NO PRE_EMPHASIS
+TWO_CHANNEL_AUDIO
+ISRC "TCAAS1032138"
+CD_TEXT {
+  LANGUAGE 0 {
+    TITLE "The Only Time"
+    PERFORMER ""
+  }
+}
+FILE "track.wav" 38:18:55 04:47:64
+
+
+// Track 10
+TRACK AUDIO
+NO COPY
+NO PRE_EMPHASIS
+TWO_CHANNEL_AUDIO
+ISRC "TCAAS1032139"
+CD_TEXT {
+  LANGUAGE 0 {
+    TITLE "Ringfinger"
+  }
+}
+FILE "track.wav" 43:06:44 05:45:32
+
+
+// Track 11
+TRACK AUDIO
+NO COPY
+NO PRE_EMPHASIS
+TWO_CHANNEL_AUDIO
+ISRC "TCAAS1032140"
+CD_TEXT {
+  LANGUAGE 0 {
+    TITLE "Get Down, Make Love"
+  }
+}
+FILE "track.wav" 48:52:01 04:18:58
+

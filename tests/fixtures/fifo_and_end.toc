@@ -1,0 +1,7 @@
+// FIFO and END, neither of which appears in data/.
+CD_DA
+
+// Track 1
+TRACK AUDIO
+FIFO "/tmp/audio.fifo" 05:00:00
+END 04:30:00

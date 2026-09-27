@@ -1,0 +1,242 @@
+CD_DA
+
+CATALOG "0602498647295"
+CD_TEXT {
+  LANGUAGE_MAP {
+    0: 9
+  }
+  LANGUAGE 0 {
+    TITLE "The Downward Spiral - Deluxe Edition [ Disc 1 ] "
+    PERFORMER "Nine Inch Nails"
+    DISC_ID "B0003739-36 CD01"
+    UPC_EAN "0602498647295"
+    SIZE_INFO { 1,  1, 14,  0, 19, 20,  0,  0,  0,  0,  2,  0,
+                0,  0,  0,  0,  0,  0, 20,  3, 63,  0,  0,  0,
+                0,  0,  0,  0,  9,  0,  0,  0,  0,  0,  0,  0}
+  }
+}
+
+// Track 1
+TRACK AUDIO
+NO COPY
+NO PRE_EMPHASIS
+TWO_CHANNEL_AUDIO
+ISRC "USIR19400525"
+CD_TEXT {
+  LANGUAGE 0 {
+    TITLE "Mr. Self Destruct "
+    PERFORMER "Nine Inch Nails"
+    ISRC "US-IR1-04-00754"
+  }
+}
+FILE "track.wav" 0 04:30:22
+
+
+// Track 2
+TRACK AUDIO
+NO COPY
+NO PRE_EMPHASIS
+TWO_CHANNEL_AUDIO
+ISRC "USIR19400526"
+CD_TEXT {
+  LANGUAGE 0 {
+    TITLE "Piggy"
+    PERFORMER "Nine Inch Nails"
+    ISRC "US-IR1-04-00756"
+  }
+}
+FILE "track.wav" 04:30:22 04:24:30
+
+
+// Track 3
+TRACK AUDIO
+NO COPY
+NO PRE_EMPHASIS
+TWO_CHANNEL_AUDIO
+ISRC "USIR19400527"
+CD_TEXT {
+  LANGUAGE 0 {
+    TITLE "Heresy"
+    PERFORMER "Nine Inch Nails"
+    ISRC "US-IR1-04-00758"
+  }
+}
+FILE "track.wav" 08:54:52 03:54:23
+
+
+// Track 4
+TRACK AUDIO
+NO COPY
+NO PRE_EMPHASIS
+TWO_CHANNEL_AUDIO
+ISRC "USIR19400528"
+CD_TEXT {
+  LANGUAGE 0 {
+    TITLE "March Of The Pigs "
+    PERFORMER "Nine Inch Nails"
+    ISRC "US-IR1-04-00760"
+  }
+}
+FILE "track.wav" 12:49:00 02:58:32
+
+
+// Track 5
+TRACK AUDIO
+NO COPY
+NO PRE_EMPHASIS
+TWO_CHANNEL_AUDIO
+ISRC "USIR19400529"
+CD_TEXT {
+  LANGUAGE 0 {
+    TITLE "Closer"
+    PERFORMER "Nine Inch Nails"
+    ISRC "US-IR1-04-00762"
+  }
+}
+FILE "track.wav" 15:47:32 06:13:23
+
+
+// Track 6
+TRACK AUDIO
+NO COPY
+NO PRE_EMPHASIS
+TWO_CHANNEL_AUDIO
+ISRC "USIR19400530"
+CD_TEXT {
+  LANGUAGE 0 {
+    TITLE "Ruiner"
+    PERFORMER "Nine Inch Nails"
+    ISRC "US-IR1-04-00764"
+  }
+}
+FILE "track.wav" 22:00:55 04:56:30
+
+
+// Track 7
+TRACK AUDIO
+NO COPY
+NO PRE_EMPHASIS
+TWO_CHANNEL_AUDIO
+ISRC "USIR19400531"
+CD_TEXT {
+  LANGUAGE 0 {
+    TITLE "The Becoming "
+    PERFORMER "Nine Inch Nails"
+    ISRC "US-IR1-04-00766"
+  }
+}
+FILE "track.wav" 26:57:10 05:33:72
+START 00:02:30
+
+
+// Track 8
+TRACK AUDIO
+NO COPY
+NO PRE_EMPHASIS
+TWO_CHANNEL_AUDIO
+ISRC "USIR19400532"
+CD_TEXT {
+  LANGUAGE 0 {
+    TITLE "I Do Not Want This "
+    PERFORMER "Nine Inch Nails"
+    ISRC "US-IR1-04-00768"
+  }
+}
+FILE "track.wav" 32:31:07 05:41:15
+
+
+// Track 9
+TRACK AUDIO
+NO COPY
+NO PRE_EMPHASIS
+TWO_CHANNEL_AUDIO
+ISRC "USIR19400533"
+CD_TEXT {
+  LANGUAGE 0 {
+    TITLE "Big Man With A Gun "
+    PERFORMER "Nine Inch Nails"
+    ISRC "US-IR1-04-00770"
+  }
+}
+FILE "track.wav" 38:12:22 01:36:15
+
+
+// Track 10
+TRACK AUDIO
+NO COPY
+NO PRE_EMPHASIS
+TWO_CHANNEL_AUDIO
+ISRC "USIR19400534"
+CD_TEXT {
+  LANGUAGE 0 {
+    TITLE "A Warm Place "
+    PERFORMER "Nine Inch Nails"
+    ISRC "US-IR1-04-00772"
+  }
+}
+FILE "track.wav" 39:48:37 03:22:23
+
+
+// Track 11
+TRACK AUDIO
+NO COPY
+NO PRE_EMPHASIS
+TWO_CHANNEL_AUDIO
+ISRC "USIR19400535"
+CD_TEXT {
+  LANGUAGE 0 {
+    TITLE "Eraser"
+    PERFORMER "Nine Inch Nails"
+    ISRC "US-IR1-04-00774"
+  }
+}
+FILE "track.wav" 43:10:60 04:54:27
+
+
+// Track 12
+TRACK AUDIO
+NO COPY
+NO PRE_EMPHASIS
+TWO_CHANNEL_AUDIO
+ISRC "USIR19400536"
+CD_TEXT {
+  LANGUAGE 0 {
+    TITLE "Reptile"
+    PERFORMER "Nine Inch Nails"
+    ISRC "US-IR1-04-00776"
+  }
+}
+FILE "track.wav" 48:05:12 06:51:63
+
+
+// Track 13
+TRACK AUDIO
+NO COPY
+NO PRE_EMPHASIS
+TWO_CHANNEL_AUDIO
+ISRC "USIR19400537"
+CD_TEXT {
+  LANGUAGE 0 {
+    TITLE "The Downward Spiral "
+    PERFORMER "Nine Inch Nails"
+    ISRC "US-IR1-04-00778"
+  }
+}
+FILE "track.wav" 54:57:00 03:57:22
+
+
+// Track 14
+TRACK AUDIO
+NO COPY
+NO PRE_EMPHASIS
+TWO_CHANNEL_AUDIO
+ISRC "USIR19400538"
+CD_TEXT {
+  LANGUAGE 0 {
+    TITLE "Hurt "
+    PERFORMER "Nine Inch Nails"
+    ISRC "US-IR1-04-00780"
+  }
+}
+FILE "track.wav" 58:54:22 06:13:25
+

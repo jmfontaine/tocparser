@@ -1,0 +1,54 @@
+// Multi-language CD-TEXT with every disc-level pack type.
+CD_DA
+
+CATALOG "1234567890123"
+FIRST_TRACK_NO 3
+CD_TEXT {
+  LANGUAGE_MAP {
+    0: 9
+    1: 4
+  }
+  LANGUAGE 0 {
+    TITLE "Disc Title"
+    PERFORMER "Performer"
+    SONGWRITER "Songwriter"
+    COMPOSER "Composer"
+    ARRANGER "Arranger"
+    MESSAGE "Message to the user"
+    DISC_ID "XY12345"
+    GENRE { 0,  1, 82, 111, 99, 107}
+    TOC_INFO1 { 1,  2,  3}
+    TOC_INFO2 { 4,  5,  6}
+    RESERVED1 "r1"
+    RESERVED2 "r2"
+    RESERVED3 "r3"
+    RESERVED4 "r4"
+    UPC_EAN "1234567890123"
+    SIZE_INFO { 1,  1,  6,  3, 10,  2,  0,  0,  0,  0,  1,  0,
+                0,  0,  0,  0,  0,  0,  2,  3, 17,  0,  0,  0,
+                0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0}
+  }
+  LANGUAGE 1 {
+    TITLE "Titre du disque"
+    PERFORMER "Interprete"
+  }
+}
+
+// Track 3
+TRACK AUDIO
+NO COPY
+NO PRE_EMPHASIS
+TWO_CHANNEL_AUDIO
+ISRC "DEXXX9800001"
+CD_TEXT {
+  LANGUAGE 0 {
+    TITLE "Track Title"
+    PERFORMER "Performer"
+    ISRC "DE-XXX-98-00001"
+    DISC_ID "XY12345"
+  }
+  LANGUAGE 1 {
+    TITLE "Titre"
+  }
+}
+FILE "a.wav" 0 04:00:00

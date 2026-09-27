@@ -1,0 +1,10 @@
+// AUDIOFILE spelling, SWAP and a #offset, none of which appear in data/.
+CD_DA
+
+// Track 1
+TRACK AUDIO
+AUDIOFILE "raw.cdr" SWAP #44 0 05:00:00
+
+// Track 2
+TRACK AUDIO
+FILE "raw.cdr" #0 05:00:00 04:00:00

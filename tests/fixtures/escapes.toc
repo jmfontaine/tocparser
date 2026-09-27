@@ -1,0 +1,14 @@
+// String escapes: \" for a quote and \NNN for an octal byte.
+CD_DA
+
+CD_TEXT {
+  LANGUAGE 0 {
+    TITLE "He said \"hi\""
+    PERFORMER "A\101B"
+    MESSAGE "back\\slash"
+  }
+}
+
+// Track 1
+TRACK AUDIO
+FILE "a.wav" 0 04:00:00

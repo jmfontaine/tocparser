@@ -1,0 +1,87 @@
+[project]
+name = "tocparser"
+version = "0.1.0"
+description = "Parse, validate, and write cdrdao CD TOC files"
+readme = "README.md"
+license = "Apache-2.0"
+license-files = ["LICENSE.txt"]
+authors = [{ name = "Jean-Marc Fontaine", email = "jm@jmfontaine.net" }]
+keywords = ["cdrdao", "toc", "cd", "cd-text", "parser", "audio"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Programming Language :: Python :: 3.15",
+    "Topic :: Multimedia :: Sound/Audio :: CD Audio",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Typing :: Typed",
+]
+requires-python = ">=3.10"
+dependencies = [
+    "lark>=1.2",
+    "pydantic>=2.9",
+    # pydantic 2.14 is the first whose pydantic-core publishes Python 3.15
+    # wheels; older releases would be compiled from source. The beta floor lets
+    # installers pick 2.14 while it is in beta, and its final release after.
+    # uv_build publishes python_version markers as python_full_version ones. A
+    # range such as >= '3.15' then misses release candidates ("3.15.0rc2" sorts
+    # below 3.15), but the prefix match == '3.15.*' this line becomes covers
+    # them. Keep it an equality so that uv_build does not turn it into a range.
+    "pydantic>=2.14.0b1; python_version == '3.15'",
+]
+
+[build-system]
+requires = ["uv_build>=0.12.3,<0.13.0"]
+build-backend = "uv_build"
+
+[tool.uv.build-backend]
+# Ship the test suite and its corpus in the sdist for downstream packagers.
+source-include = ["tests/**"]
+
+[dependency-groups]
+dev = [
+    "mypy>=1.11",
+    "pytest>=8.0",
+    "pytest-cov>=6",
+    "ruff>=0.6",
+]
+
+[tool.ruff]
+line-length = 100
+src = ["src", "tests", "scripts"]
+# The README aligns the comments in its examples, which the formatter collapses.
+extend-exclude = ["*.md"]
+
+[tool.ruff.lint]
+select = [
+    "E",   # pycodestyle errors
+    "F",   # pyflakes
+    "I",   # isort
+    "N",   # pep8-naming
+    "UP",  # pyupgrade
+    "B",   # flake8-bugbear
+    "SIM", # flake8-simplify
+    "RUF",
+]
+
+[tool.mypy]
+python_version = "3.10"
+strict = true
+files = ["src", "tests", "scripts"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.coverage.run]
+source = ["tocparser"]
+
+[tool.coverage.report]
+skip_empty = true
+show_missing = true

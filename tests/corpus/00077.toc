@@ -1,0 +1,159 @@
+CD_DA
+
+CATALOG "3760053842404"
+CD_TEXT {
+  LANGUAGE_MAP {
+    0: 9
+  }
+  LANGUAGE 0 {
+    TITLE "Stranded in Arcadia"
+    PERFORMER "MARS RED SKY"
+    SONGWRITER "Jimmy Kinast, Julien Pras"
+    COMPOSER "Julien Pras, Jimmy Kinast, Mat Gaz"
+    MESSAGE "Mrs Red Sound / Listenable Records posh240"
+    SIZE_INFO { 0,  1,  8,  0, 11, 10,  9, 27,  0,  5,  0,  0,
+                0,  0,  0,  0,  0,  0,  0,  3, 64,  0,  0,  0,
+                0,  0,  0,  0,  9,  0,  0,  0,  0,  0,  0,  0}
+  }
+}
+
+// Track 1
+TRACK AUDIO
+NO COPY
+NO PRE_EMPHASIS
+TWO_CHANNEL_AUDIO
+ISRC "FR1PP1400010"
+CD_TEXT {
+  LANGUAGE 0 {
+    TITLE "The Light Beyond"
+    PERFORMER "MARS RED SKY"
+    SONGWRITER "Julien Pras"
+    COMPOSER "Julien Pras, Jimmy Kinast, Mat Gaz"
+  }
+}
+FILE "track.wav" 0 08:01:72
+
+
+// Track 2
+TRACK AUDIO
+NO COPY
+NO PRE_EMPHASIS
+TWO_CHANNEL_AUDIO
+ISRC "FR1PP1400020"
+CD_TEXT {
+  LANGUAGE 0 {
+    TITLE "Hovering Satellites"
+    PERFORMER "MARS RED SKY"
+    SONGWRITER "Julien Pras"
+    COMPOSER "Julien Pras, Jimmy Kinast, Mat Gaz"
+  }
+}
+FILE "track.wav" 08:01:72 05:35:37
+START 00:02:00
+
+
+// Track 3
+TRACK AUDIO
+NO COPY
+NO PRE_EMPHASIS
+TWO_CHANNEL_AUDIO
+ISRC "FR1PP1400040"
+CD_TEXT {
+  LANGUAGE 0 {
+    TITLE "Holy Mondays"
+    PERFORMER "MARS RED SKY"
+    SONGWRITER "Jimmy Kinast"
+    COMPOSER "Julien Pras, Jimmy Kinast, Mat Gaz"
+  }
+}
+FILE "track.wav" 13:37:34 04:55:57
+START 00:02:00
+
+
+// Track 4
+TRACK AUDIO
+NO COPY
+NO PRE_EMPHASIS
+TWO_CHANNEL_AUDIO
+ISRC "FR1PP1400030"
+CD_TEXT {
+  LANGUAGE 0 {
+    TITLE "Join The Race"
+    PERFORMER "MARS RED SKY"
+    SONGWRITER "Julien Pras"
+    COMPOSER "Julien Pras, Jimmy Kinast, Mat Gaz"
+  }
+}
+FILE "track.wav" 18:33:16 05:17:31
+START 00:00:37
+
+
+// Track 5
+TRACK AUDIO
+NO COPY
+NO PRE_EMPHASIS
+TWO_CHANNEL_AUDIO
+ISRC "FR1PP1400050"
+CD_TEXT {
+  LANGUAGE 0 {
+    TITLE "Arcadia"
+    PERFORMER "MARS RED SKY"
+    COMPOSER "Julien Pras, Jimmy Kinast, Mat Gaz"
+  }
+}
+FILE "track.wav" 23:50:47 05:56:72
+START 00:01:74
+
+
+// Track 6
+TRACK AUDIO
+NO COPY
+NO PRE_EMPHASIS
+TWO_CHANNEL_AUDIO
+ISRC "FR1PP1400060"
+CD_TEXT {
+  LANGUAGE 0 {
+    TITLE "Circles"
+    PERFORMER "MARS RED SKY"
+    SONGWRITER "Julien Pras"
+    COMPOSER "Julien Pras, Jimmy Kinast, Mat Gaz"
+    MESSAGE ""
+  }
+}
+FILE "track.wav" 29:47:44 04:59:34
+START 00:02:00
+
+
+// Track 7
+TRACK AUDIO
+NO COPY
+NO PRE_EMPHASIS
+TWO_CHANNEL_AUDIO
+ISRC "FR1PP1400070"
+CD_TEXT {
+  LANGUAGE 0 {
+    TITLE "Seen A Ghost"
+    PERFORMER "MARS RED SKY"
+    SONGWRITER "Julien Pras"
+    COMPOSER "Julien Pras, Jimmy Kinast, Mat Gaz"
+  }
+}
+FILE "track.wav" 34:47:03 07:19:48
+START 00:02:00
+
+
+// Track 8
+TRACK AUDIO
+NO COPY
+NO PRE_EMPHASIS
+TWO_CHANNEL_AUDIO
+ISRC "FR1PP1400080"
+CD_TEXT {
+  LANGUAGE 0 {
+    TITLE "Beyond The Light"
+    PERFORMER "MARS RED SKY"
+    COMPOSER "Julien Pras, Jimmy Kinast, Mat Gaz"
+  }
+}
+FILE "track.wav" 42:06:51 02:34:04
+
