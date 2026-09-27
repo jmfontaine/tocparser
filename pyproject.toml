@@ -1,99 +1,99 @@
+[build-system]
+build-backend = "uv_build"
+requires = [ "uv-build>=0.12.3,<0.13" ]
+
 [project]
 name = "tocparser"
 version = "0.1.0"
 description = "Parse, validate, and write cdrdao CD TOC files"
 readme = "README.md"
+keywords = [ "audio", "cd", "cd-text", "cdrdao", "parser", "toc" ]
 license = "Apache-2.0"
-license-files = ["LICENSE.txt"]
-authors = [{ name = "Jean-Marc Fontaine", email = "jm@jmfontaine.net" }]
-keywords = ["cdrdao", "toc", "cd", "cd-text", "parser", "audio"]
-classifiers = [
-    "Development Status :: 4 - Beta",
-    "Intended Audience :: Developers",
-    "Operating System :: OS Independent",
-    "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3 :: Only",
-    "Programming Language :: Python :: 3.10",
-    "Programming Language :: Python :: 3.11",
-    "Programming Language :: Python :: 3.12",
-    "Programming Language :: Python :: 3.13",
-    "Programming Language :: Python :: 3.14",
-    "Programming Language :: Python :: 3.15",
-    "Topic :: Multimedia :: Sound/Audio :: CD Audio",
-    "Topic :: Software Development :: Libraries :: Python Modules",
-    "Typing :: Typed",
-]
+license-files = [ "LICENSE.txt" ]
+authors = [ { name = "Jean-Marc Fontaine", email = "jm@jmfontaine.net" } ]
 requires-python = ">=3.10"
-dependencies = [
-    "lark>=1.2",
-    "pydantic>=2.9",
-    # KLUDGE: the Python 3.15 clause below pins a pydantic prerelease behind a
-    # version cap. Both are temporary; see the replacement note at the end.
-    #
-    # pydantic 2.14 is the first whose pydantic-core publishes Python 3.15
-    # wheels; older releases would be compiled from source.
-    #
-    # uv_build publishes python_version markers as python_full_version ones. A
-    # range such as >= '3.15' then misses release candidates ("3.15.0rc2" sorts
-    # below 3.15), but the prefix match == '3.15.*' this line becomes covers
-    # them. Keep it an equality so that uv_build does not turn it into a range.
-    #
-    # Naming 2.14.0b1 also lets installers pick pydantic prereleases, so without
-    # `<2.15` they would prefer any newer prerelease, such as a 2.15 alpha, over
-    # 2.14 final. Once 2.14 is released, rewrite the clause as
-    # `"pydantic>=2.14; python_version == '3.15'"`: keep the marker, because
-    # dropping the clause would let a downstream constraint pull pydantic 2.13
-    # back in on 3.15, where it cannot install.
-    "pydantic>=2.14.0b1,<2.15; python_version == '3.15'",
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: Developers",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3.14",
+  "Programming Language :: Python :: 3.15",
+  "Topic :: Multimedia :: Sound/Audio :: CD Audio",
+  "Topic :: Software Development :: Libraries :: Python Modules",
+  "Typing :: Typed",
 ]
-
-[build-system]
-requires = ["uv_build>=0.12.3,<0.13.0"]
-build-backend = "uv_build"
-
-[tool.uv.build-backend]
-# Ship the test suite and its corpus in the sdist for downstream packagers.
-source-include = ["tests/**"]
+dependencies = [
+  "lark>=1.2",
+  "pydantic>=2.9",
+  # KLUDGE: the Python 3.15 clause below pins a pydantic prerelease behind a
+  # version cap. Both are temporary; see the replacement note at the end.
+  #
+  # pydantic 2.14 is the first whose pydantic-core publishes Python 3.15
+  # wheels; older releases would be compiled from source.
+  #
+  # uv_build publishes python_version markers as python_full_version ones. A
+  # range such as >= '3.15' then misses release candidates ("3.15.0rc2" sorts
+  # below 3.15), but the prefix match == '3.15.*' this line becomes covers
+  # them. Keep it an equality so that uv_build does not turn it into a range.
+  #
+  # Naming 2.14.0b1 also lets installers pick pydantic prereleases, so without
+  # `<2.15` they would prefer any newer prerelease, such as a 2.15 alpha, over
+  # 2.14 final. Once 2.14 is released, rewrite the clause as
+  # `"pydantic>=2.14; python_version == '3.15'"`: keep the marker, because
+  # dropping the clause would let a downstream constraint pull pydantic 2.13
+  # back in on 3.15, where it cannot install.
+  "pydantic>=2.14.0b1,<2.15; python_version=='3.15'",
+]
 
 [dependency-groups]
 dev = [
-    "mypy>=1.11",
-    "pre-commit>=4.4",
-    "pyright>=1.1.408",
-    "pytest>=8.0",
-    "pytest-cov>=6",
-    "ruff>=0.6",
+  "mypy>=1.11",
+  "pre-commit>=4.4",
+  "pyproject-fmt>=2.16.1",
+  "pyright>=1.1.408",
+  "pytest>=8",
+  "pytest-cov>=6",
+  "ruff>=0.6",
 ]
+
+[tool.uv]
+# Ship the test suite and its corpus in the sdist for downstream packagers.
+build-backend.source-include = [ "tests/**" ]
 
 [tool.ruff]
 line-length = 100
-src = ["src", "tests", "scripts"]
+src = [ "scripts", "src", "tests" ]
 # The README aligns the comments in its examples, which the formatter collapses.
-extend-exclude = ["*.md"]
-
-[tool.ruff.lint]
-select = [
-    "E",   # pycodestyle errors
-    "F",   # pyflakes
-    "I",   # isort
-    "N",   # pep8-naming
-    "UP",  # pyupgrade
-    "B",   # flake8-bugbear
-    "SIM", # flake8-simplify
-    "RUF",
+extend-exclude = [ "*.md" ]
+lint.select = [
+  "B",   # flake8-bugbear
+  "E",   # pycodestyle errors
+  "F",   # pyflakes
+  "I",   # isort
+  "N",   # pep8-naming
+  "RUF",
+  "SIM", # flake8-simplify
+  "UP",  # pyupgrade
 ]
 
+[tool.pyproject-fmt]
+column_width = 100
+max_supported_python = "3.15"
+
 [tool.mypy]
+files = [ "scripts", "src", "tests" ]
 python_version = "3.10"
 strict = true
-files = ["src", "tests", "scripts"]
 
-[tool.pytest.ini_options]
-testpaths = ["tests"]
+[tool.pytest]
+ini_options.testpaths = [ "tests" ]
 
-[tool.coverage.run]
-source = ["tocparser"]
-
-[tool.coverage.report]
-skip_empty = true
-show_missing = true
+[tool.coverage]
+run.source = [ "tocparser" ]
+report.skip_empty = true
+report.show_missing = true

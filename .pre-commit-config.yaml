@@ -22,6 +22,12 @@ repos:
   # Through `uv run`, so the hooks use the versions pinned in uv.lock, as CI does.
   - repo: local
     hooks:
+      - id: pyproject-fmt
+        name: pyproject-fmt
+        entry: uv run pyproject-fmt
+        language: system
+        files: ^pyproject\.toml$
+
       # Fixes first: they can leave code the formatter then changes.
       - id: ruff-check
         name: ruff-check

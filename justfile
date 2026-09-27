@@ -14,12 +14,15 @@ deps-update:
     uv lock --upgrade
     uv sync --all-groups
 
-# Run formatter
+# Run formatters
 format:
+    # pyproject-fmt exits 1 after reformatting; only fail if the file is still off.
+    uv run pyproject-fmt pyproject.toml || uv run pyproject-fmt --check pyproject.toml
     uv run ruff format
 
 # Check formatting without modifying files
 format-check:
+    uv run pyproject-fmt --check pyproject.toml
     uv run ruff format --check
 
 # Run linter
