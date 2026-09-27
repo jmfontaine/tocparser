@@ -52,6 +52,31 @@ pre-commit-update:
 # Run all quality assurance checks
 qa: format-check lint type-check verify-types
 
+# Tag the version in pyproject.toml, push it, and watch the publish workflow
+release:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    tag="v$(uv version --short)"
+    if [ "$(git branch --show-current)" != "main" ]; then
+        echo "Error: releases are tagged on main" >&2
+        exit 1
+    fi
+    if [ -n "$(git status --porcelain)" ]; then
+        echo "Error: working tree is not clean" >&2
+        exit 1
+    fi
+    if git rev-parse --quiet --verify "refs/tags/$tag" >/dev/null; then
+        echo "Error: tag $tag already exists" >&2
+        exit 1
+    fi
+    echo "Creating signed tag $tag..."
+    git tag -s "$tag" -m "Release $tag"
+    echo "Pushing main and $tag to origin..."
+    git push origin main "$tag"
+    echo "Waiting for the publish workflow to start..."
+    sleep 5
+    gh run watch --exit-status "$(gh run list --workflow=publish.yml --branch="$tag" --limit=1 --json=databaseId --jq='.[0].databaseId')"
+
 # Set local dev environment up
 setup:
     uv sync --all-groups  # Install dependencies

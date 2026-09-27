@@ -120,6 +120,24 @@ A maintainer will review your pull request, usually within a few days. Change re
 and collaborative. Push additional commits to the same branch; no need to force-push or squash
 until asked.
 
+## Releasing
+
+Maintainers only.
+
+1. Set the new version, e.g. `uv version --bump minor`, and commit it along with `uv.lock`
+2. Run `just changelog-preview` to check the release notes, which
+   [git-cliff](https://git-cliff.org/) builds from the commit messages since the last tag
+3. Run `just release`, which tags the version as `vX.Y.Z`, pushes `main` and the tag, and watches
+   the publish workflow
+
+The tag starts `.github/workflows/publish.yml`. It runs every CI check on the tagged commit,
+publishes the wheel and sdist that CI built and tested to PyPI, then creates the GitHub release
+with the same notes. A tag that doesn't match the package version stops before the upload.
+
+Publishing uses [trusted publishing](https://docs.pypi.org/trusted-publishers/), so no token is
+stored. It needs a GitHub environment named `pypi`, and a trusted publisher on PyPI for the
+`jmfontaine/tocparser` repository, the `publish.yml` workflow and the `pypi` environment.
+
 ## License
 
 By contributing, you agree that your contributions will be licensed under the
