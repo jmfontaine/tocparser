@@ -37,7 +37,7 @@ dependency group, and then installs the git hooks.
 > [!TIP]
 > If you don't have just installed, you can run the underlying commands directly. Check
 > [`justfile`](justfile) to see what each recipe runs; most are one-line `uv run` commands.
-> For example, `just test` runs `uv run pytest --cov --cov-report=term-missing`.
+> For example, `just test` runs `uv run pytest --cov`.
 
 ## Development workflow
 

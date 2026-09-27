@@ -100,7 +100,7 @@ setup:
 
 # Run tests with coverage
 test *args:
-    uv run pytest --cov --cov-report=term-missing {{ args }}
+    uv run pytest --cov {{ args }}
 
 # Compare results with cdrdao (requires cdrdao)
 test-cdrdao *args:
