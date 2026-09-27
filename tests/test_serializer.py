@@ -179,11 +179,12 @@ def test_a_negative_number_is_never_written() -> None:
         dumps(toc)
 
 
-def test_disc_type_collapses_to_the_effective_one() -> None:
-    """Only the last disc flag has an effect, so only it is written back."""
-    output = dumps(parse_file(FIXTURES_DIR / "repeated_disc_type.toc"))
-    assert output.startswith("CD_DA\n")
-    assert "CD_ROM" not in output
+def test_every_disc_type_flag_is_written_back_in_order() -> None:
+    """cdrdao accepts several disc flags, so all of them are written back."""
+    toc = parse_file(FIXTURES_DIR / "repeated_disc_type.toc")
+    output = dumps(toc)
+    assert output.startswith("CD_ROM\nCD_DA\n")
+    assert parse(output) == toc
 
 
 def test_hand_written_comments_are_dropped() -> None:

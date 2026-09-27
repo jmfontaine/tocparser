@@ -219,7 +219,8 @@ def dumps(toc: Toc) -> str:
     first: an invalid one raises instead of producing a file cdrdao rejects.
     """
     toc = Toc.model_validate(toc.model_dump())
-    lines: list[str] = [toc.disc_type.value, ""]
+    lines = [flag.value for flag in toc.superseded_disc_types]
+    lines += [toc.disc_type.value, ""]
     if toc.catalog is not None:
         lines.append(f"CATALOG {_quote(toc.catalog)}")
     if toc.first_track_number is not None:

@@ -238,14 +238,14 @@ class _TocTransformer(Transformer[Token, object]):
 
     def toc(self, meta: Meta, children: list[_Child]) -> Toc:
         catalog: str | None = None
-        disc_type = DiscType.CD_DA
+        disc_types: list[DiscType] = []
         first_track_number: int | None = None
         cd_text: CdText | None = None
         tracks: list[Track] = []
         for child in children:
             # DiscType is a str enum, so it must be tested before plain str.
             if isinstance(child, DiscType):
-                disc_type = child
+                disc_types.append(child)
             elif isinstance(child, CdText):
                 cd_text = child
             elif isinstance(child, Track):
@@ -257,7 +257,8 @@ class _TocTransformer(Transformer[Token, object]):
         with self._located(self._lines, None):
             return Toc(
                 catalog=catalog,
-                disc_type=disc_type,
+                disc_type=disc_types[-1] if disc_types else DiscType.CD_DA,
+                superseded_disc_types=disc_types[:-1],
                 first_track_number=first_track_number,
                 cd_text=cd_text,
                 tracks=tracks,

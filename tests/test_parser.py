@@ -52,7 +52,9 @@ def test_disc_type_defaults_to_cd_da_when_absent() -> None:
 
 def test_last_disc_type_wins() -> None:
     """cdrdao documents that the last of several disc flags takes effect."""
-    assert parse(f"CD_ROM\n{MINIMAL}").disc_type is DiscType.CD_DA
+    toc = parse(f"CD_ROM\n{MINIMAL}")
+    assert toc.disc_type is DiscType.CD_DA
+    assert toc.superseded_disc_types == [DiscType.CD_ROM]
     assert parse(f"CD_DA\nCD_ROM_XA\n{MINIMAL_TRACK}").disc_type is DiscType.CD_ROM_XA
 
 

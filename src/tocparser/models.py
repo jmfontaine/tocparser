@@ -662,6 +662,9 @@ class Toc(_Model):
 
     catalog: str | None = None
     disc_type: DiscType = DiscType.CD_DA
+    #: The disc type flags written before ``disc_type``, in file order. The last
+    #: flag takes effect, so these have none, but they are written back.
+    superseded_disc_types: list[DiscType] = Field(default_factory=list)
     first_track_number: int | None = None
     cd_text: CdText | None = None
     tracks: list[Track] = Field(default_factory=list)
