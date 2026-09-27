@@ -182,19 +182,8 @@ before 1.2.2 were not checked.
   ISO-8859-1. Latin text comes through intact, but text in another encoding,
   such as Japanese, does not.
 
-## Development
+## Contributing
 
-```console
-uv sync
-uv run pytest
-uv run mypy
-uv run ruff check .
-uv run ruff format --check .
-```
-
-The test suite parses and round-trips every file in `tests/corpus/`, which
-holds real cdrdao output, plus the hand-written files in `tests/fixtures/`,
-which cover the directives the corpus never uses. `tests/test_cdrdao_oracle.py`
-runs `cdrdao show-toc` over both and over a list of edge cases, and asserts its
-verdict, message and line number match ours. It is skipped when cdrdao is not
-installed, unless `TOCPARSER_REQUIRE_CDRDAO` is set, as it is in CI.
+Contributions are welcome. See
+[CONTRIBUTING.md](https://github.com/jmfontaine/tocparser/blob/main/CONTRIBUTING.md) for the
+development setup, how the tests compare tocparser with cdrdao, and the pull request process.
