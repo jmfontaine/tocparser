@@ -52,6 +52,7 @@ dependencies = [
 
 [dependency-groups]
 dev = [
+  "git-cliff>=2.14.2",
   "mypy>=1.11",
   "pre-commit>=4.4",
   "pyproject-fmt>=2.16.1",

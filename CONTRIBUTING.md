@@ -127,16 +127,23 @@ Maintainers only.
 1. Set the new version, e.g. `uv version --bump minor`, and commit it along with `uv.lock`
 2. Run `just changelog-preview` to check the release notes, which
    [git-cliff](https://git-cliff.org/) builds from the commit messages since the last tag
-3. Run `just release`, which tags the version as `vX.Y.Z`, pushes `main` and the tag, and watches
-   the publish workflow
+3. Run `just release`, which tags the version as `vX.Y.Z`, pushes `main` and the tag in one atomic
+   push, and watches the publish workflow
 
-The tag starts `.github/workflows/publish.yml`. It runs every CI check on the tagged commit,
-publishes the wheel and sdist that CI built and tested to PyPI, then creates the GitHub release
-with the same notes. A tag that doesn't match the package version stops before the upload.
+The tag starts `.github/workflows/publish.yml`. It checks that the tagged commit is on `main`, runs
+every CI check on it, publishes the wheel and sdist that CI built and tested to PyPI, then creates
+the GitHub release with the same notes. A tag that doesn't match the package version stops before
+the upload.
+
+If a job fails after the PyPI upload, rerun the workflow: the upload skips the files PyPI already
+has, and the GitHub release is created only if it doesn't exist yet.
 
 Publishing uses [trusted publishing](https://docs.pypi.org/trusted-publishers/), so no token is
-stored. It needs a GitHub environment named `pypi`, and a trusted publisher on PyPI for the
-`jmfontaine/tocparser` repository, the `publish.yml` workflow and the `pypi` environment.
+stored. It needs a GitHub environment named `pypi`, and a trusted publisher on PyPI with exactly
+these values: owner `jmfontaine`, repository `tocparser`, workflow `publish.yml`, environment
+`pypi`. Before the first release the PyPI project doesn't exist yet, so register it as a
+[pending publisher](https://docs.pypi.org/trusted-publishers/creating-a-project-through-oidc/) for
+the project name `tocparser`; the first upload creates the project.
 
 ## License
 

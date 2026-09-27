@@ -11,7 +11,7 @@ add-toc toc_file="":
 
 # Preview release notes for unreleased changes
 changelog-preview:
-    uvx git-cliff --unreleased
+    uv run git-cliff --unreleased
 
 # Update deps to latest versions
 deps-update:
@@ -72,10 +72,24 @@ release:
     echo "Creating signed tag $tag..."
     git tag -s "$tag" -m "Release $tag"
     echo "Pushing main and $tag to origin..."
-    git push origin main "$tag"
+    # Atomic: were main rejected, the tag alone would still publish.
+    if ! git push --atomic origin main "$tag"; then
+        git tag -d "$tag" >/dev/null
+        echo "Error: push rejected; deleted the local tag $tag" >&2
+        exit 1
+    fi
     echo "Waiting for the publish workflow to start..."
-    sleep 5
-    gh run watch --exit-status "$(gh run list --workflow=publish.yml --branch="$tag" --limit=1 --json=databaseId --jq='.[0].databaseId')"
+    run_id=""
+    for _ in $(seq 30); do
+        run_id=$(gh run list --workflow=publish.yml --branch="$tag" --limit=1 --json=databaseId --jq='.[0].databaseId // empty')
+        [ -n "$run_id" ] && break
+        sleep 2
+    done
+    if [ -z "$run_id" ]; then
+        echo "Error: no publish run for $tag after 60s; check GitHub Actions" >&2
+        exit 1
+    fi
+    gh run watch --exit-status "$run_id"
 
 # Set local dev environment up
 setup:

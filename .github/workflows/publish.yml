@@ -7,9 +7,29 @@ on:
 permissions: {}
 
 jobs:
+  # Releases come from main. `just release` pushes main and the tag together,
+  # but a tag pushed by hand could point anywhere.
+  tag-on-main:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - name: Check the tagged commit is on main
+        env:
+          TAG: ${{ github.ref_name }}
+        run: |
+          if ! git merge-base --is-ancestor "$GITHUB_SHA" origin/main; then
+            echo "::error::$TAG points to $GITHUB_SHA, which is not on main"
+            exit 1
+          fi
+
   # Every CI check, on the tagged commit. Its build job uploads the
   # distributions that its wheel and sdist jobs install and test.
   ci:
+    needs: [tag-on-main]
     uses: ./.github/workflows/ci.yml
     permissions:
       contents: read
@@ -39,6 +59,10 @@ jobs:
             exit 1
           fi
       - uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          # Files already uploaded are skipped, so a full rerun after a later
+          # failure gets past this job instead of failing on them.
+          skip-existing: true
 
   github-release:
     needs: [publish]
@@ -49,14 +73,18 @@ jobs:
       - uses: actions/checkout@v7
         with:
           fetch-depth: 0
+      - uses: astral-sh/setup-uv@v7
+      # The git-cliff pinned in uv.lock, the one `just changelog-preview` runs.
       - name: Generate release notes
-        id: changelog
-        uses: orhun/git-cliff-action@v4
-        with:
-          args: --latest
+        run: uv run --locked --only-group dev git-cliff --latest --output "$RUNNER_TEMP/notes.md"
+      # A rerun finds the release a previous attempt created, and leaves it.
       - name: Create the GitHub release
         env:
           GH_TOKEN: ${{ github.token }}
           TAG: ${{ github.ref_name }}
-          NOTES: ${{ steps.changelog.outputs.changelog }}
-        run: gh release create "$TAG" --verify-tag --title "$TAG" --notes-file "$NOTES"
+        run: |
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            echo "Release $TAG already exists"
+          else
+            gh release create "$TAG" --verify-tag --title "$TAG" --notes-file "$RUNNER_TEMP/notes.md"
+          fi
