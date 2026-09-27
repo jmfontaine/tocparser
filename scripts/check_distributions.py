@@ -98,23 +98,21 @@ def check_sdist(path: Path) -> None:
             for name in archive.getnames()
             if name.startswith(f"{root}/")
         ]
-        try:
-            versions = archive.extractfile(f"{root}/tests/corpus/cdrdao-versions.csv")
-        except KeyError:
-            versions = None
-        listed = (
-            [
-                row["file"]
-                for row in csv.DictReader(io.TextIOWrapper(versions, encoding="utf-8"))
-            ]
-            if versions is not None
-            else []
-        )
+        required = [
+            *SDIST_REQUIRED,
+            *(f"src/{PACKAGE}/{name}" for name in PACKAGE_FILES),
+        ]
+        missing = [name for name in required if name not in names]
+        if missing:
+            fail(f"{path.name} is missing {', '.join(missing)}")
 
-    required = [*SDIST_REQUIRED, *(f"src/{PACKAGE}/{name}" for name in PACKAGE_FILES)]
-    missing = [name for name in required if name not in names]
-    if missing:
-        fail(f"{path.name} is missing {', '.join(missing)}")
+        # Listed in SDIST_REQUIRED, so present from here on.
+        versions = archive.extractfile(f"{root}/tests/corpus/cdrdao-versions.csv")
+        assert versions is not None  # None only for a directory or a link
+        listed = [
+            row["file"]
+            for row in csv.DictReader(io.TextIOWrapper(versions, encoding="utf-8"))
+        ]
 
     # The corpus is the heart of the test suite, so every file it lists ships.
     if not listed:

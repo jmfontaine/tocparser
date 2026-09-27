@@ -16,7 +16,7 @@ first_track_no: "FIRST_TRACK_NO" INT
 track: "TRACK" MODE SUB_CHANNEL_MODE? track_flag* cd_text_track? pregap? \
        track_statement+ index*
 
-track_flag:         isrc | copy | pre_emphasis | channels
+?track_flag:        isrc | copy | pre_emphasis | channels
 isrc:               "ISRC" STRING
 copy:               NO? "COPY"
 pre_emphasis:       NO? "PRE_EMPHASIS"
@@ -25,7 +25,7 @@ channels:           CHANNELS
 pregap:             "PREGAP" msf
 index:              "INDEX" msf
 
-track_statement:    file | datafile | fifo | silence | zero | start | end
+?track_statement:   file | datafile | fifo | silence | zero | start | end
 
 file:               FILE_KEYWORD STRING SWAP? offset? time time?
 datafile:           "DATAFILE" STRING offset? time?

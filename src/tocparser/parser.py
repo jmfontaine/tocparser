@@ -9,7 +9,7 @@ from functools import cache
 from importlib import resources
 from os import PathLike
 from pathlib import Path
-from typing import NamedTuple
+from typing import Literal, NamedTuple
 
 from lark import Lark, Token, Transformer, v_args
 from lark.exceptions import (
@@ -137,7 +137,7 @@ class _PreEmphasis(NamedTuple):
 
 
 class _Channels(NamedTuple):
-    value: int
+    value: Literal[2, 4]
 
 
 class _Pregap(NamedTuple):
@@ -293,7 +293,7 @@ class _TocTransformer(Transformer[Token, object]):
         isrc: str | None = None
         copy_permitted: bool | None = None
         pre_emphasis: bool | None = None
-        channels: int | None = None
+        channels: Literal[2, 4] | None = None
         cd_text: CdText | None = None
         pregap: Time | None = None
         statements: list[TrackStatement] = []
@@ -332,19 +332,13 @@ class _TocTransformer(Transformer[Token, object]):
                 sub_channel_mode=sub_channel_mode,
                 copy_permitted=copy_permitted,
                 pre_emphasis=pre_emphasis,
-                channels=channels,  # type: ignore[arg-type]
+                channels=channels,
                 isrc=isrc,
                 cd_text=cd_text,
                 pregap=pregap,
                 statements=statements,
                 indexes=indexes,
             )
-
-    def track_flag(self, meta: Meta, children: list[_Child]) -> _Child:
-        return children[0]
-
-    def track_statement(self, meta: Meta, children: list[_Child]) -> _Child:
-        return children[0]
 
     def isrc(self, meta: Meta, children: list[Token]) -> _Isrc:
         with self._at(meta.line):

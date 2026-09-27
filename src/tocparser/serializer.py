@@ -68,11 +68,6 @@ def _quote(text: str) -> str:
     return f'"{escape(text)}"'
 
 
-def _time(value: Time) -> str:
-    """Render a position or length; ``Msf.__str__`` zero-pads, ints do not."""
-    return str(value)
-
-
 def _binary(name: str, values: list[int], indent: str) -> list[str]:
     if not values:
         return [f"{indent}{name} {{}}"]
@@ -146,9 +141,9 @@ def _statement(statement: TrackStatement, track: Track) -> str:
             parts.append("SWAP")
         if statement.offset is not None:
             parts.append(f"#{statement.offset}")
-        parts.append(_time(statement.start))
+        parts.append(str(statement.start))
         if statement.length is not None:
-            parts.append(_time(statement.length))
+            parts.append(str(statement.length))
         return " ".join(parts)
 
     if isinstance(statement, DataFile):
@@ -157,7 +152,7 @@ def _statement(statement: TrackStatement, track: Track) -> str:
             parts.append(f"#{statement.offset}")
         if statement.length is None:
             return " ".join(parts)
-        parts.append(_time(statement.length))
+        parts.append(str(statement.length))
         line = " ".join(parts)
         # cdrdao annotates data lengths, but not ones it wrote as FILE.
         if track.mode is not TrackMode.AUDIO:
@@ -165,7 +160,7 @@ def _statement(statement: TrackStatement, track: Track) -> str:
         return line
 
     if isinstance(statement, Fifo):
-        line = f"FIFO {_quote(statement.filename)} {_time(statement.length)}"
+        line = f"FIFO {_quote(statement.filename)} {statement.length}"
         # cdrdao only annotates a FIFO whose length lands on a block boundary,
         # which is exactly when it writes the length as MSF.
         if isinstance(statement.length, Msf):
@@ -173,7 +168,7 @@ def _statement(statement: TrackStatement, track: Track) -> str:
         return line
 
     if isinstance(statement, Silence):
-        return f"SILENCE {_time(statement.length)}"
+        return f"SILENCE {statement.length}"
 
     if isinstance(statement, Zero):
         parts = ["ZERO"]
@@ -181,18 +176,14 @@ def _statement(statement: TrackStatement, track: Track) -> str:
             parts.append(statement.data_mode.value)
         if statement.sub_channel_mode is not None:
             parts.append(statement.sub_channel_mode.value)
-        parts.append(_time(statement.length))
+        parts.append(str(statement.length))
         return " ".join(parts)
 
     if isinstance(statement, Start):
-        return (
-            "START"
-            if statement.position is None
-            else f"START {_time(statement.position)}"
-        )
+        return "START" if statement.position is None else f"START {statement.position}"
 
     # Every other statement returned above, so this is an End.
-    return "END" if statement.position is None else f"END {_time(statement.position)}"
+    return "END" if statement.position is None else f"END {statement.position}"
 
 
 def _track(track: Track) -> list[str]:
@@ -214,10 +205,10 @@ def _track(track: Track) -> list[str]:
     if track.cd_text is not None:
         lines.extend(_cd_text(track.cd_text))
     if track.pregap is not None:
-        lines.append(f"PREGAP {_time(track.pregap)}")
+        lines.append(f"PREGAP {track.pregap}")
 
     lines.extend(_statement(statement, track) for statement in track.statements)
-    lines.extend(f"INDEX {_time(index)}" for index in track.indexes)
+    lines.extend(f"INDEX {index}" for index in track.indexes)
     return lines
 
 
