@@ -4,9 +4,13 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
-  # The uv ecosystem updates pyproject.toml and uv.lock together. The pip one
-  # would leave uv.lock stale, failing CI's `uv sync --locked`.
+  # The uv ecosystem updates uv.lock. The pip one would leave it stale, failing
+  # CI's `uv sync --locked`.
   - package-ecosystem: "uv"
     directory: "/"
     schedule:
       interval: "weekly"
+    # A library's minimum versions are deliberate, and the lowest-direct CI jobs
+    # test them, so only the lock moves. Without this, Dependabot rewrote the
+    # general pydantic requirement to fit the Python 3.15 clause's prerelease.
+    versioning-strategy: "lockfile-only"
