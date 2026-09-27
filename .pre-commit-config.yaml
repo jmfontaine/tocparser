@@ -1,0 +1,43 @@
+# Never touch these: LICENSE.txt is kept verbatim, and the TOC files are
+# cdrdao's bytes, which tests/test_corpus.py requires unchanged.
+exclude: ^(LICENSE\.txt|tests/(corpus|fixtures)/.*\.toc)$
+
+repos:
+  # General
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: 3e8a8703264a2f4a69428a0aa4dcb512790b2c8c  # frozen: v6.0.0
+    hooks:
+      - id: check-added-large-files
+      - id: check-merge-conflict
+      - id: check-toml
+      - id: end-of-file-fixer
+      - id: mixed-line-ending
+      - id: trailing-whitespace
+
+  - repo: https://github.com/rhysd/actionlint
+    rev: 914e7df21a07ef503a81201c76d2b11c789d3fca  # frozen: v1.7.12
+    hooks:
+      - id: actionlint
+
+  # Through `uv run`, so the hooks use the versions pinned in uv.lock, as CI does.
+  - repo: local
+    hooks:
+      # Fixes first: they can leave code the formatter then changes.
+      - id: ruff-check
+        name: ruff-check
+        entry: uv run ruff check --fix
+        language: system
+        types_or: [python, pyi]
+
+      - id: ruff-format
+        name: ruff-format
+        entry: uv run ruff format
+        language: system
+        types_or: [python, pyi]
+
+      - id: type-check
+        name: type-check
+        entry: uv run mypy
+        language: system
+        types: [python]
+        pass_filenames: false

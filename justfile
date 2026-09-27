@@ -25,6 +25,18 @@ lint:
 lint-fix:
     uv run ruff check --fix
 
+# Run pre-commit on all files
+pre-commit:
+    uv run pre-commit run --all-files
+
+# Install pre-commit hooks
+pre-commit-install:
+    uv run pre-commit install
+
+# Update pre-commit hooks to latest versions
+pre-commit-update:
+    uv run pre-commit autoupdate --freeze
+
 # Run all quality assurance checks
 qa: format-check lint type-check verify-types
 
