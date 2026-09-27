@@ -19,7 +19,6 @@ from tocparser.models import (
     CdText,
     CdTextValue,
     DataFile,
-    End,
     Fifo,
     File,
     Silence,
@@ -27,6 +26,7 @@ from tocparser.models import (
     Toc,
     Track,
     TrackMode,
+    TrackStatement,
     Zero,
 )
 from tocparser.times import Msf, Time
@@ -100,22 +100,21 @@ def _cd_text_value(name: str, value: CdTextValue, indent: str) -> list[str]:
     return _binary(name, value, indent)
 
 
-def _cd_text(cd_text: CdText, indent: str = "") -> list[str]:
-    lines = [f"{indent}CD_TEXT {{"]
-    inner = indent + _INDENT
+def _cd_text(cd_text: CdText) -> list[str]:
+    lines = ["CD_TEXT {"]
     if cd_text.language_map:
-        lines.append(f"{inner}LANGUAGE_MAP {{")
+        lines.append(f"{_INDENT}LANGUAGE_MAP {{")
         for number, code in cd_text.language_map.items():
-            lines.append(f"{inner}{_INDENT}{number}: {code}")
-        lines.append(f"{inner}}}")
+            lines.append(f"{_INDENT * 2}{number}: {code}")
+        lines.append(f"{_INDENT}}}")
     for number, block in cd_text.blocks.items():
-        lines.append(f"{inner}LANGUAGE {number} {{")
+        lines.append(f"{_INDENT}LANGUAGE {number} {{")
         if block.encoding is not None:
-            lines.append(f"{inner}{_INDENT}{block.encoding.value}")
+            lines.append(f"{_INDENT * 2}{block.encoding.value}")
         for name, value in block.items.items():
-            lines.extend(_cd_text_value(name.value, value, inner + _INDENT))
-        lines.append(f"{inner}}}")
-    lines.append(f"{indent}}}")
+            lines.extend(_cd_text_value(name.value, value, _INDENT * 2))
+        lines.append(f"{_INDENT}}}")
+    lines.append("}")
     return lines
 
 
@@ -137,7 +136,7 @@ def _length_comment(length: Time, track: Track) -> str:
     return f" // length in bytes: {_byte_length(length, track)}"
 
 
-def _statement(statement: object, track: Track) -> str:
+def _statement(statement: TrackStatement, track: Track) -> str:
     if isinstance(statement, File):
         parts = [
             "AUDIOFILE" if statement.audiofile else "FILE",
@@ -192,12 +191,8 @@ def _statement(statement: object, track: Track) -> str:
             else f"START {_time(statement.position)}"
         )
 
-    if isinstance(statement, End):
-        return (
-            "END" if statement.position is None else f"END {_time(statement.position)}"
-        )
-
-    raise TypeError(f"Unsupported track statement: {statement!r}")  # pragma: no cover
+    # Every other statement returned above, so this is an End.
+    return "END" if statement.position is None else f"END {_time(statement.position)}"
 
 
 def _track(track: Track) -> list[str]:

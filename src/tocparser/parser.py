@@ -25,6 +25,7 @@ from tocparser.errors import Loc, TocError, TocParseError, TocValidationError
 from tocparser.models import (
     BINARY_DATA_TOO_LONG,
     CD_TEXT_ALIASES,
+    LANGUAGE_CODE_EN,
     MAX_BINARY_LENGTH,
     PREGAP_IS_ZERO,
     SILENCE_IS_ZERO,
@@ -125,7 +126,6 @@ def _cd_text_string(value: _String, encoding: CdTextEncoding) -> str:
 
 class _Isrc(NamedTuple):
     value: str
-    line: int
 
 
 class _Copy(NamedTuple):
@@ -142,7 +142,6 @@ class _Channels(NamedTuple):
 
 class _Pregap(NamedTuple):
     value: Time
-    line: int
 
 
 class _Index(NamedTuple):
@@ -265,7 +264,6 @@ class _TocTransformer(Transformer[Token, object]):
             )
 
     def catalog(self, meta: Meta, children: list[Token]) -> str:
-        self._lines[("catalog",)] = meta.line
         with self._at(meta.line):
             return validate_catalog(self._string(children[0]).text)
 
@@ -274,7 +272,6 @@ class _TocTransformer(Transformer[Token, object]):
 
     def first_track_no(self, meta: Meta, children: list[Token]) -> int:
         line = _line(children[0])
-        self._lines[("first_track_number",)] = line
         with self._at(line):
             return validate_first_track_number(int(children[0]))
 
@@ -308,7 +305,6 @@ class _TocTransformer(Transformer[Token, object]):
                 sub_channel_mode = SubChannelMode(str(child))
             elif isinstance(child, _Isrc):
                 isrc = child.value
-                lines[("isrc",)] = child.line
             elif isinstance(child, _Copy):
                 copy_permitted = child.value
             elif isinstance(child, _PreEmphasis):
@@ -320,7 +316,6 @@ class _TocTransformer(Transformer[Token, object]):
                 lines.update(child.lines)
             elif isinstance(child, _Pregap):
                 pregap = child.value
-                lines[("pregap",)] = child.line
             elif isinstance(child, _Statement):
                 lines[("statements", len(statements))] = child.line
                 statements.append(child.value)
@@ -353,7 +348,7 @@ class _TocTransformer(Transformer[Token, object]):
 
     def isrc(self, meta: Meta, children: list[Token]) -> _Isrc:
         with self._at(meta.line):
-            return _Isrc(validate_isrc(self._string(children[0]).text), meta.line)
+            return _Isrc(validate_isrc(self._string(children[0]).text))
 
     def copy(self, meta: Meta, children: list[Token]) -> _Copy:
         return _Copy(not children)
@@ -366,9 +361,7 @@ class _TocTransformer(Transformer[Token, object]):
 
     def pregap(self, meta: Meta, children: list[Time]) -> _Pregap:
         with self._at(meta.line):
-            return _Pregap(
-                validate_non_zero_length(children[0], PREGAP_IS_ZERO), meta.line
-            )
+            return _Pregap(validate_non_zero_length(children[0], PREGAP_IS_ZERO))
 
     def index(self, meta: Meta, children: list[Time]) -> _Index:
         return _Index(children[0], meta.line)
@@ -548,7 +541,7 @@ class _TocTransformer(Transformer[Token, object]):
 
     def language_code(self, meta: Meta, children: list[Token]) -> int:
         token = children[0]
-        return 9 if token.type == "LANGUAGE_EN" else int(token)
+        return LANGUAGE_CODE_EN if token.type == "LANGUAGE_EN" else int(token)
 
     def cd_text_block(self, meta: Meta, children: list[_Child]) -> _CdTextBlock:
         number_token = children[0]
