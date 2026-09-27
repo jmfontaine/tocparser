@@ -43,7 +43,9 @@ def _installed_cdrdao_version() -> str | None:
     if not HAVE_CDRDAO:
         return None
     # cdrdao prints "Cdrdao version 1.2.6 - (C) ..." on stderr.
-    completed = subprocess.run(["cdrdao", "version"], capture_output=True, text=True, check=False)
+    completed = subprocess.run(
+        ["cdrdao", "version"], capture_output=True, text=True, check=False
+    )
     match = re.search(r"version (\S+)", completed.stdout + completed.stderr)
     return match[1] if match else None
 
@@ -65,7 +67,8 @@ T = 'TRACK AUDIO\nFILE "a.wav" 0\n'
 
 def _indexes(count: int) -> str:
     return "".join(
-        f"INDEX 00:{1 + second // 60:02d}:{second % 60:02d}\n" for second in range(count)
+        f"INDEX 00:{1 + second // 60:02d}:{second % 60:02d}\n"
+        for second in range(count)
     )
 
 
@@ -82,16 +85,48 @@ CASES: list[tuple[str, str, bool]] = [
     ("catalog-short", f'CD_DA\nCATALOG "123"\n{T}', False),
     ("catalog-non-digit", f'CD_DA\nCATALOG "123456789012X"\n{T}', False),
     ("isrc-ok", 'CD_DA\nTRACK AUDIO\nISRC "DEXXX9800001"\nFILE "a.wav" 0\n', True),
-    ("isrc-digit-country", 'CD_DA\nTRACK AUDIO\nISRC "12XXX9800001"\nFILE "a.wav" 0\n', True),
-    ("isrc-lower-case", 'CD_DA\nTRACK AUDIO\nISRC "dexxx9800001"\nFILE "a.wav" 0\n', False),
-    ("isrc-dashed", 'CD_DA\nTRACK AUDIO\nISRC "DE-XXX-98-00001"\nFILE "a.wav" 0\n', False),
-    ("isrc-alpha-year", 'CD_DA\nTRACK AUDIO\nISRC "DEXXXAB00001"\nFILE "a.wav" 0\n', False),
+    (
+        "isrc-digit-country",
+        'CD_DA\nTRACK AUDIO\nISRC "12XXX9800001"\nFILE "a.wav" 0\n',
+        True,
+    ),
+    (
+        "isrc-lower-case",
+        'CD_DA\nTRACK AUDIO\nISRC "dexxx9800001"\nFILE "a.wav" 0\n',
+        False,
+    ),
+    (
+        "isrc-dashed",
+        'CD_DA\nTRACK AUDIO\nISRC "DE-XXX-98-00001"\nFILE "a.wav" 0\n',
+        False,
+    ),
+    (
+        "isrc-alpha-year",
+        'CD_DA\nTRACK AUDIO\nISRC "DEXXXAB00001"\nFILE "a.wav" 0\n',
+        False,
+    ),
     ("msf-second-60", 'CD_DA\nTRACK AUDIO\nFILE "a.wav" 0\nSTART 00:60:00\n', False),
     ("msf-frame-75", 'CD_DA\nTRACK AUDIO\nFILE "a.wav" 0\nSTART 00:02:75\n', False),
-    ("msf-wide-fields", 'CD_DA\nTRACK AUDIO\nFILE "a.wav" 0\nSTART 000:002:000\n', True),
-    ("language-without-map", f'CD_DA\nCD_TEXT {{ LANGUAGE 0 {{ TITLE "x" }} }}\n{T}', True),
-    ("language-number-8", f"CD_DA\nCD_TEXT {{ LANGUAGE_MAP {{ 8 : EN }} }}\n{T}", False),
-    ("language-code-256", f"CD_DA\nCD_TEXT {{ LANGUAGE_MAP {{ 0: 256 }} }}\n{T}", False),
+    (
+        "msf-wide-fields",
+        'CD_DA\nTRACK AUDIO\nFILE "a.wav" 0\nSTART 000:002:000\n',
+        True,
+    ),
+    (
+        "language-without-map",
+        f'CD_DA\nCD_TEXT {{ LANGUAGE 0 {{ TITLE "x" }} }}\n{T}',
+        True,
+    ),
+    (
+        "language-number-8",
+        f"CD_DA\nCD_TEXT {{ LANGUAGE_MAP {{ 8 : EN }} }}\n{T}",
+        False,
+    ),
+    (
+        "language-code-256",
+        f"CD_DA\nCD_TEXT {{ LANGUAGE_MAP {{ 0: 256 }} }}\n{T}",
+        False,
+    ),
     ("block-number-8", f"CD_DA\nCD_TEXT {{ LANGUAGE 8 {{ }} }}\n{T}", False),
     (
         "language-map-numeric",
@@ -103,7 +138,11 @@ CASES: list[tuple[str, str, bool]] = [
         f"CD_DA\nCD_TEXT {{ LANGUAGE 0 {{ TOC_INFO1 {{ 0, 256 }} }} }}\n{T}",
         False,
     ),
-    ("binary-empty", f"CD_DA\nCD_TEXT {{ LANGUAGE 0 {{ TOC_INFO1 {{ }} }} }}\n{T}", True),
+    (
+        "binary-empty",
+        f"CD_DA\nCD_TEXT {{ LANGUAGE 0 {{ TOC_INFO1 {{ }} }} }}\n{T}",
+        True,
+    ),
     (
         "binary-at-limit",
         f"CD_DA\nCD_TEXT {{ LANGUAGE 0 {{ TOC_INFO1 {{ {_binary(3072)} }} }} }}\n{T}",
@@ -137,17 +176,49 @@ CASES: list[tuple[str, str, bool]] = [
         False,
     ),
     ("pregap-zero", 'CD_DA\nTRACK AUDIO\nPREGAP 0:0:0\nFILE "a.wav" 0\n', False),
-    ("pregap-and-start", 'CD_DA\nTRACK AUDIO\nPREGAP 0:2:0\nFILE "a.wav" 0\nSTART 0:1:0\n', False),
-    ("pregap-after-content", 'CD_DA\nTRACK AUDIO\nFILE "a.wav" 0\nPREGAP 0:2:0\n', False),
+    (
+        "pregap-and-start",
+        'CD_DA\nTRACK AUDIO\nPREGAP 0:2:0\nFILE "a.wav" 0\nSTART 0:1:0\n',
+        False,
+    ),
+    (
+        "pregap-after-content",
+        'CD_DA\nTRACK AUDIO\nFILE "a.wav" 0\nPREGAP 0:2:0\n',
+        False,
+    ),
     ("pregap-then-silence", "CD_DA\nTRACK AUDIO\nPREGAP 0:2:0\nSILENCE 0:5:0\n", True),
     # On an audio track PREGAP is inserted as silence, which is audio data.
-    ("pregap-then-datafile", 'CD_DA\nTRACK AUDIO\nPREGAP 0:2:0\nDATAFILE "d" 0:5:0\n', False),
+    (
+        "pregap-then-datafile",
+        'CD_DA\nTRACK AUDIO\nPREGAP 0:2:0\nDATAFILE "d" 0:5:0\n',
+        False,
+    ),
     ("pregap-then-zero", "CD_DA\nTRACK AUDIO\nPREGAP 0:2:0\nZERO 0:5:0\n", False),
-    ("data-pregap-then-datafile", 'CD_ROM\nTRACK MODE1\nPREGAP 0:2:0\nDATAFILE "d"\n', True),
-    ("two-starts", 'CD_DA\nTRACK AUDIO\nFILE "a.wav" 0\nSTART 0:1:0\nSTART 0:2:0\n', False),
-    ("two-ends", 'CD_DA\nTRACK AUDIO\nFILE "a.wav" 0 0:10:0\nEND 0:8:0\nEND 0:9:0\n', False),
-    ("start-after-index", 'CD_DA\nTRACK AUDIO\nFILE "a.wav" 0\nINDEX 0:2:0\nSTART 0:1:0\n', False),
-    ("index-before-content", 'CD_DA\nTRACK AUDIO\nINDEX 0:2:0\nFILE "a.wav" 0\n', False),
+    (
+        "data-pregap-then-datafile",
+        'CD_ROM\nTRACK MODE1\nPREGAP 0:2:0\nDATAFILE "d"\n',
+        True,
+    ),
+    (
+        "two-starts",
+        'CD_DA\nTRACK AUDIO\nFILE "a.wav" 0\nSTART 0:1:0\nSTART 0:2:0\n',
+        False,
+    ),
+    (
+        "two-ends",
+        'CD_DA\nTRACK AUDIO\nFILE "a.wav" 0 0:10:0\nEND 0:8:0\nEND 0:9:0\n',
+        False,
+    ),
+    (
+        "start-after-index",
+        'CD_DA\nTRACK AUDIO\nFILE "a.wav" 0\nINDEX 0:2:0\nSTART 0:1:0\n',
+        False,
+    ),
+    (
+        "index-before-content",
+        'CD_DA\nTRACK AUDIO\nINDEX 0:2:0\nFILE "a.wav" 0\n',
+        False,
+    ),
     ("index-at-start", 'CD_DA\nTRACK AUDIO\nFILE "a.wav" 0\nINDEX 00:00:00\n', False),
     ("98-indexes", f'CD_DA\nTRACK AUDIO\nFILE "a.wav" 0\n{_indexes(98)}', True),
     ("99-indexes", f'CD_DA\nTRACK AUDIO\nFILE "a.wav" 0\n{_indexes(99)}', False),
@@ -156,8 +227,16 @@ CASES: list[tuple[str, str, bool]] = [
     ("zero-on-audio-track", 'CD_DA\nTRACK AUDIO\nZERO 0:2:0\nFILE "a.wav" 0\n', False),
     ("file-then-zero", 'CD_DA\nTRACK AUDIO\nFILE "a.wav" 0 0:5:0\nZERO 0:2:0\n', False),
     # FIFO data counts as data, not audio, so it cannot join a FILE either.
-    ("file-then-fifo", 'CD_DA\nTRACK AUDIO\nFILE "a.wav" 0 0:5:0\nFIFO "p" 0:2:0\n', False),
-    ("silence-on-data-track", 'CD_ROM\nTRACK MODE1\nSILENCE 0:2:0\nDATAFILE "d"\n', False),
+    (
+        "file-then-fifo",
+        'CD_DA\nTRACK AUDIO\nFILE "a.wav" 0 0:5:0\nFIFO "p" 0:2:0\n',
+        False,
+    ),
+    (
+        "silence-on-data-track",
+        'CD_ROM\nTRACK MODE1\nSILENCE 0:2:0\nDATAFILE "d"\n',
+        False,
+    ),
     ("file-on-data-track", 'CD_ROM\nTRACK MODE1\nFILE "a.wav" 0\n', False),
     ("file-with-sub-channel", 'CD_DA\nTRACK AUDIO RW\nFILE "a.wav" 0\n', False),
     ("no-tracks", "CD_DA\n", False),
@@ -184,8 +263,16 @@ CASES: list[tuple[str, str, bool]] = [
     ("mode1-under-cd-da", 'CD_DA\nTRACK MODE1\nDATAFILE "d"\n', True),
     ("audio-under-cd-rom", 'CD_ROM\nTRACK AUDIO\nFILE "a.wav" 0\n', True),
     # Audio-only flags on a data track are tolerated.
-    ("pre-emphasis-on-data", 'CD_ROM\nTRACK MODE1\nNO PRE_EMPHASIS\nDATAFILE "d"\n', True),
-    ("pregap-on-first-track", 'CD_DA\nTRACK AUDIO\nPREGAP 0:2:0\nFILE "a.wav" 0\n', True),
+    (
+        "pre-emphasis-on-data",
+        'CD_ROM\nTRACK MODE1\nNO PRE_EMPHASIS\nDATAFILE "d"\n',
+        True,
+    ),
+    (
+        "pregap-on-first-track",
+        'CD_DA\nTRACK AUDIO\nPREGAP 0:2:0\nFILE "a.wav" 0\n',
+        True,
+    ),
     ("hundred-tracks", "CD_DA\n" + 'TRACK AUDIO\nFILE "a.wav" 0 0:5:0\n' * 100, True),
     (
         "duplicate-cd-text-item",
@@ -194,20 +281,55 @@ CASES: list[tuple[str, str, bool]] = [
     ),
     (
         "repeated-language-block",
-        f'CD_DA\nCD_TEXT {{ LANGUAGE 0 {{ TITLE "a" }} LANGUAGE 0 {{ PERFORMER "b" }} }}\n{T}',
+        (
+            f'CD_DA\nCD_TEXT {{ LANGUAGE 0 {{ TITLE "a" }} '
+            f'LANGUAGE 0 {{ PERFORMER "b" }} }}\n{T}'
+        ),
         True,
     ),
-    ("upc-ean-and-isrc", f'CD_DA\nCD_TEXT {{ LANGUAGE 0 {{ UPC_EAN "1" ISRC "2" }} }}\n{T}', True),
+    (
+        "upc-ean-and-isrc",
+        f'CD_DA\nCD_TEXT {{ LANGUAGE 0 {{ UPC_EAN "1" ISRC "2" }} }}\n{T}',
+        True,
+    ),
     # A backslash may only introduce a quote, another backslash or three
     # digits; cdrdao reports "Illegal token: \" for anything else.
     ("escape-quote", f'CD_DA\nCD_TEXT {{ LANGUAGE 0 {{ TITLE "a\\"b" }} }}\n{T}', True),
-    ("escape-backslash", f'CD_DA\nCD_TEXT {{ LANGUAGE 0 {{ TITLE "a\\\\b" }} }}\n{T}', True),
-    ("escape-octal", f'CD_DA\nCD_TEXT {{ LANGUAGE 0 {{ TITLE "a\\101b" }} }}\n{T}', True),
-    ("escape-non-octal-digits", f'CD_DA\nCD_TEXT {{ LANGUAGE 0 {{ TITLE "a\\999" }} }}\n{T}', True),
-    ("escape-above-byte", f'CD_DA\nCD_TEXT {{ LANGUAGE 0 {{ TITLE "a\\777" }} }}\n{T}', True),
-    ("escape-lone-backslash", f'CD_DA\nCD_TEXT {{ LANGUAGE 0 {{ TITLE "a\\b" }} }}\n{T}', False),
-    ("escape-short-octal", f'CD_DA\nCD_TEXT {{ LANGUAGE 0 {{ TITLE "a\\12b" }} }}\n{T}', False),
-    ("escape-mixed-with-utf8", f'CD_DA\nCD_TEXT {{ LANGUAGE 0 {{ TITLE "é\\351" }} }}\n{T}', False),
+    (
+        "escape-backslash",
+        f'CD_DA\nCD_TEXT {{ LANGUAGE 0 {{ TITLE "a\\\\b" }} }}\n{T}',
+        True,
+    ),
+    (
+        "escape-octal",
+        f'CD_DA\nCD_TEXT {{ LANGUAGE 0 {{ TITLE "a\\101b" }} }}\n{T}',
+        True,
+    ),
+    (
+        "escape-non-octal-digits",
+        f'CD_DA\nCD_TEXT {{ LANGUAGE 0 {{ TITLE "a\\999" }} }}\n{T}',
+        True,
+    ),
+    (
+        "escape-above-byte",
+        f'CD_DA\nCD_TEXT {{ LANGUAGE 0 {{ TITLE "a\\777" }} }}\n{T}',
+        True,
+    ),
+    (
+        "escape-lone-backslash",
+        f'CD_DA\nCD_TEXT {{ LANGUAGE 0 {{ TITLE "a\\b" }} }}\n{T}',
+        False,
+    ),
+    (
+        "escape-short-octal",
+        f'CD_DA\nCD_TEXT {{ LANGUAGE 0 {{ TITLE "a\\12b" }} }}\n{T}',
+        False,
+    ),
+    (
+        "escape-mixed-with-utf8",
+        f'CD_DA\nCD_TEXT {{ LANGUAGE 0 {{ TITLE "é\\351" }} }}\n{T}',
+        False,
+    ),
     # An escaped backslash before three digits still reads as an octal escape.
     (
         "escape-backslash-digits-with-utf8",
@@ -215,9 +337,17 @@ CASES: list[tuple[str, str, bool]] = [
         False,
     ),
     ("tab-in-string", f'CD_DA\nCD_TEXT {{ LANGUAGE 0 {{ TITLE "a\tb" }} }}\n{T}', True),
-    ("newline-in-string", f'CD_DA\nCD_TEXT {{ LANGUAGE 0 {{ TITLE "a\nb" }} }}\n{T}', True),
+    (
+        "newline-in-string",
+        f'CD_DA\nCD_TEXT {{ LANGUAGE 0 {{ TITLE "a\nb" }} }}\n{T}',
+        True,
+    ),
     ("latin-text", f'CD_DA\nCD_TEXT {{ LANGUAGE 0 {{ TITLE "café" }} }}\n{T}', True),
-    ("cjk-without-encoding", f'CD_DA\nCD_TEXT {{ LANGUAGE 0 {{ TITLE "日本" }} }}\n{T}', False),
+    (
+        "cjk-without-encoding",
+        f'CD_DA\nCD_TEXT {{ LANGUAGE 0 {{ TITLE "日本" }} }}\n{T}',
+        False,
+    ),
     (
         "cjk-with-ms-jis",
         f'CD_DA\nCD_TEXT {{ LANGUAGE 0 {{ ENCODING_MS_JIS TITLE "日本" }} }}\n{T}',
@@ -228,7 +358,10 @@ CASES: list[tuple[str, str, bool]] = [
     # master branch falls back on it when there is no ENCODING_*, and accepts.
     (
         "cjk-with-size-info-ms-jis",
-        f'CD_DA\nCD_TEXT {{ LANGUAGE 0 {{ TITLE "日本" SIZE_INFO {{ 128, 1, 2 }} }} }}\n{T}',
+        (
+            f'CD_DA\nCD_TEXT {{ LANGUAGE 0 {{ TITLE "日本" '
+            f"SIZE_INFO {{ 128, 1, 2 }} }} }}\n{T}"
+        ),
         False,
     ),
     (
@@ -250,7 +383,8 @@ CASES: list[tuple[str, str, bool]] = [
     (
         "encoding-on-track-ignored",
         (
-            'CD_DA\nTRACK AUDIO\nCD_TEXT { LANGUAGE 0 { ENCODING_MS_JIS TITLE "日本" } }\n'
+            "CD_DA\nTRACK AUDIO\n"
+            'CD_TEXT { LANGUAGE 0 { ENCODING_MS_JIS TITLE "日本" } }\n'
             'FILE "a.wav" 0\n'
         ),
         False,
@@ -279,7 +413,11 @@ CASES: list[tuple[str, str, bool]] = [
         'CD_DA\nTRACK AUDIO\nCD_TEXT { LANGUAGE 0 { CLOSED "x" } }\nFILE "a.wav" 0\n',
         True,
     ),
-    ("unknown-cd-text-item", f'CD_DA\nCD_TEXT {{ LANGUAGE 0 {{ FOO "x" }} }}\n{T}', False),
+    (
+        "unknown-cd-text-item",
+        f'CD_DA\nCD_TEXT {{ LANGUAGE 0 {{ FOO "x" }} }}\n{T}',
+        False,
+    ),
 ]
 
 # cdrdao's parser looks ahead differently, so for these syntax errors it names
@@ -357,7 +495,9 @@ def cdrdao_report(source: str, directory: Path, name: str) -> Report | None:
             timeout=CDRDAO_TIMEOUT,
         )
     except subprocess.TimeoutExpired:
-        pytest.fail(f"cdrdao show-toc did not finish on {name} within {CDRDAO_TIMEOUT}s")
+        pytest.fail(
+            f"cdrdao show-toc did not finish on {name} within {CDRDAO_TIMEOUT}s"
+        )
     output = (completed.stdout + completed.stderr).decode("utf-8", "replace")
     # An error cdrdao meets after parsing, such as CD-TEXT it cannot encode,
     # is reported without failing the command, so the ERROR line decides.
@@ -365,7 +505,9 @@ def cdrdao_report(source: str, directory: Path, name: str) -> Report | None:
         match = _ERROR_RE.match(output_line)
         if match is not None:
             line = match["line"]
-            return Report(int(line) if line is not None else None, match["message"].strip())
+            return Report(
+                int(line) if line is not None else None, match["message"].strip()
+            )
     assert completed.returncode == 0, output
     return None
 
@@ -378,7 +520,9 @@ def tocparser_report(source: str) -> TocParseError | TocValidationError | None:
     return None
 
 
-def assert_same_report(ours: TocParseError | TocValidationError, theirs: Report, case: str) -> None:
+def assert_same_report(
+    ours: TocParseError | TocValidationError, theirs: Report, case: str
+) -> None:
     if isinstance(ours, TocParseError) and case in SYNTAX_ERROR_REPORTED_ELSEWHERE:
         return
     # cdrdao reports line 0 for a FIFO, whose statement records no line.
@@ -395,7 +539,8 @@ def assert_same_report(ours: TocParseError | TocValidationError, theirs: Report,
 def test_installed_cdrdao_is_the_recorded_version() -> None:
     assert INSTALLED_CDRDAO_VERSION == EXPECTED_CDRDAO_VERSION, (
         f"these expectations were recorded with cdrdao {EXPECTED_CDRDAO_VERSION}, "
-        f"but cdrdao {INSTALLED_CDRDAO_VERSION} is installed: re-run this module against it, "
+        f"but cdrdao {INSTALLED_CDRDAO_VERSION} is installed: "
+        "re-run this module against it, "
         "update the cases and rules that changed, then EXPECTED_CDRDAO_VERSION"
     )
 

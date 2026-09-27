@@ -92,7 +92,7 @@ comparisons are skipped.
 
 ## Code style
 
-- Python 3.10+, formatting and linting by ruff, line length 100 (`just format`, `just lint-fix`)
+- Python 3.10+, formatting and linting by ruff, line length 88 (`just format`, `just lint-fix`)
 - Strict type checking with mypy (`just type-check`), and a fully typed public API
   (`just verify-types`)
 - US English everywhere: code, comments, docs and commit messages

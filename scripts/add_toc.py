@@ -41,7 +41,18 @@ from collections.abc import Callable
 from pathlib import Path
 from typing import NoReturn
 
-from tocparser import DataFile, Fifo, File, Msf, Silence, Start, TocError, Zero, dumps, parse_file
+from tocparser import (
+    DataFile,
+    Fifo,
+    File,
+    Msf,
+    Silence,
+    Start,
+    TocError,
+    Zero,
+    dumps,
+    parse_file,
+)
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 CORPUS_DIR = PROJECT_ROOT / "tests" / "corpus"
@@ -58,7 +69,9 @@ def die(message: str) -> NoReturn:
 
 
 def corpus_files() -> list[Path]:
-    return sorted(path for path in CORPUS_DIR.glob("*.toc") if NUMBERED.fullmatch(path.name))
+    return sorted(
+        path for path in CORPUS_DIR.glob("*.toc") if NUMBERED.fullmatch(path.name)
+    )
 
 
 def drive_status() -> tuple[str, int] | None:
@@ -68,7 +81,9 @@ def drive_status() -> tuple[str, int] | None:
     answers a read of an empty drive with a SCSI illegal request that reads like
     a bad command line rather than a missing disc.
     """
-    result = subprocess.run(["drutil", "status"], capture_output=True, text=True, check=False)
+    result = subprocess.run(
+        ["drutil", "status"], capture_output=True, text=True, check=False
+    )
     if result.returncode != 0:
         return None
     status = result.stdout
@@ -88,14 +103,16 @@ def disc_sessions(requested: int | None) -> list[int]:
     status = drive_status()
     if status is None:
         die(
-            "the drive reports no disc. If one is in there, the drive has lost track of "
-            "it: eject it, put it back, and try again."
+            "the drive reports no disc. If one is in there, the drive has lost track "
+            "of it: eject it, put it back, and try again."
         )
     _, sessions = status
     if requested is not None:
         return [requested]
     if sessions > 1:
-        print(f"add-toc: {sessions} sessions on this disc, reading each one.", flush=True)
+        print(
+            f"add-toc: {sessions} sessions on this disc, reading each one.", flush=True
+        )
     return list(range(1, sessions + 1))
 
 
@@ -124,8 +141,8 @@ def unmount_disc() -> bool:
         # Losing the disc mid-run leaves whatever was already installed intact,
         # so report it and let the caller finish rather than exiting here.
         print(
-            "add-toc: the drive reports no disc. It can lose track of a disc that never "
-            "moved; eject it, put it back, and run add-toc again.",
+            "add-toc: the drive reports no disc. It can lose track of a disc that "
+            "never moved; eject it, put it back, and run add-toc again.",
             file=sys.stderr,
         )
         return False
@@ -144,11 +161,14 @@ def unmount_disc() -> bool:
     )
     forced = _unmount(disc, force=True)
     if forced.returncode == 0:
-        print(f"add-toc: had to force {disc} off the OS. {held_by}".rstrip(), flush=True)
+        print(
+            f"add-toc: had to force {disc} off the OS. {held_by}".rstrip(), flush=True
+        )
         return True
 
+    reason = held_by or forced.stderr.strip()
     print(
-        f"add-toc: cannot take {disc} from the OS. {held_by or forced.stderr.strip()}".rstrip(),
+        f"add-toc: cannot take {disc} from the OS. {reason}".rstrip(),
         file=sys.stderr,
     )
     return False
@@ -200,7 +220,8 @@ def read_session(destination: Path, session: int) -> bool:
     except subprocess.CalledProcessError as error:
         # One unreadable session does not spoil the sessions that did read.
         print(
-            f"add-toc: cdrdao failed on session {session} with exit code {error.returncode}.",
+            f"add-toc: cdrdao failed on session {session} "
+            f"with exit code {error.returncode}.",
             file=sys.stderr,
         )
         return False
@@ -248,12 +269,18 @@ def disc_signature(path: Path) -> tuple[tuple[int, ...], int] | None:
                 if written is None:
                     return None
                 pregap = written
-            elif start is None and isinstance(statement, File | DataFile | Fifo | Silence | Zero):
+            elif start is None and isinstance(
+                statement, File | DataFile | Fifo | Silence | Zero
+            ):
                 # Only FILE carries an offset into its data file; the rest begin
                 # where the track begins.
-                offset = statement.start if isinstance(statement, File) else Msf(0, 0, 0)
+                offset = (
+                    statement.start if isinstance(statement, File) else Msf(0, 0, 0)
+                )
                 start = _frames(offset)
-                length = _frames(statement.length) if statement.length is not None else None
+                length = (
+                    _frames(statement.length) if statement.length is not None else None
+                )
         if start is None:
             return None
         positions.append(start + pregap)
@@ -267,13 +294,17 @@ def same_disc_as(candidate: Path) -> Path | None:
     signature = disc_signature(candidate)
     if signature is None:
         return None
-    return next((path for path in corpus_files() if disc_signature(path) == signature), None)
+    return next(
+        (path for path in corpus_files() if disc_signature(path) == signature), None
+    )
 
 
 def duplicate_of(candidate: Path) -> Path | None:
     """The corpus file holding exactly these bytes, if there is one."""
     contents = candidate.read_bytes()
-    return next((path for path in corpus_files() if path.read_bytes() == contents), None)
+    return next(
+        (path for path in corpus_files() if path.read_bytes() == contents), None
+    )
 
 
 def describe(path: Path) -> str:
@@ -284,12 +315,17 @@ def describe(path: Path) -> str:
         len(re.findall(r"^START", text, re.MULTILINE)),
         len(re.findall(r"^ISRC ", text, re.MULTILINE)),
     )
-    return "{} tracks, {} pregaps, {} ISRCs, {} bytes".format(*counts, path.stat().st_size)
+    return "{} tracks, {} pregaps, {} ISRCs, {} bytes".format(
+        *counts, path.stat().st_size
+    )
 
 
 def reread_agrees(work: Path, session: int, first: Path) -> bool:
     """Read a session again, and say whether it came back the same."""
-    print(f"add-toc: reading session {session} again to check it. Leave the disc in.", flush=True)
+    print(
+        f"add-toc: reading session {session} again to check it. Leave the disc in.",
+        flush=True,
+    )
     second = work / f"session{session}-again.toc"
     if not read_session(second, session):
         return False
@@ -332,10 +368,14 @@ def install(candidate: Path, version: str) -> Path:
             f"remove {destination.relative_to(PROJECT_ROOT)}",
             lambda: destination.unlink(missing_ok=True),
         )
-        _undo(f"cut {VERSIONS.name} back to {listed} bytes", lambda: _truncate(VERSIONS, listed))
+        _undo(
+            f"cut {VERSIONS.name} back to {listed} bytes",
+            lambda: _truncate(VERSIONS, listed),
+        )
         raise
     print(
-        f"add-toc: added {destination.relative_to(PROJECT_ROOT)} (cdrdao version: {version}).",
+        f"add-toc: added {destination.relative_to(PROJECT_ROOT)} "
+        f"(cdrdao version: {version}).",
         flush=True,
     )
     return destination
@@ -357,13 +397,16 @@ def _undo(what: str, step: Callable[[], None]) -> None:
 def installed_cdrdao_version() -> str:
     """The version of the cdrdao that will read the disc."""
     try:
-        result = subprocess.run(["cdrdao", "version"], capture_output=True, text=True, check=False)
+        result = subprocess.run(
+            ["cdrdao", "version"], capture_output=True, text=True, check=False
+        )
     except FileNotFoundError:
         die("cdrdao is not installed.")
     # cdrdao prints "Cdrdao version 1.2.6 - (C) ..." on stderr.
     match = re.search(r"version (\S+)", result.stdout + result.stderr)
     if match is None or not CDRDAO_VERSION.fullmatch(match[1]):
-        die(f"cannot tell the cdrdao version from: {(result.stdout + result.stderr).strip()!r}")
+        output = (result.stdout + result.stderr).strip()
+        die(f"cannot tell the cdrdao version from: {output!r}")
     return match[1]
 
 
@@ -378,8 +421,9 @@ def keep(candidate: Path, *, force: bool, version: str) -> Path | None:
         known = same_disc_as(candidate)
         if known is not None:
             print(
-                f"add-toc: this is the disc already in {known.name}, by where its tracks "
-                f"begin, read differently. Not added. Pass --force to keep it anyway.",
+                f"add-toc: this is the disc already in {known.name}, by where its "
+                "tracks begin, read differently. Not added. Pass --force to keep it "
+                "anyway.",
                 file=sys.stderr,
             )
             return None
@@ -413,7 +457,10 @@ def main() -> int:
         "--force",
         action="store_true",
         default=env_flag("FORCE"),
-        help="keep the read even if the corpus already describes that disc (default: $FORCE)",
+        help=(
+            "keep the read even if the corpus already describes that disc "
+            "(default: $FORCE)"
+        ),
     )
     parser.add_argument(
         "--cdrdao-version",
@@ -438,14 +485,18 @@ def main() -> int:
             added.append(installed)
     else:
         if given_version is not None:
-            die("--cdrdao-version only applies to a TOC_FILE; a disc read here uses this cdrdao.")
+            die(
+                "--cdrdao-version only applies to a TOC_FILE; "
+                "a disc read here uses this cdrdao."
+            )
         version = installed_cdrdao_version()
         with tempfile.TemporaryDirectory() as directory:
             work = Path(directory)
             for number in disc_sessions(session):
                 if disc_gone():
                     print(
-                        "add-toc: the drive reports no disc, so nothing more can be read.",
+                        "add-toc: the drive reports no disc, "
+                        "so nothing more can be read.",
                         file=sys.stderr,
                     )
                     unusable += 1
@@ -467,7 +518,10 @@ def main() -> int:
         try:
             same = path.read_text() == dumps(parse_file(path))
         except TocError as error:
-            print(f"add-toc: warning: {path.name} does not parse: {error}", file=sys.stderr)
+            print(
+                f"add-toc: warning: {path.name} does not parse: {error}",
+                file=sys.stderr,
+            )
             continue
         if not same:
             print(

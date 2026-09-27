@@ -366,7 +366,9 @@ class _TocTransformer(Transformer[Token, object]):
 
     def pregap(self, meta: Meta, children: list[Time]) -> _Pregap:
         with self._at(meta.line):
-            return _Pregap(validate_non_zero_length(children[0], PREGAP_IS_ZERO), meta.line)
+            return _Pregap(
+                validate_non_zero_length(children[0], PREGAP_IS_ZERO), meta.line
+            )
 
     def index(self, meta: Meta, children: list[Time]) -> _Index:
         return _Index(children[0], meta.line)
@@ -439,8 +441,13 @@ class _TocTransformer(Transformer[Token, object]):
             sub_channel_mode = SubChannelMode(str(rest[0]))
             rest = rest[1:]
         with self._at(meta.line):
-            length = validate_non_zero_length(rest[0], ZERO_DATA_IS_ZERO)  # type: ignore[arg-type]
-        statement = Zero(length=length, data_mode=data_mode, sub_channel_mode=sub_channel_mode)
+            length = validate_non_zero_length(
+                rest[0],  # type: ignore[arg-type]
+                ZERO_DATA_IS_ZERO,
+            )
+        statement = Zero(
+            length=length, data_mode=data_mode, sub_channel_mode=sub_channel_mode
+        )
         return _Statement(statement, meta.line)
 
     def start(self, meta: Meta, children: list[Time]) -> _Statement:
@@ -524,7 +531,9 @@ class _TocTransformer(Transformer[Token, object]):
         }
         return built, lines
 
-    def language_map(self, meta: Meta, children: list[tuple[int, int]]) -> dict[int, int]:
+    def language_map(
+        self, meta: Meta, children: list[tuple[int, int]]
+    ) -> dict[int, int]:
         return dict(children)
 
     def language_map_entry(self, meta: Meta, children: list[_Child]) -> tuple[int, int]:
@@ -633,12 +642,16 @@ def _unwrap(error: VisitError) -> BaseException:
     return original if isinstance(original, TocError) else error
 
 
-def _syntax_error(error: UnexpectedInput, text: str, filename: str | None) -> TocParseError:
+def _syntax_error(
+    error: UnexpectedInput, text: str, filename: str | None
+) -> TocParseError:
     """Word a syntax error the way cdrdao does."""
     if isinstance(error, UnexpectedEOF) or (
         isinstance(error, UnexpectedToken) and error.token.type == "$END"
     ):
-        return TocParseError('syntax error at "EOF"', line=text.count("\n") + 1, filename=filename)
+        return TocParseError(
+            'syntax error at "EOF"', line=text.count("\n") + 1, filename=filename
+        )
     if isinstance(error, UnexpectedToken):
         # cdrdao's scanner makes a string's opening quote a token of its own.
         shown = '"' if error.token.type == "STRING" else str(error.token)
@@ -660,7 +673,9 @@ def _syntax_error(error: UnexpectedInput, text: str, filename: str | None) -> To
     return TocParseError("syntax error", filename=filename)  # pragma: no cover
 
 
-def _broken_string(error: UnexpectedCharacters, text: str, filename: str | None) -> TocParseError:
+def _broken_string(
+    error: UnexpectedCharacters, text: str, filename: str | None
+) -> TocParseError:
     """A string that does not lex: an illegal backslash, or no closing quote."""
     position = error.pos_in_stream
     assert position is not None
@@ -668,7 +683,9 @@ def _broken_string(error: UnexpectedCharacters, text: str, filename: str | None)
     assert prefix is not None
     end = prefix.end()
     if end == len(text):
-        return TocParseError('syntax error at "EOF"', line=error.line, filename=filename)
+        return TocParseError(
+            'syntax error at "EOF"', line=error.line, filename=filename
+        )
     if text[end] == "\\":
         # A backslash starting no escape cdrdao knows.
         return TocParseError(

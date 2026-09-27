@@ -67,7 +67,7 @@ dev = [
 build-backend.source-include = [ "tests/**" ]
 
 [tool.ruff]
-line-length = 100
+line-length = 88
 src = [ "scripts", "src", "tests" ]
 # The README aligns the comments in its examples, which the formatter collapses.
 extend-exclude = [ "*.md" ]
@@ -99,7 +99,7 @@ lint.select = [
 ]
 
 [tool.pyproject-fmt]
-column_width = 100
+column_width = 88
 max_supported_python = "3.15"
 
 [tool.mypy]

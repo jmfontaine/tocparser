@@ -47,7 +47,11 @@ def test_serializer_reproduces_cdrdao_output_byte_for_byte() -> None:
 
     ``tests/corpus/`` holds only real cdrdao output, so nothing here may differ.
     """
-    differing = {path.stem for path in CORPUS_FILES if path.read_text() != dumps(parse_file(path))}
+    differing = {
+        path.stem
+        for path in CORPUS_FILES
+        if path.read_text() != dumps(parse_file(path))
+    }
     assert differing == set()
 
 

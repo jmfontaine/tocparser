@@ -89,13 +89,17 @@ def test_flags_are_tri_state() -> None:
 
 
 def test_flags_when_written() -> None:
-    track = parse_track('COPY\nPRE_EMPHASIS\nFOUR_CHANNEL_AUDIO\nFILE "a.wav" 0').tracks[0]
+    track = parse_track(
+        'COPY\nPRE_EMPHASIS\nFOUR_CHANNEL_AUDIO\nFILE "a.wav" 0'
+    ).tracks[0]
     assert track.copy_permitted is True
     assert track.pre_emphasis is True
     assert track.channels == 4
     assert track.channel_count == 4
 
-    track = parse_track('NO COPY\nNO PRE_EMPHASIS\nTWO_CHANNEL_AUDIO\nFILE "a.wav" 0').tracks[0]
+    track = parse_track(
+        'NO COPY\nNO PRE_EMPHASIS\nTWO_CHANNEL_AUDIO\nFILE "a.wav" 0'
+    ).tracks[0]
     assert track.copy_permitted is False
     assert track.pre_emphasis is False
     assert track.channels == 2
@@ -133,7 +137,11 @@ def test_datafile_fifo_silence_zero() -> None:
     )
     assert toc.tracks[0].statements == [
         DataFile(filename="d", offset=2048, length=Msf(0, 4, 0)),
-        Zero(length=Msf(0, 2, 0), data_mode=DataMode.MODE0, sub_channel_mode=SubChannelMode.RW),
+        Zero(
+            length=Msf(0, 2, 0),
+            data_mode=DataMode.MODE0,
+            sub_channel_mode=SubChannelMode.RW,
+        ),
     ]
     assert toc.tracks[1].statements == [Fifo(filename="p", length=Msf(0, 4, 0))]
     assert toc.tracks[2].statements[0] == Silence(length=Msf(0, 2, 0))
@@ -227,7 +235,9 @@ def test_cd_text_binary_can_be_empty() -> None:
 
 def title_of(raw: str, block: str = "") -> str | None:
     """The TITLE read from a CD-TEXT string written as ``"raw"``."""
-    toc = parse(f'CD_DA\nCD_TEXT {{ LANGUAGE 0 {{ {block} TITLE "{raw}" }} }}\n{MINIMAL[6:]}')
+    toc = parse(
+        f'CD_DA\nCD_TEXT {{ LANGUAGE 0 {{ {block} TITLE "{raw}" }} }}\n{MINIMAL[6:]}'
+    )
     assert toc.cd_text is not None
     return toc.cd_text[0].title
 
@@ -307,9 +317,12 @@ def test_repeated_language_blocks_merge() -> None:
         (CdTextItemName.RESERVED4, CdTextItemName.CLOSED),
     ],
 )
-def test_aliased_items_collapse_to_the_last(first: CdTextItemName, second: CdTextItemName) -> None:
+def test_aliased_items_collapse_to_the_last(
+    first: CdTextItemName, second: CdTextItemName
+) -> None:
     toc = parse(
-        f'CD_DA\nCD_TEXT {{ LANGUAGE 0 {{ {first.value} "1" {second.value} "2" }} }}\n{MINIMAL[6:]}'
+        f"CD_DA\nCD_TEXT {{ LANGUAGE 0 {{ "
+        f'{first.value} "1" {second.value} "2" }} }}\n{MINIMAL[6:]}'
     )
     assert toc.cd_text is not None
     block = toc.cd_text[0]
@@ -332,7 +345,9 @@ def test_empty_string_value() -> None:
 
 
 def test_closed_cd_text_item() -> None:
-    toc = parse(f'CD_DA\nCD_TEXT {{ LANGUAGE 0 {{ CLOSED "SADiE v6" }} }}\n{MINIMAL[6:]}')
+    toc = parse(
+        f'CD_DA\nCD_TEXT {{ LANGUAGE 0 {{ CLOSED "SADiE v6" }} }}\n{MINIMAL[6:]}'
+    )
     assert toc.cd_text is not None
     assert toc.cd_text[0].text(CdTextItemName.CLOSED) == "SADiE v6"
 
@@ -346,13 +361,20 @@ def test_parse_file_reports_the_filename_in_errors(tmp_path: Path) -> None:
 
 
 @pytest.mark.parametrize("newline", [b"\n", b"\r\n", b"\r"], ids=["lf", "crlf", "cr"])
-def test_parse_file_rejects_bytes_it_cannot_decode(tmp_path: Path, newline: bytes) -> None:
+def test_parse_file_rejects_bytes_it_cannot_decode(
+    tmp_path: Path, newline: bytes
+) -> None:
     path = tmp_path / "latin.toc"
-    source = b'CD_DA\nCD_TEXT { LANGUAGE 0 {\nTITLE "caf\xe9" } }\nTRACK AUDIO\nFILE "a" 0\n'
+    source = (
+        b'CD_DA\nCD_TEXT { LANGUAGE 0 {\nTITLE "caf\xe9" } }\nTRACK AUDIO\nFILE "a" 0\n'
+    )
     path.write_bytes(source.replace(b"\n", newline))
     with pytest.raises(TocParseError) as info:
         parse_file(path)
-    assert (info.value.line, info.value.message) == (3, "Cannot decode byte 0xe9 as utf-8")
+    assert (info.value.line, info.value.message) == (
+        3,
+        "Cannot decode byte 0xe9 as utf-8",
+    )
     assert parse_file(path, encoding="latin-1").cd_text is not None
 
 

@@ -63,24 +63,34 @@ def check_dependencies() -> None:
     if sys.version_info[:2] == (3, 15):
         low, high = PYDANTIC_RANGE_315
         if not low <= pydantic_version < high:
-            fail(f"pydantic {pydantic.VERSION} is outside the Python 3.15 range {low}..{high}")
+            fail(
+                f"pydantic {pydantic.VERSION} is outside the Python 3.15 range "
+                f"{low}..{high}"
+            )
     elif pydantic_version < MINIMUM_PYDANTIC:
         fail(f"pydantic {pydantic.VERSION} is below the declared floor")
-    print(f"check_installed_package: lark {lark.__version__}, pydantic {pydantic.VERSION}")
+    print(
+        f"check_installed_package: lark {lark.__version__}, pydantic {pydantic.VERSION}"
+    )
 
 
 def check_round_trip() -> None:
     if tocparser.__version__ != version("tocparser"):
-        fail(f"__version__ {tocparser.__version__} does not match the installed metadata")
+        fail(
+            f"__version__ {tocparser.__version__} does not match the installed metadata"
+        )
     source = (
         'CD_DA\nCATALOG "0602498647295"\n'
-        'CD_TEXT { LANGUAGE 0 { TITLE "The Downward Spiral" PERFORMER "Nine Inch Nails" } }\n'
+        'CD_TEXT { LANGUAGE 0 { TITLE "The Downward Spiral" '
+        'PERFORMER "Nine Inch Nails" } }\n'
         'TRACK AUDIO\nISRC "USIR19400529"\nFILE "closer.wav" 0 06:13:23\n'
     )
     toc = tocparser.parse(source)
     if tocparser.parse(tocparser.dumps(toc)) != toc:
         fail("a TOC file did not survive a round trip")
-    print(f"check_installed_package: tocparser {tocparser.__version__} parses and writes")
+    print(
+        f"check_installed_package: tocparser {tocparser.__version__} parses and writes"
+    )
 
 
 def main() -> None:

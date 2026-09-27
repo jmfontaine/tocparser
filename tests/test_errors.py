@@ -13,7 +13,9 @@ from tocparser import TocParseError, TocValidationError, parse
 MINIMAL_TRACK = 'TRACK AUDIO\nFILE "a.wav" 0\n'
 
 
-def expect_validation_error(source: str, *, line: int, message: str) -> TocValidationError:
+def expect_validation_error(
+    source: str, *, line: int, message: str
+) -> TocValidationError:
     with pytest.raises(TocValidationError) as info:
         parse(source, filename="x.toc")
     assert (info.value.line, info.value.message) == (line, message)
@@ -27,7 +29,9 @@ def expect_parse_error(source: str, *, line: int, message: str) -> None:
     assert (info.value.line, info.value.message) == (line, message)
 
 
-@pytest.mark.parametrize("catalog", ["", "123", "123456789012", "12345678901234", "123456789012X"])
+@pytest.mark.parametrize(
+    "catalog", ["", "123", "123456789012", "12345678901234", "123456789012X"]
+)
 def test_catalog_must_be_thirteen_digits(catalog: str) -> None:
     expect_validation_error(
         f'CD_DA\nCATALOG "{catalog}"\n{MINIMAL_TRACK}',
@@ -57,12 +61,18 @@ def test_isrc_format(isrc: str) -> None:
 
 @pytest.mark.parametrize("isrc", ["DEXXX9800001", "12XXX9800001", "12A4B9800001"])
 def test_valid_isrc_is_accepted(isrc: str) -> None:
-    assert parse(f'CD_DA\nTRACK AUDIO\nISRC "{isrc}"\nFILE "a.wav" 0\n').tracks[0].isrc == isrc
+    assert (
+        parse(f'CD_DA\nTRACK AUDIO\nISRC "{isrc}"\nFILE "a.wav" 0\n').tracks[0].isrc
+        == isrc
+    )
 
 
 @pytest.mark.parametrize(
     ("value", "message"),
-    [("00:60:00", "Illegal second field: 60"), ("00:02:75", "Illegal fraction field: 75")],
+    [
+        ("00:60:00", "Illegal second field: 60"),
+        ("00:02:75", "Illegal fraction field: 75"),
+    ],
 )
 def test_msf_field_ranges(value: str, message: str) -> None:
     expect_validation_error(
@@ -109,7 +119,8 @@ def test_language_code_range() -> None:
 
 def test_binary_data_byte_range() -> None:
     expect_validation_error(
-        f"CD_DA\nCD_TEXT {{\nLANGUAGE 0 {{\nTOC_INFO1 {{ 0,\n256 }}\n}}\n}}\n{MINIMAL_TRACK}",
+        f"CD_DA\nCD_TEXT {{\nLANGUAGE 0 {{\nTOC_INFO1 {{ 0,\n256 }}\n"
+        f"}}\n}}\n{MINIMAL_TRACK}",
         line=5,
         message="Illegal binary data: 256",
     )
@@ -118,7 +129,8 @@ def test_binary_data_byte_range() -> None:
 def test_binary_data_length_limit() -> None:
     values = ",\n".join(["1"] * 3073)
     expect_validation_error(
-        f"CD_DA\nCD_TEXT {{ LANGUAGE 0 {{ TOC_INFO1 {{ {values} }} }} }}\n{MINIMAL_TRACK}",
+        f"CD_DA\nCD_TEXT {{ LANGUAGE 0 {{ TOC_INFO1 {{ {values} }} }} }}\n"
+        f"{MINIMAL_TRACK}",
         line=3074,
         message="Binary data exceeds maximum length (3072).",
     )
@@ -137,7 +149,9 @@ def test_zero_length_silence(source: str) -> None:
 
 def test_zero_length_zero() -> None:
     expect_validation_error(
-        'CD_ROM\nTRACK MODE1\nDATAFILE "d"\nZERO 0\n', line=4, message="Length of zero data is 0."
+        'CD_ROM\nTRACK MODE1\nDATAFILE "d"\nZERO 0\n',
+        line=4,
+        message="Length of zero data is 0.",
     )
 
 
@@ -178,7 +192,9 @@ def test_pregap_and_start_are_mutually_exclusive() -> None:
     ("statement", "name"),
     [('FILE "a.wav" 0', "FILE/AUDIOFILE"), ("SILENCE 00:02:00", "SILENCE")],
 )
-def test_audio_statements_are_rejected_on_data_tracks(statement: str, name: str) -> None:
+def test_audio_statements_are_rejected_on_data_tracks(
+    statement: str, name: str
+) -> None:
     expect_validation_error(
         f'CD_ROM\nTRACK MODE1\n{statement}\nDATAFILE "d" 00:04:00\n',
         line=3,
@@ -210,7 +226,9 @@ def test_audio_and_data_statements_may_not_be_mixed(source: str) -> None:
     expect_validation_error(
         source,
         line=4,
-        message="Mixing of FILE/AUDIOFILE/SILENCE and DATAFILE/ZERO statements not allowed.",
+        message=(
+            "Mixing of FILE/AUDIOFILE/SILENCE and DATAFILE/ZERO statements not allowed."
+        ),
     )
 
 
@@ -224,7 +242,8 @@ def test_pregap_of_a_data_track_is_data() -> None:
 )
 def test_disc_only_cd_text_items_are_rejected_on_tracks(item: str) -> None:
     expect_validation_error(
-        f'CD_DA\nTRACK AUDIO\nCD_TEXT {{\nLANGUAGE 0 {{\n{item}\n}}\n}}\nFILE "a.wav" 0\n',
+        f"CD_DA\nTRACK AUDIO\nCD_TEXT {{\nLANGUAGE 0 {{\n{item}\n}}\n}}\n"
+        'FILE "a.wav" 0\n',
         line=5,
         message="Invalid CD-TEXT item for a track.",
     )
@@ -238,7 +257,8 @@ def test_empty_disc_only_item_is_ignored_on_a_track() -> None:
 def test_disc_id_is_allowed_on_a_track() -> None:
     """cdrdao only rejects pack types 0x87..0x89 and 0x8f, so DISC_ID passes."""
     toc = parse(
-        'CD_DA\nTRACK AUDIO\nCD_TEXT { LANGUAGE 0 { DISC_ID "XY12345" } }\nFILE "a.wav" 0\n'
+        "CD_DA\nTRACK AUDIO\n"
+        'CD_TEXT { LANGUAGE 0 { DISC_ID "XY12345" } }\nFILE "a.wav" 0\n'
     )
     assert toc.tracks[0].cd_text is not None
     assert toc.tracks[0].cd_text[0].disc_id == "XY12345"
@@ -288,7 +308,8 @@ def test_escaped_backslash_before_digits_is_an_escape_too() -> None:
 )
 def test_cd_text_must_fit_its_encoding(block: str, title: str) -> None:
     error = expect_validation_error(
-        f'CD_DA\nCD_TEXT {{\nLANGUAGE 0 {{ {block}\nTITLE "{title}" }} }}\n{MINIMAL_TRACK}',
+        f'CD_DA\nCD_TEXT {{\nLANGUAGE 0 {{ {block}\nTITLE "{title}" }} }}\n'
+        f"{MINIMAL_TRACK}",
         line=4,
         message=f'CD-TEXT: Unable to encode "{title}" into compatible format',
     )
@@ -298,18 +319,29 @@ def test_cd_text_must_fit_its_encoding(block: str, title: str) -> None:
 @pytest.mark.parametrize(
     ("block", "raw", "message"),
     [
-        ("ENCODING_MS_JIS", r"\201", "CD-TEXT: Illegal byte sequence for ENCODING_MS_JIS."),
-        ("ENCODING_ASCII", r"caf\351", 'CD-TEXT: Unable to encode "café" into compatible format'),
+        (
+            "ENCODING_MS_JIS",
+            r"\201",
+            "CD-TEXT: Illegal byte sequence for ENCODING_MS_JIS.",
+        ),
+        (
+            "ENCODING_ASCII",
+            r"caf\351",
+            'CD-TEXT: Unable to encode "café" into compatible format',
+        ),
     ],
 )
-def test_escaped_bytes_must_be_text_in_their_encoding(block: str, raw: str, message: str) -> None:
+def test_escaped_bytes_must_be_text_in_their_encoding(
+    block: str, raw: str, message: str
+) -> None:
     """A deliberate difference: cdrdao keeps such bytes, warning at most.
 
     A value that is not text in its block's encoding cannot be held as a
     string, nor written back in a form cdrdao would read the same way.
     """
     expect_validation_error(
-        f'CD_DA\nCD_TEXT {{\nLANGUAGE 0 {{ {block}\nTITLE "{raw}" }} }}\n{MINIMAL_TRACK}',
+        f'CD_DA\nCD_TEXT {{\nLANGUAGE 0 {{ {block}\nTITLE "{raw}" }} }}\n'
+        f"{MINIMAL_TRACK}",
         line=4,
         message=message,
     )
@@ -322,7 +354,9 @@ def test_track_cd_text_follows_the_disc_encoding() -> None:
         'TITLE "日本" } }\nFILE "a.wav" 0\n'
     )
     error = expect_validation_error(
-        source, line=5, message='CD-TEXT: Unable to encode "日本" into compatible format'
+        source,
+        line=5,
+        message='CD-TEXT: Unable to encode "日本" into compatible format',
     )
     assert error.loc == ("tracks", 0, "cd_text", "blocks", 0, "items", "TITLE")
 
@@ -345,7 +379,11 @@ def test_track_cd_text_follows_the_disc_encoding() -> None:
             3,
             "Illegal token: \\",
         ),
-        ('CD_DA\nTRACK AUDIO\nINDEX 00:02:00\nFILE "a.wav" 0\n', 3, 'syntax error at "INDEX"'),
+        (
+            'CD_DA\nTRACK AUDIO\nINDEX 00:02:00\nFILE "a.wav" 0\n',
+            3,
+            'syntax error at "INDEX"',
+        ),
         (
             'CD_DA\nTRACK AUDIO\nFILE "a.wav" 0\nINDEX 00:02:00\nSTART\n',
             5,
@@ -353,7 +391,10 @@ def test_track_cd_text_follows_the_disc_encoding() -> None:
         ),
         ('CD_ROM\nTRACK MODE0\nDATAFILE "d" 00:04:00\n', 2, 'syntax error at "MODE0"'),
         (
-            f'CD_DA\nCD_TEXT {{ LANGUAGE 0 {{ TITLE "x" ENCODING_ASCII }} }}\n{MINIMAL_TRACK}',
+            (
+                f'CD_DA\nCD_TEXT {{ LANGUAGE 0 {{ TITLE "x" ENCODING_ASCII }} }}\n'
+                f"{MINIMAL_TRACK}"
+            ),
             2,
             'syntax error at "ENCODING_ASCII"',
         ),
@@ -384,7 +425,8 @@ def test_syntax_errors(source: str, line: int, message: str) -> None:
     [
         'CD_DA\nTRACK AUDIO\nFILE "a.wav" 0\nPREGAP 00:02:00\n',  # PREGAP comes first
         'CD_DA\nTRACK AUDIO\nCD_TEXT { LANGUAGE_MAP { 0: 9 } }\nFILE "a.wav" 0\n',
-        'CD_DA\nTRACK AUDIO\nFILE "a.wav" 0\nCATALOG "1234567890123"\n',  # header comes first
+        # header comes first
+        'CD_DA\nTRACK AUDIO\nFILE "a.wav" 0\nCATALOG "1234567890123"\n',
     ],
     ids=["pregap-after-content", "language-map-in-track", "catalog-after-track"],
 )

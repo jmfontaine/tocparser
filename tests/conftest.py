@@ -14,7 +14,9 @@ import pytest
 
 from tests.paths import CORPUS_FILES, FIXTURE_FILES
 
-_DISC_TYPE_RE = re.compile(r"^\s*(CD_DA|CD_ROM_XA|CD_ROM|CD_I)\s*(?://.*)?$", re.MULTILINE)
+_DISC_TYPE_RE = re.compile(
+    r"^\s*(CD_DA|CD_ROM_XA|CD_ROM|CD_I)\s*(?://.*)?$", re.MULTILINE
+)
 _TRACK_RE = re.compile(r"^\s*TRACK\s", re.MULTILINE)
 
 

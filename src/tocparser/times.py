@@ -54,7 +54,9 @@ class Msf:
     @property
     def total_frames(self) -> int:
         """The value as a plain frame (block) count."""
-        return (self.minutes * SECONDS_PER_MINUTE + self.seconds) * FRAMES_PER_SECOND + self.frames
+        return (
+            self.minutes * SECONDS_PER_MINUTE + self.seconds
+        ) * FRAMES_PER_SECOND + self.frames
 
     @classmethod
     def from_frames(cls, frames: int) -> Msf:

@@ -128,7 +128,10 @@ def track_error(**overrides: object) -> TocValidationError:
         ),
         (
             {"pregap": Msf(0, 2, 0), "statements": [Zero(length=Msf(0, 4, 0))]},
-            "Mixing of FILE/AUDIOFILE/SILENCE and DATAFILE/ZERO statements not allowed.",
+            (
+                "Mixing of FILE/AUDIOFILE/SILENCE and DATAFILE/ZERO "
+                "statements not allowed."
+            ),
             ("statements", 0),
         ),
         (
@@ -154,7 +157,11 @@ def track_error(**overrides: object) -> TocValidationError:
             ("cd_text", "language_map"),
         ),
         (
-            {"cd_text": CdText(blocks={2: CdTextBlock(items={CdTextItemName.GENRE: [1]})})},
+            {
+                "cd_text": CdText(
+                    blocks={2: CdTextBlock(items={CdTextItemName.GENRE: [1]})}
+                )
+            },
             "Invalid CD-TEXT item for a track.",
             ("cd_text", "blocks", 2, "items", "GENRE"),
         ),
@@ -179,7 +186,11 @@ def test_track_errors_say_where(
 
 
 def test_pregap_of_a_data_track_is_data() -> None:
-    Track(mode=TrackMode.MODE1, pregap=Msf(0, 2, 0), statements=[Zero(length=Msf(0, 4, 0))])
+    Track(
+        mode=TrackMode.MODE1,
+        pregap=Msf(0, 2, 0),
+        statements=[Zero(length=Msf(0, 4, 0))],
+    )
 
 
 @pytest.mark.parametrize(
@@ -193,7 +204,15 @@ def test_pregap_of_a_data_track_is_data() -> None:
         lambda: Start(position=-1),
         lambda: End(position=-1),
     ],
-    ids=["start", "length", "file-offset", "datafile-offset", "silence", "start-at", "end-at"],
+    ids=[
+        "start",
+        "length",
+        "file-offset",
+        "datafile-offset",
+        "silence",
+        "start-at",
+        "end-at",
+    ],
 )
 def test_bare_numbers_may_not_be_negative(statement: Callable[[], object]) -> None:
     """cdrdao's syntax has no sign, so a negative number could not be written."""
@@ -210,7 +229,10 @@ def test_track_times_may_not_be_negative(overrides: dict[str, object]) -> None:
 def test_zero_data_may_not_be_empty() -> None:
     with pytest.raises(TocValidationError) as info:
         Track(mode=TrackMode.MODE1, statements=[Zero(length=0)])
-    assert (info.value.message, info.value.loc) == ("Length of zero data is 0.", ("statements", 0))
+    assert (info.value.message, info.value.loc) == (
+        "Length of zero data is 0.",
+        ("statements", 0),
+    )
 
 
 def test_aliased_cd_text_items_may_not_both_be_set() -> None:
@@ -270,8 +292,12 @@ def test_cd_text_block_accessors_ignore_binary_values() -> None:
 def test_json_round_trip_preserves_time_forms() -> None:
     toc = Toc(
         tracks=[
-            audio_track(statements=[File(filename="a.wav", start=1234567, length=Msf(0, 4, 0))]),
-            Track(mode=TrackMode.MODE1, statements=[DataFile(filename="d", length=9999)]),
+            audio_track(
+                statements=[File(filename="a.wav", start=1234567, length=Msf(0, 4, 0))]
+            ),
+            Track(
+                mode=TrackMode.MODE1, statements=[DataFile(filename="d", length=9999)]
+            ),
         ]
     )
     restored = Toc.model_validate_json(toc.model_dump_json())

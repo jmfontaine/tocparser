@@ -72,7 +72,9 @@ MAX_BINARY_LENGTH = 256 * 12
 PREGAP_IS_ZERO = "Length of pregap is zero."
 SILENCE_IS_ZERO = "Length of silence is 0."
 ZERO_DATA_IS_ZERO = "Length of zero data is 0."
-MIXED_STATEMENTS = "Mixing of FILE/AUDIOFILE/SILENCE and DATAFILE/ZERO statements not allowed."
+MIXED_STATEMENTS = (
+    "Mixing of FILE/AUDIOFILE/SILENCE and DATAFILE/ZERO statements not allowed."
+)
 BINARY_DATA_TOO_LONG = f"Binary data exceeds maximum length ({MAX_BINARY_LENGTH})."
 
 
@@ -140,7 +142,9 @@ BLOCK_SIZES: dict[str, int] = {
 SUB_CHANNEL_SIZE = 96
 
 
-def block_size(mode: TrackMode | DataMode, sub_channel_mode: SubChannelMode | None) -> int:
+def block_size(
+    mode: TrackMode | DataMode, sub_channel_mode: SubChannelMode | None
+) -> int:
     """Return the sector size for ``mode``, including sub-channel data."""
     size = BLOCK_SIZES[mode.value]
     if sub_channel_mode is not None:
@@ -285,7 +289,9 @@ def validate_block_number(number: int) -> int:
 def validate_language_code(code: int) -> int:
     """Check a country code from a ``LANGUAGE_MAP`` entry."""
     if not 0 <= code <= MAX_LANGUAGE_CODE:
-        raise TocValidationError(f"Invalid language code, allowed range: [0..{MAX_LANGUAGE_CODE}].")
+        raise TocValidationError(
+            f"Invalid language code, allowed range: [0..{MAX_LANGUAGE_CODE}]."
+        )
     return code
 
 
@@ -327,7 +333,9 @@ class CdTextBlock(_Model):
             loc = ("items", name.value)
             alias = CD_TEXT_ALIASES.get(name)
             if alias is not None and alias in self.items:
-                _fail(f"{name.value} and {alias.value} are the same CD-TEXT item.", *loc)
+                _fail(
+                    f"{name.value} and {alias.value} are the same CD-TEXT item.", *loc
+                )
             if isinstance(value, list):
                 for byte in value:
                     _check_at(validate_binary_value, byte, *loc)
@@ -682,14 +690,20 @@ class Toc(_Model):
             _check_at(validate_catalog, self.catalog, "catalog")
 
         if self.first_track_number is not None:
-            _check_at(validate_first_track_number, self.first_track_number, "first_track_number")
+            _check_at(
+                validate_first_track_number,
+                self.first_track_number,
+                "first_track_number",
+            )
 
         if not self.tracks:
             _fail("A TOC file must define at least one track.", "tracks")
 
         # cdrdao converts CD-TEXT to its block's encoding once the whole file
         # is read, so this is the last check it makes.
-        located: list[tuple[tuple[str | int, ...], CdText | None]] = [(("cd_text",), self.cd_text)]
+        located: list[tuple[tuple[str | int, ...], CdText | None]] = [
+            (("cd_text",), self.cd_text)
+        ]
         located += [
             (("tracks", number, "cd_text"), track.cd_text)
             for number, track in enumerate(self.tracks)
@@ -702,7 +716,8 @@ class Toc(_Model):
                 for name, value in block.items.items():
                     if isinstance(value, str) and not _encodes(value, codec):
                         _fail(
-                            f'CD-TEXT: Unable to encode "{value}" into compatible format',
+                            f'CD-TEXT: Unable to encode "{value}" '
+                            "into compatible format",
                             *prefix,
                             "blocks",
                             number,

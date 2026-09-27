@@ -28,7 +28,11 @@ from tocparser.serializer import escape
 
 
 def test_minimal_output() -> None:
-    toc = Toc(tracks=[Track(mode=TrackMode.AUDIO, statements=[File(filename="a.wav", start=0)])])
+    toc = Toc(
+        tracks=[
+            Track(mode=TrackMode.AUDIO, statements=[File(filename="a.wav", start=0)])
+        ]
+    )
     assert dumps(toc) == 'CD_DA\n\n\n// Track 1\nTRACK AUDIO\nFILE "a.wav" 0\n\n'
 
 
@@ -57,7 +61,10 @@ def test_msf_values_are_normalized_but_scalars_are_not() -> None:
 
 
 def test_track_numbering_follows_first_track_no() -> None:
-    source = 'CD_DA\nFIRST_TRACK_NO 7\nTRACK AUDIO\nFILE "a.wav" 0\nTRACK AUDIO\nFILE "b.wav" 0\n'
+    source = (
+        'CD_DA\nFIRST_TRACK_NO 7\nTRACK AUDIO\nFILE "a.wav" 0\n'
+        'TRACK AUDIO\nFILE "b.wav" 0\n'
+    )
     output = dumps(parse(source))
     assert "FIRST_TRACK_NO 7" in output
     assert "// Track 7" in output
@@ -68,20 +75,28 @@ def test_binary_values_match_cdrdao_layout() -> None:
     toc = Toc(
         cd_text=CdText(
             blocks={
-                0: CdTextBlock(items={CdTextItemName.SIZE_INFO: [1, 1, 6, 3, 10, 2] + [0] * 30})
+                0: CdTextBlock(
+                    items={CdTextItemName.SIZE_INFO: [1, 1, 6, 3, 10, 2] + [0] * 30}
+                )
             }
         ),
-        tracks=[Track(mode=TrackMode.AUDIO, statements=[File(filename="a.wav", start=0)])],
+        tracks=[
+            Track(mode=TrackMode.AUDIO, statements=[File(filename="a.wav", start=0)])
+        ],
     )
     lines = dumps(toc).splitlines()
     first = next(i for i, line in enumerate(lines) if "SIZE_INFO" in line)
-    assert lines[first] == "    SIZE_INFO { 1,  1,  6,  3, 10,  2,  0,  0,  0,  0,  0,  0,"
+    assert (
+        lines[first] == "    SIZE_INFO { 1,  1,  6,  3, 10,  2,  0,  0,  0,  0,  0,  0,"
+    )
     assert lines[first + 1].startswith(" " * 16 + "0,")
     assert lines[first + 2].endswith("}")
 
 
 def test_empty_binary_value() -> None:
-    toc = parse('CD_DA\nCD_TEXT { LANGUAGE 0 { TOC_INFO1 {} } }\nTRACK AUDIO\nFILE "a.wav" 0\n')
+    toc = parse(
+        'CD_DA\nCD_TEXT { LANGUAGE 0 { TOC_INFO1 {} } }\nTRACK AUDIO\nFILE "a.wav" 0\n'
+    )
     assert "TOC_INFO1 {}" in dumps(toc)
 
 
@@ -127,7 +142,9 @@ def test_non_ascii_text_cannot_hold_a_backslash_before_digits() -> None:
 def test_string_values_survive_a_round_trip(value: str) -> None:
     toc = Toc(
         cd_text=CdText(blocks={0: CdTextBlock(items={CdTextItemName.TITLE: value})}),
-        tracks=[Track(mode=TrackMode.AUDIO, statements=[File(filename="a.wav", start=0)])],
+        tracks=[
+            Track(mode=TrackMode.AUDIO, statements=[File(filename="a.wav", start=0)])
+        ],
     )
     restored = parse(dumps(toc))
     assert restored.cd_text is not None
@@ -173,7 +190,9 @@ def test_hand_written_comments_are_dropped() -> None:
     source = '// a comment\nCD_DA\nTRACK AUDIO\nFILE "a.wav" 0 // here\n'
     output = dumps(parse(source))
     # The only comments written back are the ones cdrdao generates itself.
-    assert [line for line in output.splitlines() if line.startswith("//")] == ["// Track 1"]
+    assert [line for line in output.splitlines() if line.startswith("//")] == [
+        "// Track 1"
+    ]
     assert "// here" not in output
     assert "// a comment" not in output
 
@@ -213,11 +232,15 @@ def test_dump_writes_a_file(tmp_path: Path) -> None:
 
 
 def test_disc_type_is_always_written() -> None:
-    assert dumps(parse('TRACK AUDIO\nFILE "a.wav" 0\n')).startswith(DiscType.CD_DA.value)
+    assert dumps(parse('TRACK AUDIO\nFILE "a.wav" 0\n')).startswith(
+        DiscType.CD_DA.value
+    )
 
 
 def test_msf_start_of_zero_is_kept_as_written() -> None:
-    assert 'FILE "a.wav" 00:00:00' in dumps(parse('CD_DA\nTRACK AUDIO\nFILE "a.wav" 00:00:00\n'))
+    assert 'FILE "a.wav" 00:00:00' in dumps(
+        parse('CD_DA\nTRACK AUDIO\nFILE "a.wav" 00:00:00\n')
+    )
     assert 'FILE "a.wav" 0\n' in dumps(parse('CD_DA\nTRACK AUDIO\nFILE "a.wav" 0\n'))
 
 
@@ -236,7 +259,9 @@ def test_continued_binary_line_pads_its_first_value() -> None:
     genre = [*range(1, 13), 32]
     toc = Toc(
         cd_text=CdText(blocks={0: CdTextBlock(items={CdTextItemName.GENRE: genre})}),
-        tracks=[Track(mode=TrackMode.AUDIO, statements=[File(filename="a.wav", start=0)])],
+        tracks=[
+            Track(mode=TrackMode.AUDIO, statements=[File(filename="a.wav", start=0)])
+        ],
     )
     lines = dumps(toc).splitlines()
     assert "    GENRE { 1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12," in lines

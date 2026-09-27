@@ -49,14 +49,17 @@ def test_ordering_and_hashing() -> None:
     ("minutes", "seconds", "frames"),
     [(-1, 0, 0), (0, 60, 0), (0, -1, 0), (0, 0, 75), (0, 0, -1)],
 )
-def test_out_of_range_fields_are_rejected(minutes: int, seconds: int, frames: int) -> None:
+def test_out_of_range_fields_are_rejected(
+    minutes: int, seconds: int, frames: int
+) -> None:
     with pytest.raises(TocValidationError):
         Msf(minutes, seconds, frames)
 
 
 # The last one is written with Arabic-Indic digits, which are not ASCII digits.
 @pytest.mark.parametrize(
-    "text", ["", "1:2", "1:2:3:4", "a:b:c", "-1:0:0", "\u0660:\u0660\u0662:\u0660\u0660"]
+    "text",
+    ["", "1:2", "1:2:3:4", "a:b:c", "-1:0:0", "\u0660:\u0660\u0662:\u0660\u0660"],
 )
 def test_parse_rejects_malformed_input(text: str) -> None:
     with pytest.raises(TocValidationError):

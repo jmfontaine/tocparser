@@ -139,7 +139,10 @@ def _length_comment(length: Time, track: Track) -> str:
 
 def _statement(statement: object, track: Track) -> str:
     if isinstance(statement, File):
-        parts = ["AUDIOFILE" if statement.audiofile else "FILE", _quote(statement.filename)]
+        parts = [
+            "AUDIOFILE" if statement.audiofile else "FILE",
+            _quote(statement.filename),
+        ]
         if statement.swap:
             parts.append("SWAP")
         if statement.offset is not None:
@@ -183,10 +186,16 @@ def _statement(statement: object, track: Track) -> str:
         return " ".join(parts)
 
     if isinstance(statement, Start):
-        return "START" if statement.position is None else f"START {_time(statement.position)}"
+        return (
+            "START"
+            if statement.position is None
+            else f"START {_time(statement.position)}"
+        )
 
     if isinstance(statement, End):
-        return "END" if statement.position is None else f"END {_time(statement.position)}"
+        return (
+            "END" if statement.position is None else f"END {_time(statement.position)}"
+        )
 
     raise TypeError(f"Unsupported track statement: {statement!r}")  # pragma: no cover
 
@@ -202,7 +211,9 @@ def _track(track: Track) -> list[str]:
     if track.pre_emphasis is not None:
         lines.append("PRE_EMPHASIS" if track.pre_emphasis else "NO PRE_EMPHASIS")
     if track.channels is not None:
-        lines.append("FOUR_CHANNEL_AUDIO" if track.channels == 4 else "TWO_CHANNEL_AUDIO")
+        lines.append(
+            "FOUR_CHANNEL_AUDIO" if track.channels == 4 else "TWO_CHANNEL_AUDIO"
+        )
     if track.isrc is not None:
         lines.append(f"ISRC {_quote(track.isrc)}")
     if track.cd_text is not None:

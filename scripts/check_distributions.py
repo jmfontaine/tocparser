@@ -43,7 +43,13 @@ SDIST_REQUIRED = (
     "tests/corpus/cdrdao-versions.csv",
 )
 # Build and editor leftovers that must never be published.
-FORBIDDEN_PARTS = ("__pycache__", ".pytest_cache", ".mypy_cache", ".ruff_cache", ".venv")
+FORBIDDEN_PARTS = (
+    "__pycache__",
+    ".pytest_cache",
+    ".mypy_cache",
+    ".ruff_cache",
+    ".venv",
+)
 
 
 def fail(message: str) -> None:
@@ -54,7 +60,9 @@ def fail(message: str) -> None:
 def check_leftovers(archive: str, names: list[str]) -> None:
     for name in names:
         parts = Path(name).parts
-        if any(part in FORBIDDEN_PARTS for part in parts) or name.endswith((".pyc", ".coverage")):
+        if any(part in FORBIDDEN_PARTS for part in parts) or name.endswith(
+            (".pyc", ".coverage")
+        ):
             fail(f"{archive} contains {name}")
 
 
@@ -62,7 +70,11 @@ def check_wheel(path: Path) -> None:
     with zipfile.ZipFile(path) as archive:
         names = archive.namelist()
 
-    missing = [f"{PACKAGE}/{name}" for name in PACKAGE_FILES if f"{PACKAGE}/{name}" not in names]
+    missing = [
+        f"{PACKAGE}/{name}"
+        for name in PACKAGE_FILES
+        if f"{PACKAGE}/{name}" not in names
+    ]
     if missing:
         fail(f"{path.name} is missing {', '.join(missing)}")
 
@@ -82,14 +94,19 @@ def check_sdist(path: Path) -> None:
     root = path.name.removesuffix(".tar.gz")
     with tarfile.open(path) as archive:
         names = [
-            name[len(root) + 1 :] for name in archive.getnames() if name.startswith(f"{root}/")
+            name[len(root) + 1 :]
+            for name in archive.getnames()
+            if name.startswith(f"{root}/")
         ]
         try:
             versions = archive.extractfile(f"{root}/tests/corpus/cdrdao-versions.csv")
         except KeyError:
             versions = None
         listed = (
-            [row["file"] for row in csv.DictReader(io.TextIOWrapper(versions, encoding="utf-8"))]
+            [
+                row["file"]
+                for row in csv.DictReader(io.TextIOWrapper(versions, encoding="utf-8"))
+            ]
             if versions is not None
             else []
         )
@@ -104,10 +121,16 @@ def check_sdist(path: Path) -> None:
         fail(f"{path.name} lists no corpus files")
     missing_corpus = [name for name in listed if f"tests/corpus/{name}" not in names]
     if missing_corpus:
-        fail(f"{path.name} is missing {len(missing_corpus)} corpus files, e.g. {missing_corpus[0]}")
+        fail(
+            f"{path.name} is missing {len(missing_corpus)} corpus files, "
+            f"e.g. {missing_corpus[0]}"
+        )
 
     check_leftovers(path.name, names)
-    print(f"check_distributions: {path.name} ok ({len(names)} files, {len(listed)} corpus files)")
+    print(
+        f"check_distributions: {path.name} ok "
+        f"({len(names)} files, {len(listed)} corpus files)"
+    )
 
 
 def main() -> None:
@@ -117,7 +140,10 @@ def main() -> None:
     wheels = sorted(dist.glob("*.whl"))
     sdists = sorted(dist.glob("*.tar.gz"))
     if len(wheels) != 1 or len(sdists) != 1:
-        fail(f"expected one wheel and one sdist in {dist}, found {len(wheels)} and {len(sdists)}")
+        fail(
+            f"expected one wheel and one sdist in {dist}, "
+            f"found {len(wheels)} and {len(sdists)}"
+        )
     check_wheel(wheels[0])
     check_sdist(sdists[0])
 
