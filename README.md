@@ -187,3 +187,7 @@ before 1.2.2 were not checked.
 Contributions are welcome. See
 [CONTRIBUTING.md](https://github.com/jmfontaine/tocparser/blob/main/CONTRIBUTING.md) for the
 development setup, how the tests compare tocparser with cdrdao, and the pull request process.
+
+## License
+
+tocparser is licensed under the [Apache License 2.0](https://github.com/jmfontaine/tocparser/blob/main/LICENSE.txt).
