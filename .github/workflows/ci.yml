@@ -23,6 +23,8 @@ jobs:
       - run: uv run ruff check .
       - run: uv run ruff format --check .
       - run: uv run mypy
+      - name: Verify public API type completeness
+        run: uv run pyright --ignoreexternal --verifytypes tocparser
 
   test:
     runs-on: ubuntu-latest

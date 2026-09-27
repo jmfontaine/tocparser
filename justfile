@@ -26,7 +26,7 @@ lint-fix:
     uv run ruff check --fix
 
 # Run all quality assurance checks
-qa: format-check lint type-check
+qa: format-check lint type-check verify-types
 
 # Run tests with coverage
 test *args:
@@ -39,3 +39,7 @@ test-cdrdao *args:
 # Run type checker
 type-check:
     uv run mypy
+
+# Audit public API type annotation coverage
+verify-types:
+    uv run pyright --ignoreexternal --verifytypes tocparser

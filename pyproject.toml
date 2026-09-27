@@ -58,6 +58,7 @@ source-include = ["tests/**"]
 [dependency-groups]
 dev = [
     "mypy>=1.11",
+    "pyright>=1.1.408",
     "pytest>=8.0",
     "pytest-cov>=6",
     "ruff>=0.6",
