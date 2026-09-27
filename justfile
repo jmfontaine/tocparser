@@ -9,6 +9,10 @@ _list:
 add-toc toc_file="":
     uv run python scripts/add_toc.py {{ if toc_file == "" { "" } else { quote(toc_file) } }}
 
+# Preview release notes for unreleased changes
+changelog-preview:
+    uvx git-cliff --unreleased
+
 # Update deps to latest versions
 deps-update:
     uv lock --upgrade
