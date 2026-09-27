@@ -68,7 +68,7 @@ def drive_status() -> tuple[str, int] | None:
     answers a read of an empty drive with a SCSI illegal request that reads like
     a bad command line rather than a missing disc.
     """
-    result = subprocess.run(["drutil", "status"], capture_output=True, text=True)
+    result = subprocess.run(["drutil", "status"], capture_output=True, text=True, check=False)
     if result.returncode != 0:
         return None
     status = result.stdout
@@ -101,7 +101,7 @@ def disc_sessions(requested: int | None) -> list[int]:
 
 def _unmount(disc: str, *, force: bool) -> subprocess.CompletedProcess[str]:
     command = ["diskutil", "unmountDisk", *(["force"] if force else []), disc]
-    return subprocess.run(command, capture_output=True, text=True)
+    return subprocess.run(command, capture_output=True, text=True, check=False)
 
 
 def disc_gone() -> bool:
@@ -357,7 +357,7 @@ def _undo(what: str, step: Callable[[], None]) -> None:
 def installed_cdrdao_version() -> str:
     """The version of the cdrdao that will read the disc."""
     try:
-        result = subprocess.run(["cdrdao", "version"], capture_output=True, text=True)
+        result = subprocess.run(["cdrdao", "version"], capture_output=True, text=True, check=False)
     except FileNotFoundError:
         die("cdrdao is not installed.")
     # cdrdao prints "Cdrdao version 1.2.6 - (C) ..." on stderr.

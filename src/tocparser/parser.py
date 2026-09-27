@@ -5,6 +5,7 @@ from __future__ import annotations
 import re
 from collections.abc import Iterator, Mapping
 from contextlib import contextmanager
+from functools import cache
 from importlib import resources
 from os import PathLike
 from pathlib import Path
@@ -60,8 +61,6 @@ from tocparser.times import Msf, Time
 
 __all__ = ["parse", "parse_file"]
 
-_parser: Lark | None = None
-
 # cdrdao's scanner turns \" and \\ into the character and keeps \NNN as it is;
 # a second pass then reads every backslash followed by three digits, including
 # one that came from \\, as an octal byte. That pass, and the rule that a string
@@ -74,12 +73,10 @@ _OCTAL_DIGITS_RE = re.compile(r"[0-7]*")
 _STRING_PREFIX_RE = re.compile(r'"(?:\\[0-9]{3}|\\["\\]|[^"\\])*')
 
 
+@cache
 def _get_parser() -> Lark:
-    global _parser
-    if _parser is None:
-        grammar = resources.files(__package__).joinpath("grammar.lark").read_text()
-        _parser = Lark(grammar, start="toc", parser="lalr", propagate_positions=True)
-    return _parser
+    grammar = resources.files(__package__).joinpath("grammar.lark").read_text()
+    return Lark(grammar, start="toc", parser="lalr", propagate_positions=True)
 
 
 class _String(NamedTuple):

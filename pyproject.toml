@@ -72,14 +72,30 @@ src = [ "scripts", "src", "tests" ]
 # The README aligns the comments in its examples, which the formatter collapses.
 extend-exclude = [ "*.md" ]
 lint.select = [
-  "B",   # flake8-bugbear
-  "E",   # pycodestyle errors
-  "F",   # pyflakes
-  "I",   # isort
-  "N",   # pep8-naming
+  "A",    # flake8-builtins
+  "B",    # flake8-bugbear
+  "BLE",  # flake8-blind-except
+  "C4",   # flake8-comprehensions
+  "E",    # pycodestyle errors
+  "EXE",  # flake8-executable
+  "F",    # pyflakes
+  "I",    # isort
+  "ISC",  # flake8-implicit-str-concat
+  "N",    # pep8-naming
+  "PERF", # perflint
+  "PGH",  # pygrep-hooks
+  "PIE",  # flake8-pie
+  "PLE",  # pylint errors
+  "PLW",  # pylint warnings
+  "PT",   # flake8-pytest-style
+  "PTH",  # flake8-use-pathlib
+  "RET",  # flake8-return
+  "RSE",  # flake8-raise
   "RUF",
-  "SIM", # flake8-simplify
-  "UP",  # pyupgrade
+  "SIM",  # flake8-simplify
+  "T10",  # flake8-debugger
+  "UP",   # pyupgrade
+  "W",    # pycodestyle warnings
 ]
 
 [tool.pyproject-fmt]

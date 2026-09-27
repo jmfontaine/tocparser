@@ -249,14 +249,18 @@ CASES: list[tuple[str, str, bool]] = [
     ),
     (
         "encoding-on-track-ignored",
-        'CD_DA\nTRACK AUDIO\nCD_TEXT { LANGUAGE 0 { ENCODING_MS_JIS TITLE "日本" } }\n'
-        'FILE "a.wav" 0\n',
+        (
+            'CD_DA\nTRACK AUDIO\nCD_TEXT { LANGUAGE 0 { ENCODING_MS_JIS TITLE "日本" } }\n'
+            'FILE "a.wav" 0\n'
+        ),
         False,
     ),
     (
         "track-follows-disc-encoding",
-        "CD_DA\nCD_TEXT { LANGUAGE 0 { ENCODING_MS_JIS } }\n"
-        'TRACK AUDIO\nCD_TEXT { LANGUAGE 0 { TITLE "日本" } }\nFILE "a.wav" 0\n',
+        (
+            "CD_DA\nCD_TEXT { LANGUAGE 0 { ENCODING_MS_JIS } }\n"
+            'TRACK AUDIO\nCD_TEXT { LANGUAGE 0 { TITLE "日本" } }\nFILE "a.wav" 0\n'
+        ),
         True,
     ),
     (
