@@ -1,7 +1,3 @@
-# Never touch these: LICENSE.txt is kept verbatim, and the TOC files are
-# cdrdao's bytes, which tests/test_corpus.py requires unchanged.
-exclude: ^(LICENSE\.txt|tests/(corpus|fixtures)/.*\.toc)$
-
 repos:
   # General
   - repo: https://github.com/pre-commit/pre-commit-hooks
@@ -10,9 +6,14 @@ repos:
       - id: check-added-large-files
       - id: check-merge-conflict
       - id: check-toml
+      # The fixers never touch these: LICENSE.txt is kept verbatim, and the TOC
+      # files are cdrdao's bytes, which tests/test_corpus.py requires unchanged.
       - id: end-of-file-fixer
+        exclude: &verbatim ^(LICENSE\.txt|tests/(corpus|fixtures)/.*\.toc)$
       - id: mixed-line-ending
+        exclude: *verbatim
       - id: trailing-whitespace
+        exclude: *verbatim
 
   - repo: https://github.com/rhysd/actionlint
     rev: 914e7df21a07ef503a81201c76d2b11c789d3fca  # frozen: v1.7.12
