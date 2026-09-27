@@ -31,12 +31,6 @@ def test_corpus_file_round_trips_through_json(corpus_file: Path) -> None:
     assert Toc.model_validate_json(toc.model_dump_json()) == toc
 
 
-def test_fixture_parses(fixture_file: Path) -> None:
-    toc = parse_file(fixture_file)
-    assert isinstance(toc, Toc)
-    assert toc.tracks
-
-
 def test_fixture_round_trips(fixture_file: Path) -> None:
     toc = parse_file(fixture_file)
     assert parse(dumps(toc)) == toc

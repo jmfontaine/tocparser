@@ -29,7 +29,8 @@ from tocparser import (
     parse_file,
 )
 
-MINIMAL = 'CD_DA\nTRACK AUDIO\nFILE "data.wav" 0\n'
+MINIMAL_TRACK = 'TRACK AUDIO\nFILE "data.wav" 0\n'
+MINIMAL = f"CD_DA\n{MINIMAL_TRACK}"
 
 
 def parse_track(body: str) -> Toc:
@@ -52,7 +53,7 @@ def test_disc_type_defaults_to_cd_da_when_absent() -> None:
 def test_last_disc_type_wins() -> None:
     """cdrdao documents that the last of several disc flags takes effect."""
     assert parse(f"CD_ROM\n{MINIMAL}").disc_type is DiscType.CD_DA
-    assert parse(f"CD_DA\nCD_ROM_XA\n{MINIMAL[6:]}").disc_type is DiscType.CD_ROM_XA
+    assert parse(f"CD_DA\nCD_ROM_XA\n{MINIMAL_TRACK}").disc_type is DiscType.CD_ROM_XA
 
 
 @pytest.mark.parametrize(
@@ -72,7 +73,7 @@ def test_comments_are_ignored_anywhere() -> None:
 
 
 def test_catalog_and_first_track_number() -> None:
-    toc = parse(f'CD_DA\nCATALOG "1234567890123"\nFIRST_TRACK_NO 5\n{MINIMAL[6:]}')
+    toc = parse(f'CD_DA\nCATALOG "1234567890123"\nFIRST_TRACK_NO 5\n{MINIMAL_TRACK}')
     assert toc.catalog == "1234567890123"
     assert toc.first_track_number == 5
 
@@ -200,8 +201,8 @@ def test_block_sizes(mode: TrackMode, size: int) -> None:
 
 
 def test_language_map_accepts_both_spellings() -> None:
-    numeric = parse(f"CD_DA\nCD_TEXT {{ LANGUAGE_MAP {{ 0: 9 }} }}\n{MINIMAL[6:]}")
-    symbolic = parse(f"CD_DA\nCD_TEXT {{ LANGUAGE_MAP {{ 0 : EN }} }}\n{MINIMAL[6:]}")
+    numeric = parse(f"CD_DA\nCD_TEXT {{ LANGUAGE_MAP {{ 0: 9 }} }}\n{MINIMAL_TRACK}")
+    symbolic = parse(f"CD_DA\nCD_TEXT {{ LANGUAGE_MAP {{ 0 : EN }} }}\n{MINIMAL_TRACK}")
     assert numeric == symbolic
     assert numeric.cd_text is not None
     assert numeric.cd_text.language_map == {0: 9}
@@ -236,7 +237,7 @@ def test_cd_text_binary_can_be_empty() -> None:
 def title_of(raw: str, block: str = "") -> str | None:
     """The TITLE read from a CD-TEXT string written as ``"raw"``."""
     toc = parse(
-        f'CD_DA\nCD_TEXT {{ LANGUAGE 0 {{ {block} TITLE "{raw}" }} }}\n{MINIMAL[6:]}'
+        f'CD_DA\nCD_TEXT {{ LANGUAGE 0 {{ {block} TITLE "{raw}" }} }}\n{MINIMAL_TRACK}'
     )
     assert toc.cd_text is not None
     return toc.cd_text[0].title
@@ -301,7 +302,7 @@ def test_repeated_language_blocks_merge() -> None:
         "CD_DA\nCD_TEXT {\n"
         'LANGUAGE 0 { ENCODING_ISO_8859_1 TITLE "a" PERFORMER "p" }\n'
         'LANGUAGE 0 { TITLE "b" }\n'
-        f"}}\n{MINIMAL[6:]}"
+        f"}}\n{MINIMAL_TRACK}"
     )
     assert toc.cd_text is not None
     block = toc.cd_text[0]
@@ -322,7 +323,7 @@ def test_aliased_items_collapse_to_the_last(
 ) -> None:
     toc = parse(
         f"CD_DA\nCD_TEXT {{ LANGUAGE 0 {{ "
-        f'{first.value} "1" {second.value} "2" }} }}\n{MINIMAL[6:]}'
+        f'{first.value} "1" {second.value} "2" }} }}\n{MINIMAL_TRACK}'
     )
     assert toc.cd_text is not None
     block = toc.cd_text[0]
@@ -339,14 +340,14 @@ def test_escapes_in_a_real_file() -> None:
 
 
 def test_empty_string_value() -> None:
-    toc = parse(f'CD_DA\nCD_TEXT {{ LANGUAGE 0 {{ UPC_EAN "" }} }}\n{MINIMAL[6:]}')
+    toc = parse(f'CD_DA\nCD_TEXT {{ LANGUAGE 0 {{ UPC_EAN "" }} }}\n{MINIMAL_TRACK}')
     assert toc.cd_text is not None
     assert toc.cd_text[0].upc_ean == ""
 
 
 def test_closed_cd_text_item() -> None:
     toc = parse(
-        f'CD_DA\nCD_TEXT {{ LANGUAGE 0 {{ CLOSED "SADiE v6" }} }}\n{MINIMAL[6:]}'
+        f'CD_DA\nCD_TEXT {{ LANGUAGE 0 {{ CLOSED "SADiE v6" }} }}\n{MINIMAL_TRACK}'
     )
     assert toc.cd_text is not None
     assert toc.cd_text[0].text(CdTextItemName.CLOSED) == "SADiE v6"

@@ -24,7 +24,6 @@ from typing import NamedTuple
 
 import pytest
 
-from tests.paths import FIXTURE_FILES
 from tocparser import TocParseError, TocValidationError, parse
 
 #: The cdrdao release whose rules tocparser follows and these expectations
@@ -547,13 +546,12 @@ def test_installed_cdrdao_is_the_recorded_version() -> None:
 
 @on_recorded_cdrdao
 @pytest.mark.parametrize(
-    ("source", "expected"),
-    [pytest.param(source, expected, id=name) for name, source, expected in CASES],
+    ("name", "source", "expected"),
+    [pytest.param(*case, id=case[0]) for case in CASES],
 )
 def test_matches_cdrdao(
-    source: str, expected: bool, media_dir: Path, request: pytest.FixtureRequest
+    name: str, source: str, expected: bool, media_dir: Path
 ) -> None:
-    name = request.node.callspec.id
     theirs = cdrdao_report(source, media_dir, name)
     assert (theirs is None) is expected, (
         f"the recorded expectation no longer matches cdrdao: {theirs}"
@@ -565,18 +563,15 @@ def test_matches_cdrdao(
 
 
 @on_recorded_cdrdao
-@pytest.mark.parametrize(
-    "path",
-    [pytest.param(path, id=path.stem) for path in FIXTURE_FILES],
-)
-def test_fixtures_are_accepted_by_cdrdao(path: Path, media_dir: Path) -> None:
+def test_fixtures_are_accepted_by_cdrdao(fixture_file: Path, media_dir: Path) -> None:
     """The hand-written fixtures must be files cdrdao would accept too.
 
     Without this they would only prove that our own grammar is self
     consistent. ``fifo_and_end`` is excluded because cdrdao would block
     reading the named pipe.
     """
-    if path.stem == "fifo_and_end":
+    if fixture_file.stem == "fifo_and_end":
         pytest.skip("cdrdao would block reading the FIFO")
-    assert cdrdao_report(path.read_text(), media_dir, f"fixture_{path.stem}") is None
-    assert tocparser_report(path.read_text()) is None
+    source = fixture_file.read_text()
+    assert cdrdao_report(source, media_dir, f"fixture_{fixture_file.stem}") is None
+    assert tocparser_report(source) is None

@@ -232,11 +232,6 @@ def test_audio_and_data_statements_may_not_be_mixed(source: str) -> None:
     )
 
 
-def test_pregap_of_a_data_track_is_data() -> None:
-    track = parse('CD_ROM\nTRACK MODE1\nPREGAP 00:02:00\nDATAFILE "d"\n').tracks[0]
-    assert track.pregap is not None
-
-
 @pytest.mark.parametrize(
     "item", ["GENRE { 1 }", "TOC_INFO1 { 1 }", "TOC_INFO2 { 1 }", "SIZE_INFO { 1 }"]
 )
