@@ -27,14 +27,24 @@ requires-python = ">=3.10"
 dependencies = [
     "lark>=1.2",
     "pydantic>=2.9",
+    # KLUDGE: the Python 3.15 clause below pins a pydantic prerelease behind a
+    # version cap. Both are temporary; see the replacement note at the end.
+    #
     # pydantic 2.14 is the first whose pydantic-core publishes Python 3.15
-    # wheels; older releases would be compiled from source. The beta floor lets
-    # installers pick 2.14 while it is in beta, and its final release after.
+    # wheels; older releases would be compiled from source.
+    #
     # uv_build publishes python_version markers as python_full_version ones. A
     # range such as >= '3.15' then misses release candidates ("3.15.0rc2" sorts
     # below 3.15), but the prefix match == '3.15.*' this line becomes covers
     # them. Keep it an equality so that uv_build does not turn it into a range.
-    "pydantic>=2.14.0b1; python_version == '3.15'",
+    #
+    # Naming 2.14.0b1 also lets installers pick pydantic prereleases, so without
+    # `<2.15` they would prefer any newer prerelease, such as a 2.15 alpha, over
+    # 2.14 final. Once 2.14 is released, rewrite the clause as
+    # `"pydantic>=2.14; python_version == '3.15'"`: keep the marker, because
+    # dropping the clause would let a downstream constraint pull pydantic 2.13
+    # back in on 3.15, where it cannot install.
+    "pydantic>=2.14.0b1,<2.15; python_version == '3.15'",
 ]
 
 [build-system]
