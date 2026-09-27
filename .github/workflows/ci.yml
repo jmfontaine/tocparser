@@ -8,6 +8,11 @@ on:
 permissions:
   contents: read
 
+# A newer push to the same branch or pull request makes a running check moot.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   lint:
     runs-on: ubuntu-latest
@@ -29,17 +34,22 @@ jobs:
         resolution: [highest]
         include:
           # The oldest dependency versions pyproject.toml allows, on the oldest
-          # Python and on 3.15, whose pydantic floor differs.
+          # Python and on 3.15, whose pydantic floor differs. Deprecations are
+          # fatal there, so an old dependency calling an API Python deprecates
+          # fails here rather than when that API is removed.
           - python: "3.10"
             resolution: lowest-direct
+            warnings: -W error::DeprecationWarning -W error::PendingDeprecationWarning
           - python: "3.15"
             resolution: lowest-direct
+            warnings: -W error::DeprecationWarning -W error::PendingDeprecationWarning
     steps:
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v6
       - run: >-
           uv run --isolated --python ${{ matrix.python }}
-          --resolution ${{ matrix.resolution }} --with pytest pytest
+          --resolution ${{ matrix.resolution }} --with pytest
+          python ${{ matrix.warnings }} -m pytest
 
   # The expectations in tests/test_cdrdao_oracle.py were recorded with the
   # cdrdao Homebrew ships (1.2.6); the variable makes a missing cdrdao an error
