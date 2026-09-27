@@ -1,33 +1,28 @@
 # tocparser
 
-tocparser parses [cdrdao](https://cdrdao.sourceforge.net/)'s TOC files into
-Pydantic models, and writes them back out.
+tocparser parses cdrdao's TOC files into Pydantic models and writes them back out.
 
-- Parses every directive in cdrdao 1.2.6's own grammar, not just the documented
-  ones, including the CD-TEXT `ENCODING_*` keywords added in cdrdao 1.2.5.
-- Accepts what cdrdao accepts and rejects what cdrdao rejects, with the same
-  error messages and line numbers. The few exceptions are listed under Limits
-  below.
-- Round-trips: `parse(dumps(toc)) == toc`, and the output is laid out the way
-  cdrdao lays it out. The one value `dumps` cannot write is non-ASCII text
-  holding a backslash followed by three digits, such as `café \123`; it raises
-  instead.
-- Fully type annotated, with only `lark` and `pydantic` as dependencies.
+- It supports the full TOC format. Older files mostly parse the same, with two
+  exceptions described below.
+- It validates files like cdrdao, matching its error messages and line numbers. See
+  Limits for exceptions.
+- Writing preserves every value. Unedited files usually serialize byte for byte
+  identically, though hand-written comments are dropped and some formatting is
+  normalized. See What is written back for details.
+- It is fully typed and depends only on `lark` and `pydantic`.
 
 ## Install
 
-```console
+```
 uv add tocparser
 ```
 
-Requires Python 3.10 or newer, including the Python 3.15 release candidates.
-On 3.15 tocparser needs pydantic 2.14 or later, the first with Python 3.15
-wheels, and asks for it itself: while 2.14 is in beta, that means its beta.
+Requires Python 3.10 or newer.
 
 ## Usage
 
 ```python
-from tocparser import dump, dumps, parse, parse_file
+from tocparser import dump, parse_file
 
 toc = parse_file("the_downward_spiral.toc")
 
@@ -45,22 +40,18 @@ track.content[0].length          # Msf(minutes=6, seconds=13, frames=23)
 
 # "The Becoming" starts with a 00:02:30 pre-gap: 2 seconds and 30 frames.
 toc.tracks[6].start              # Start(kind='start', position=Msf(minutes=0, seconds=2, frames=30))
-
-dumps(toc)                       # -> str
-dump(toc, "out.toc")
-parse('CD_DA\nTRACK AUDIO\nFILE "hurt.wav" 0\n')
 ```
 
-Models are ordinary Pydantic models, so `model_dump()`, `model_dump_json()`
-and `Toc.model_validate_json()` all work and preserve the parsed values.
+Models are ordinary Pydantic models, so `model_dump()`, `model_dump_json()` and
+`Toc.model_validate_json()` all work and preserve the parsed values.
 
 ### Times
 
-A position or a length is written either as `MM:SS:FF`, counting frames at 75
-frames per second, or as a bare integer, which means samples on an audio track
-and bytes on a data track. The two are not interchangeable — a sample count
-that is not frame aligned has no `MM:SS:FF` form — so tocparser keeps whichever
-form was written. Frame-based values become `Msf`, bare integers stay `int`.
+A position or length can be written as `MM:SS:FF`, where frames are counted at 75 per
+second, or as a bare integer representing samples on an audio track and bytes on a data
+track. These formats are not interchangeable. If a sample count is not frame-aligned, it
+has no `MM:SS:FF` equivalent, so tocparser preserves the format in which it was written.
+Frame-based values become `Msf`, while bare integers remain `int`.
 
 ```python
 from tocparser import Msf
@@ -77,20 +68,20 @@ Msf.from_frames(71057)           # Msf(minutes=15, seconds=47, frames=32)
 
 ### CD-TEXT
 
-CD-TEXT values are `str`, or `list[int]` for the binary packs. Each language
-block is ISO-8859-1 unless the disc's `CD_TEXT` gives it an `ENCODING_*`;
-track blocks follow the disc block with the same number, as they do in cdrdao.
-`toc.cd_text_encoding(n)` returns the encoding in effect for block `n`.
+CD-TEXT values are `str`, or `list[int]` for binary packs. Each language block uses
+ISO-8859-1 unless the disc's `CD_TEXT` specifies an `ENCODING_*` value. Track blocks
+follow the disc block with the same number, as they do in cdrdao.
+`toc.cd_text_encoding(n)` returns the encoding used for block `n`.
 
-Strings follow cdrdao's rules. Text with non-ASCII characters is UTF-8, and
-must fit the block's encoding: `TITLE "日本"` needs `ENCODING_MS_JIS`, since
-ISO-8859-1 has no Japanese. A string in plain ASCII may carry `\NNN` octal
-escapes, which are bytes in the block's encoding, so `"caf\351"` reads as
-`'café'` and, under `ENCODING_MS_JIS`, `"\223\372\226\173"` as `'日本'`.
+Strings follow cdrdao's rules. Non-ASCII text is UTF-8 and must fit the block's
+encoding: `TITLE "日本"` requires `ENCODING_MS_JIS`, because ISO-8859-1 cannot represent
+Japanese. Plain ASCII strings may contain `\NNN` octal escapes, which represent bytes in
+the block's encoding. For example, `"caf\351"` decodes to `'café'`, and under
+`ENCODING_MS_JIS`, `"\223\372\226\173"` decodes to `'日本'`.
 
-cdrdao reads `UPC_EAN` and `ISRC` as the same pack, and `RESERVED4` and
-`CLOSED` too. A block keeps whichever spelling was written last, and
-`block.upc_ean` and `block.isrc` both find it.
+cdrdao treats `UPC_EAN` and `ISRC` as the same pack, as well as `RESERVED4` and
+`CLOSED`. A block retains the spelling written last, and `block.upc_ean` and
+`block.isrc` both access it.
 
 ### Errors
 
@@ -104,90 +95,83 @@ parse(
 # TocValidationError: the_downward_spiral.toc:2: Illegal catalog number: 0602498647.
 ```
 
-`TocParseError` covers syntax errors and `TocValidationError` covers input that
-parses but breaks a rule cdrdao enforces. Both derive from `TocError` and carry
-`line`, and `TocParseError` also carries `column`. `parse_file` also raises
-`TocParseError` for bytes that do not decode as UTF-8, which is what cdrdao 1.2.5
-and later write; pass `encoding=` for anything else.
+`TocParseError` covers syntax errors and `TocValidationError` covers input that parses
+but breaks a rule cdrdao enforces. Both derive from `TocError` and carry `line`, and
+`TocParseError` also carries `column`. `parse_file` reads files as UTF-8 and raises
+`TocParseError` for bytes that do not decode; pass `encoding=` for other encodings.
 
-The models enforce the same rules, so building one by hand that cdrdao would
-reject raises `TocValidationError`, whose `loc` locates the problem inside that
-model, e.g. `("statements", 2)`. A value cdrdao's syntax cannot express, such as
-a value of the wrong type or a negative number, raises Pydantic's
-`ValidationError` instead. Models can be changed after they are built, so
-`dumps` validates its argument again before writing it.
+The models enforce the same rules, so building one by hand that cdrdao would reject
+raises `TocValidationError`, whose `loc` locates the problem inside that model, e.g.
+`("statements", 2)`. A value cdrdao's syntax cannot express, such as a value of the
+wrong type or a negative number, raises Pydantic's `ValidationError` instead. Models can
+be changed after they are built, so `dumps` validates its argument again before writing
+it.
 
 ## What is written back
 
-Serializing is meaning-preserving rather than byte-exact, but in practice it is
-usually both: every one of the real cdrdao files in `tests/corpus/` comes back
-byte for byte identical. Differences are limited to the following.
+Serializing preserves meaning, though not always the exact bytes. In practice, the
+output is usually byte-for-byte identical. Differences are limited to the following:
 
-- Hand-written comments are dropped. The two comments cdrdao generates itself,
-  the `// Track N` headers and the `// length in bytes:` annotation on data
-  lengths, are regenerated rather than preserved.
-- `MM:SS:FF` values are zero-padded, so `0:10:0` becomes `00:10:00`. Bare
-  integers are left alone.
-- Only the last disc type flag is written, since cdrdao documents that the last
-  one takes effect.
-- A repeated CD-TEXT item collapses to the last one, and a repeated `LANGUAGE`
-  block merges into the first, as cdrdao files them.
-- Text is written as UTF-8, so `\NNN` escapes come back as the characters they
-  stand for. A backslash followed by three digits is written `\134`, since
-  cdrdao would read even an escaped one as an octal escape. cdrdao accepts no
-  escape in non-ASCII text, so such text cannot hold that sequence and `dumps`
-  raises.
-- Flags that were not written are not invented: a track with no `COPY` line
-  keeps `copy_permitted is None` and gets no `COPY` line back. The effective
-  values are on `is_copy_permitted`, `has_pre_emphasis` and `channel_count`.
+- Hand-written comments are dropped. cdrdao-generated comments—the `// Track N` headers
+  and the `// length in bytes:` annotations on data lengths—are regenerated.
+- `MM:SS:FF` values are zero-padded: `0:10:0` becomes `00:10:00`. Bare integers remain
+  unchanged.
+- When a CD-TEXT item appears more than once, only its last instance is written. An
+  empty string does not replace an earlier value because cdrdao drops it. Repeated
+  LANGUAGE blocks are merged into the first, as in cdrdao's output.
+- Text is written as UTF-8, so `\NNN` escapes are replaced by the characters they
+  represent. A backslash followed by three digits is written as `\134`, because cdrdao
+  would interpret even an escaped backslash as an octal escape. cdrdao does not accept
+  escapes in non-ASCII text, so such text cannot contain that sequence; `dumps` raises
+  an error if it does.
+- Unwritten flags are not added. A track without a `COPY` line keeps
+  `copy_permitted is None` and has no `COPY` line in the output. The effective values
+  are available through `is_copy_permitted`, `has_pre_emphasis`, and `channel_count`.
 
 ## Limits
 
-cdrdao performs some checks that need the referenced media, which tocparser
-does not read: the four second minimum track length, `INDEX` beyond the track
-end, `START` and `END` behind the track end, `END` within the pre-gap, and a
-requested length longer than the file. Nor does it run the CD-TEXT
-completeness checks cdrdao only makes before writing a disc. Everything else
-`cdrdao show-toc` 1.2.6 checks is checked, with these differences:
+tocparser follows cdrdao 1.2.6, but some checks require the audio and data files
+referenced by a TOC file. Because tocparser reads only the TOC file, it cannot check the
+four-second minimum track length, an `INDEX` beyond the track end, `START` or `END` past
+the track end, an `END` within the pre-gap, or a requested length that exceeds the file.
+It also skips the CD-TEXT completeness checks that cdrdao performs only before writing a
+disc. tocparser checks everything else that `cdrdao show-toc` checks, with these
+differences:
 
-- A file with several errors raises one of them. It is not always the one cdrdao
-  reports first.
-- For two syntax errors, a `PREGAP` after the track's data and a
-  `LANGUAGE_MAP` inside a track's `CD_TEXT`, cdrdao's parser stops at a
-  different token than tocparser's.
-- cdrdao reports a `FIFO` that mixes audio and data on line 0; tocparser gives
-  the `FIFO`'s own line.
-- `\NNN` bytes that are not text in their block's encoding, such as a lone
-  CP932 lead byte, or a byte above 127 in an `ENCODING_ASCII` block, are
-  rejected. cdrdao keeps them, warning at most, but could not read back the
-  text it would write for them.
-- cdrdao 1.2.6 ignores a CD-TEXT item whose string is empty. tocparser keeps it,
-  so that it is written back, but like cdrdao does not hold it against a track.
-- Escapes in file names decode like CD-TEXT, as ISO-8859-1, and are written
-  back as UTF-8.
+- If a file contains several errors, tocparser raises one, but not necessarily the one
+  cdrdao reports first.
+- For two syntax errors—a `PREGAP` after track data and a `LANGUAGE_MAP` inside a
+  track's `CD_TEXT`—cdrdao's parser stops at a different token than tocparser does.
+- cdrdao reports a `FIFO` that mixes audio and data on line 0; tocparser reports the
+  `FIFO`'s own line.
+- tocparser rejects `\NNN` bytes that are not text in their block's encoding—for
+  example, a lone CP932 lead byte or a byte above 127 in an `ENCODING_ASCII` block.
+  cdrdao keeps these bytes, at most issuing a warning, but could not read back the text
+  it would write for them.
+- cdrdao drops CD-TEXT items with empty strings. tocparser preserves an empty item when
+  no other value is provided and writes it back. Like cdrdao, it also allows a track to
+  contain an empty item that is valid only at the disc level.
+- Escapes in file names are decoded like CD-TEXT (as ISO-8859-1) and written back as
+  UTF-8.
 
 ## TOC files from older cdrdao
 
-tocparser reads TOC files the way cdrdao 1.2.6 does. Files written by cdrdao
-1.2.2 to 1.2.4 mostly read the same, with two exceptions, both of which cdrdao
-1.2.6 shares. They come from comparing cdrdao releases 1.2.2 to 1.2.6; releases
-before 1.2.2 were not checked.
+Files written by cdrdao 1.2.2 through 1.2.4 are mostly read the same way, with two
+exceptions that also apply to later releases. Releases before 1.2.2 were not checked.
 
-- cdrdao 1.2.2 to 1.2.4 wrote a backslash in a string as it was. Since 1.2.5 a
-  backslash must start an escape, so `"AC\DC"` is rejected with
-  `Illegal token: \`, and `"C:\\x"` now reads as `C:\x`, with one backslash
-  rather than two. This applies to every string, file names included.
-- cdrdao 1.2.2 to 1.2.4 wrote bytes above 127 as octal escapes, at least under
-  the default C locale, and wrote no `ENCODING_*`, so that text reads as
-  ISO-8859-1. Latin text comes through intact, but text in another encoding,
-  such as Japanese, does not.
+- cdrdao 1.2.2 through 1.2.4 wrote backslashes in strings unchanged. Since 1.2.5, a
+  backslash must begin an escape, so `"AC\DC"` is rejected with `Illegal token: \`, and
+  `"C:\\x"` now reads as `C:\x`, with one backslash rather than two. This applies to all
+  strings, including file names.
+- cdrdao 1.2.2 through 1.2.4 wrote bytes above 127 as octal escapes, at least under the
+  default C locale, and omitted `ENCODING_*`, so the text is read as ISO-8859-1. Latin
+  text remains intact, but text in another encoding, such as Japanese, does not.
 
 ## Contributing
 
-Contributions are welcome. See
-[CONTRIBUTING.md](https://github.com/jmfontaine/tocparser/blob/main/CONTRIBUTING.md) for the
-development setup, how the tests compare tocparser with cdrdao, and the pull request process.
+Contributions are welcome. See CONTRIBUTING.md for development setup, test comparisons
+between tocparser and cdrdao, and the pull request process.
 
 ## License
 
-tocparser is licensed under the [Apache License 2.0](https://github.com/jmfontaine/tocparser/blob/main/LICENSE.txt).
+tocparser is licensed under the Apache License 2.0.
