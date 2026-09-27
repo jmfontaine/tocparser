@@ -24,7 +24,7 @@ from typing import NamedTuple
 
 import pytest
 
-from tocparser import TocParseError, TocValidationError, parse
+from tocparser import TocParseError, TocValidationError, dumps, parse
 
 #: The cdrdao release whose rules tocparser follows and these expectations
 #: were recorded with. Moving to a new release means re-running this module
@@ -480,13 +480,13 @@ def _write_sparse_wave(path: Path, data_size: int) -> None:
         handle.truncate(len(header) + data_size)
 
 
-def cdrdao_report(source: str, directory: Path, name: str) -> Report | None:
-    """cdrdao's first error for ``source``, or ``None`` when it accepts it."""
+def show_toc(source: str, directory: Path, name: str, *options: str) -> str:
+    """Run ``cdrdao show-toc`` on ``source`` and return everything it printed."""
     path = directory / f"{name}.toc"
     path.write_text(source, encoding="utf-8")
     try:
         completed = subprocess.run(
-            ["cdrdao", "show-toc", path.name],
+            ["cdrdao", "show-toc", *options, path.name],
             cwd=directory,
             capture_output=True,
             check=False,
@@ -498,6 +498,13 @@ def cdrdao_report(source: str, directory: Path, name: str) -> Report | None:
             f"cdrdao show-toc did not finish on {name} within {CDRDAO_TIMEOUT}s"
         )
     output = (completed.stdout + completed.stderr).decode("utf-8", "replace")
+    assert completed.returncode == 0 or _ERROR_RE.search(output), output
+    return output
+
+
+def cdrdao_report(source: str, directory: Path, name: str) -> Report | None:
+    """cdrdao's first error for ``source``, or ``None`` when it accepts it."""
+    output = show_toc(source, directory, name)
     # An error cdrdao meets after parsing, such as CD-TEXT it cannot encode,
     # is reported without failing the command, so the ERROR line decides.
     for output_line in output.splitlines():
@@ -507,7 +514,6 @@ def cdrdao_report(source: str, directory: Path, name: str) -> Report | None:
             return Report(
                 int(line) if line is not None else None, match["message"].strip()
             )
-    assert completed.returncode == 0, output
     return None
 
 
@@ -575,3 +581,24 @@ def test_fixtures_are_accepted_by_cdrdao(fixture_file: Path, media_dir: Path) ->
     source = fixture_file.read_text()
     assert cdrdao_report(source, media_dir, f"fixture_{fixture_file.stem}") is None
     assert tocparser_report(source) is None
+
+
+@on_recorded_cdrdao
+def test_cdrdao_reads_written_fixtures_as_it_reads_the_originals(
+    fixture_file: Path, media_dir: Path
+) -> None:
+    """What ``dumps`` writes must mean to cdrdao what the original meant.
+
+    ``show-toc -v 4`` prints the values cdrdao keeps, CD-TEXT included, so a
+    value that tocparser loses or changes on the way through shows up as a
+    difference. The corpus needs no such check: it comes back byte for byte.
+    """
+    if fixture_file.stem == "fifo_and_end":
+        pytest.skip("cdrdao would block reading the FIFO")
+    source = fixture_file.read_text()
+    name = f"written_{fixture_file.stem}"
+    original = show_toc(source, media_dir, name, "-v", "4")
+    written = show_toc(dumps(parse(source)), media_dir, name, "-v", "4")
+    for output in (original, written):
+        assert not any(map(_ERROR_RE.match, output.splitlines())), output
+    assert written == original

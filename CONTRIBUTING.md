@@ -78,8 +78,10 @@ for the details.
 ### Comparing with cdrdao
 
 `tests/test_cdrdao_oracle.py` runs `cdrdao show-toc` over the fixtures and a list of edge cases, and
-checks that tocparser's verdict, message and line number match cdrdao's. The expectations were
-recorded with cdrdao 1.2.6, which tocparser follows.
+checks that tocparser's verdict, message and line number match cdrdao's. It also runs
+`cdrdao show-toc -v 4` on each fixture and on what `dumps` writes for it, and requires the same
+output, so a value lost or changed when writing fails the test. The expectations were recorded with
+cdrdao 1.2.6, which tocparser follows.
 
 ```bash
 brew install cdrdao   # or your distribution's package
@@ -111,7 +113,7 @@ comparisons are skipped.
 
 - [ ] Tests added or updated and passing (`just test`), with coverage still at 100%
 - [ ] `just qa` passes
-- [ ] `just test-cdrdao` passes, if the change affects what tocparser accepts or rejects
+- [ ] `just test-cdrdao` passes, if the change affects what tocparser accepts, rejects or writes
 - [ ] README updated, if the change affects behavior users see
 
 ### What to expect
