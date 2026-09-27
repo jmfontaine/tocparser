@@ -1,0 +1,62 @@
+name: Publish
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions: {}
+
+jobs:
+  # Every CI check, on the tagged commit. Its build job uploads the
+  # distributions that its wheel and sdist jobs install and test.
+  ci:
+    uses: ./.github/workflows/ci.yml
+    permissions:
+      contents: read
+
+  publish:
+    needs: [ci]
+    runs-on: ubuntu-latest
+    environment:
+      name: pypi
+      url: https://pypi.org/project/tocparser/
+    permissions:
+      # PyPI trusted publishing: no API token is stored anywhere.
+      id-token: write
+    steps:
+      # The artifacts CI tested, never rebuilt, so PyPI gets exactly those.
+      - uses: actions/download-artifact@v8
+        with:
+          name: dist
+          path: dist/
+      # A PyPI upload cannot be taken back, so a mismatch stops here.
+      - name: Check the tag matches the package version
+        env:
+          TAG: ${{ github.ref_name }}
+        run: |
+          if [ ! -f "dist/tocparser-${TAG#v}-py3-none-any.whl" ]; then
+            echo "::error::tag $TAG does not match the version built: $(ls dist)"
+            exit 1
+          fi
+      - uses: pypa/gh-action-pypi-publish@release/v1
+
+  github-release:
+    needs: [publish]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - name: Generate release notes
+        id: changelog
+        uses: orhun/git-cliff-action@v4
+        with:
+          args: --latest
+      - name: Create the GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ github.ref_name }}
+          NOTES: ${{ steps.changelog.outputs.changelog }}
+        run: gh release create "$TAG" --verify-tag --title "$TAG" --notes-file "$NOTES"
