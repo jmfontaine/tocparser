@@ -16,7 +16,7 @@ from __future__ import annotations
 import re
 from collections.abc import Callable
 from enum import Enum
-from typing import Annotated, Literal, NoReturn, TypeAlias, TypeVar
+from typing import Annotated, ClassVar, Literal, NoReturn, TypeAlias, TypeVar
 
 from pydantic import BaseModel, ConfigDict, Field, NonNegativeInt, model_validator
 
@@ -304,7 +304,9 @@ def validate_binary_value(value: int) -> int:
 
 
 class _Model(BaseModel):
-    model_config = ConfigDict(extra="forbid")
+    """Base for every tocparser model: unknown fields are rejected."""
+
+    model_config: ClassVar[ConfigDict] = ConfigDict(extra="forbid")
 
 
 class CdTextBlock(_Model):
