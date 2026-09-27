@@ -17,7 +17,7 @@ concurrency:
 
 jobs:
   lint:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     steps:
       - uses: actions/checkout@v7
       - uses: astral-sh/setup-uv@v7
@@ -30,7 +30,7 @@ jobs:
         run: uv run pyright --ignoreexternal --verifytypes tocparser
 
   test:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     strategy:
       fail-fast: false
       matrix:
@@ -56,23 +56,23 @@ jobs:
           --resolution ${{ matrix.resolution }} --with pytest
           python ${{ matrix.warnings }} -m pytest
 
-  # The expectations in tests/test_cdrdao_oracle.py were recorded with the
-  # cdrdao Homebrew ships (1.2.6); the variable makes a missing cdrdao an error
-  # rather than a skip.
+  # The expectations in tests/test_cdrdao_oracle.py were recorded with cdrdao
+  # 1.2.6, the version Ubuntu 26.04 packages (24.04 has 1.2.4); the variable
+  # makes a missing cdrdao an error rather than a skip.
   cdrdao-oracle:
-    runs-on: macos-latest
+    runs-on: ubuntu-26.04
     env:
       TOCPARSER_REQUIRE_CDRDAO: "1"
     steps:
       - uses: actions/checkout@v7
       - uses: astral-sh/setup-uv@v7
-      - run: brew install cdrdao
+      - run: sudo apt-get update && sudo apt-get install --yes cdrdao
       - run: cdrdao version || true
       - run: uv sync --locked
       - run: uv run pytest tests/test_cdrdao_oracle.py
 
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     steps:
       - uses: actions/checkout@v7
       - uses: astral-sh/setup-uv@v7
@@ -92,7 +92,7 @@ jobs:
   # metadata instead of uv.lock, and test that.
   wheel:
     needs: [build]
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     strategy:
       fail-fast: false
       matrix:
@@ -119,7 +119,7 @@ jobs:
 
   sdist:
     needs: [build]
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     steps:
       - uses: actions/checkout@v7
       - uses: astral-sh/setup-uv@v7
