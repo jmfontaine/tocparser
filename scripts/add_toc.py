@@ -174,23 +174,6 @@ def unmount_disc() -> bool:
     return False
 
 
-def env_flag(name: str) -> bool:
-    """Read a yes/no environment variable, so that VERIFY=0 means no."""
-    value = os.environ.get(name, "").strip().lower()
-    if value in ("", "0", "false", "no", "off"):
-        return False
-    if value in ("1", "true", "yes", "on"):
-        return True
-    die(f"{name} must be 1 or 0, not {value!r}.")
-
-
-def env_session() -> int | None:
-    value = os.environ.get("CDRDAO_SESSION")
-    if value is not None and not value.isdigit():
-        die(f"CDRDAO_SESSION must be a session number, not {value!r}.")
-    return int(value) if value is not None else None
-
-
 def cdrdao_command(destination: Path, session: int) -> list[str]:
     """How to ask cdrdao for one session.
 
@@ -441,26 +424,20 @@ def main() -> int:
     parser.add_argument(
         "--session",
         type=int,
-        default=env_session(),
         metavar="N",
         help="read only this session, e.g. 2 for the data track of a CD-Extra "
-        "(default: $CDRDAO_SESSION, else every session on the disc)",
+        "(default: every session on the disc)",
     )
     parser.add_argument(
         "--verify",
         action="store_true",
-        default=env_flag("VERIFY"),
         help="read each session a second time and keep it only if the reads agree, "
-        "at the cost of a second read (default: $VERIFY)",
+        "at the cost of a second read",
     )
     parser.add_argument(
         "--force",
         action="store_true",
-        default=env_flag("FORCE"),
-        help=(
-            "keep the read even if the corpus already describes that disc "
-            "(default: $FORCE)"
-        ),
+        help="keep the read even if the corpus already describes that disc",
     )
     parser.add_argument(
         "--cdrdao-version",

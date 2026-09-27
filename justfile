@@ -4,10 +4,11 @@ set quiet := true
 _list:
     just --list
 
-# CDRDAO_DEVICE picks the drive, CDRDAO_SESSION the session on a multi-session disc.
-# Add the disc's TOC, or TOC_FILE, to the test corpus
-add-toc toc_file="":
-    uv run python scripts/add_toc.py {{ if toc_file == "" { "" } else { quote(toc_file) } }}
+# CDRDAO_DEVICE picks the drive. `just add-toc --help` lists the options.
+# Add the disc's TOC, or a TOC file, to the test corpus
+[positional-arguments]
+add-toc *args:
+    uv run python scripts/add_toc.py "$@"
 
 # Preview release notes for unreleased changes
 changelog-preview:
