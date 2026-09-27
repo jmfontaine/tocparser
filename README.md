@@ -8,7 +8,7 @@ tocparser parses cdrdao's TOC files into Pydantic models and writes them back ou
   Limits for exceptions.
 - Writing preserves every value. Unedited files usually serialize byte for byte
   identically, though hand-written comments are dropped and some formatting is
-  normalized. See What is written back for details.
+  normalized. See What Is Written Back for details.
 - It is fully typed and depends only on `lark` and `pydantic`.
 
 ## Install
@@ -107,7 +107,7 @@ wrong type or a negative number, raises Pydantic's `ValidationError` instead. Mo
 be changed after they are built, so `dumps` validates its argument again before writing
 it.
 
-## What is written back
+## What Is Written Back
 
 Serializing preserves meaning, though not always the exact bytes. In practice, the
 output is usually byte-for-byte identical. Differences are limited to the following:
@@ -154,7 +154,7 @@ differences:
 - Escapes in file names are decoded like CD-TEXT (as ISO-8859-1) and written back as
   UTF-8.
 
-## TOC files from older cdrdao
+## TOC Files from Older cdrdao
 
 Files written by cdrdao 1.2.2 through 1.2.4 are mostly read the same way, with two
 exceptions that also apply to later releases. Releases before 1.2.2 were not checked.
