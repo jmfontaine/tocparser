@@ -491,7 +491,9 @@ class _TocTransformer(Transformer[Token, object]):
 
         cdrdao files every item under its language and pack type, so a block
         number given twice adds to the first block, and an item given twice,
-        under either spelling of its pack, keeps the last value.
+        under either spelling of its pack, keeps the last value. cdrdao drops an
+        empty string before filing it, so one never replaces an earlier value;
+        a lone empty string is kept, so that it is written back.
         """
         encodings: dict[int, CdTextEncoding | None] = {}
         items: dict[int, dict[CdTextItemName, CdTextValue]] = {}
@@ -502,16 +504,19 @@ class _TocTransformer(Transformer[Token, object]):
             block_items = items.setdefault(block.number, {})
             encoding = self._encodings.get(block.number, CdTextEncoding.ISO_8859_1)
             for item in block.items:
+                value: CdTextValue
+                if isinstance(item.value, _String):
+                    with self._at(item.line):
+                        value = _cd_text_string(item.value, encoding)
+                else:
+                    value = item.value
                 alias = CD_TEXT_ALIASES.get(item.name)
+                if value == "" and (item.name in block_items or alias in block_items):
+                    continue
                 if alias is not None and alias in block_items:
                     del block_items[alias]
                     del lines[_item_loc(block.number, alias)]
-                value = item.value
-                if isinstance(value, _String):
-                    with self._at(item.line):
-                        block_items[item.name] = _cd_text_string(value, encoding)
-                else:
-                    block_items[item.name] = value
+                block_items[item.name] = value
                 lines[_item_loc(block.number, item.name)] = item.line
         built = {
             number: CdTextBlock(encoding=encodings[number], items=block_items)

@@ -1,0 +1,31 @@
+// cdrdao drops an empty CD-TEXT string before filing the item, so an empty
+// string never replaces an earlier value for the same pack, under either
+// spelling. A lone empty string is kept.
+CD_DA
+
+CD_TEXT {
+  LANGUAGE 0 {
+    TITLE "Disc"
+    TITLE ""
+    PERFORMER ""
+    PERFORMER "Performer"
+    MESSAGE ""
+    UPC_EAN "1234567890123"
+    ISRC ""
+    RESERVED4 "r4"
+    CLOSED ""
+  }
+}
+
+// Track 1
+TRACK AUDIO
+CD_TEXT {
+  LANGUAGE 0 {
+    TITLE "Track"
+    ISRC ""
+    UPC_EAN "DE-XXX-98-00001"
+    CLOSED ""
+    RESERVED4 "r4"
+  }
+}
+FILE "a.wav" 0 04:00:00

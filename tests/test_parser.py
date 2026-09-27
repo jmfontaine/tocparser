@@ -347,6 +347,26 @@ def test_empty_string_value() -> None:
     assert toc.cd_text[0].upc_ean == ""
 
 
+def test_an_empty_string_never_replaces_an_earlier_value() -> None:
+    """cdrdao drops an empty string before filing it, under either spelling."""
+    toc = parse_file(FIXTURES_DIR / "empty_cd_text_strings.toc")
+    assert toc.cd_text is not None
+    assert toc.cd_text[0].items == {
+        CdTextItemName.TITLE: "Disc",
+        CdTextItemName.PERFORMER: "Performer",
+        CdTextItemName.MESSAGE: "",
+        CdTextItemName.UPC_EAN: "1234567890123",
+        CdTextItemName.RESERVED4: "r4",
+    }
+    track_cd_text = toc.tracks[0].cd_text
+    assert track_cd_text is not None
+    assert track_cd_text[0].items == {
+        CdTextItemName.TITLE: "Track",
+        CdTextItemName.UPC_EAN: "DE-XXX-98-00001",
+        CdTextItemName.RESERVED4: "r4",
+    }
+
+
 def test_closed_cd_text_item() -> None:
     toc = parse(
         f'CD_DA\nCD_TEXT {{ LANGUAGE 0 {{ CLOSED "SADiE v6" }} }}\n{MINIMAL_TRACK}'
