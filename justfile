@@ -9,6 +9,11 @@ _list:
 add-toc toc_file="":
     uv run python scripts/add_toc.py {{ if toc_file == "" { "" } else { quote(toc_file) } }}
 
+# Update deps to latest versions
+deps-update:
+    uv lock --upgrade
+    uv sync --all-groups
+
 # Run formatter
 format:
     uv run ruff format
@@ -39,6 +44,12 @@ pre-commit-update:
 
 # Run all quality assurance checks
 qa: format-check lint type-check verify-types
+
+# Set local dev environment up
+setup:
+    uv sync --all-groups  # Install dependencies
+    uv run pre-commit install  # Install pre-commit hooks
+    echo "Run 'source .venv/bin/activate' to activate the Python virtual environment"
 
 # Run tests with coverage
 test *args:
