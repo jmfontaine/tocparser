@@ -95,7 +95,7 @@ and reports the mismatch, and the comparisons are skipped.
 
 ## Code Style
 
-- Python 3.10+; formatting and linting use ruff, with a line length of 88
+- Python 3.11+; formatting and linting use ruff, with a line length of 88
   (`just format`, `just lint-fix`)
 - Strict type checking with mypy (`just type-check`) and a fully typed public API
   (`just verify-types`)

@@ -15,7 +15,7 @@ from __future__ import annotations
 
 import re
 from collections.abc import Callable
-from enum import Enum
+from enum import StrEnum
 from typing import Annotated, ClassVar, Literal, NoReturn, TypeAlias, TypeVar
 
 from pydantic import BaseModel, ConfigDict, Field, NonNegativeInt, model_validator
@@ -78,7 +78,7 @@ MIXED_STATEMENTS = (
 BINARY_DATA_TOO_LONG = f"Binary data exceeds maximum length ({MAX_BINARY_LENGTH})."
 
 
-class DiscType(str, Enum):
+class DiscType(StrEnum):
     """The session type declared by the leading disc flag."""
 
     CD_DA = "CD_DA"
@@ -87,7 +87,7 @@ class DiscType(str, Enum):
     CD_I = "CD_I"
 
 
-class TrackMode(str, Enum):
+class TrackMode(StrEnum):
     """The sector layout of a track's data."""
 
     AUDIO = "AUDIO"
@@ -100,7 +100,7 @@ class TrackMode(str, Enum):
     MODE2_FORM_MIX = "MODE2_FORM_MIX"
 
 
-class DataMode(str, Enum):
+class DataMode(StrEnum):
     """Sector layouts accepted by a ``ZERO`` statement.
 
     Identical to :class:`TrackMode` plus ``MODE0``, which cdrdao's grammar
@@ -118,7 +118,7 @@ class DataMode(str, Enum):
     MODE2_FORM_MIX = "MODE2_FORM_MIX"
 
 
-class SubChannelMode(str, Enum):
+class SubChannelMode(StrEnum):
     """The type of R-W sub-channel data carried by each sector."""
 
     RW = "RW"
@@ -152,7 +152,7 @@ def block_size(
     return size
 
 
-class CdTextItemName(str, Enum):
+class CdTextItemName(StrEnum):
     """The CD-TEXT pack types cdrdao's grammar accepts."""
 
     TITLE = "TITLE"
@@ -196,7 +196,7 @@ DISC_ONLY_CD_TEXT_ITEMS = frozenset(
 )
 
 
-class CdTextEncoding(str, Enum):
+class CdTextEncoding(StrEnum):
     """The character set of a CD-TEXT language block (cdrdao 1.2.5 and later)."""
 
     ISO_8859_1 = "ENCODING_ISO_8859_1"

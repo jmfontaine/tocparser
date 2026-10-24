@@ -17,7 +17,7 @@ tocparser parses cdrdao's TOC files into Pydantic models and writes them back ou
 uv add tocparser
 ```
 
-Requires Python 3.10 or newer.
+Requires Python 3.11 or newer.
 
 ## Usage
 
