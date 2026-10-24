@@ -35,14 +35,14 @@ jobs:
       fail-fast: false
       matrix:
         # 3.15 resolves to its newest release candidate until 3.15.0 is out.
-        python: ["3.10", "3.11", "3.12", "3.13", "3.14", "3.15"]
+        python: ["3.11", "3.12", "3.13", "3.14", "3.15"]
         resolution: [highest]
         include:
           # The oldest dependency versions pyproject.toml allows, on the oldest
           # Python and on 3.15, whose pydantic floor differs. Deprecations are
           # fatal there, so an old dependency calling an API Python deprecates
           # fails here rather than when that API is removed.
-          - python: "3.10"
+          - python: "3.11"
             resolution: lowest-direct
             warnings: -W error::DeprecationWarning -W error::PendingDeprecationWarning
           - python: "3.15"
@@ -97,7 +97,7 @@ jobs:
       fail-fast: false
       matrix:
         # The oldest supported Python, and 3.15, whose pydantic floor differs.
-        python: ["3.10", "3.15"]
+        python: ["3.11", "3.15"]
     steps:
       - uses: actions/checkout@v7
       - uses: astral-sh/setup-uv@v7
