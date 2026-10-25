@@ -28,10 +28,7 @@ import tocparser
 
 MINIMUM_LARK = (1, 2)
 MINIMUM_PYDANTIC = (2, 9)
-# KLUDGE: mirrors the temporary Python 3.15 clause in pyproject.toml. When that
-# clause becomes `pydantic>=2.14; python_version == '3.15'`, drop only the
-# upper bound here: the 3.15 branch must keep checking the 2.14 minimum.
-PYDANTIC_RANGE_315 = ((2, 14), (2, 15))
+MINIMUM_PYDANTIC_315 = (2, 14)
 
 
 def fail(message: str) -> None:
@@ -61,14 +58,11 @@ def check_dependencies() -> None:
 
     pydantic_version = major_minor(pydantic.VERSION)
     if sys.version_info[:2] == (3, 15):
-        low, high = PYDANTIC_RANGE_315
-        if not low <= pydantic_version < high:
-            fail(
-                f"pydantic {pydantic.VERSION} is outside the Python 3.15 range "
-                f"{low}..{high}"
-            )
-    elif pydantic_version < MINIMUM_PYDANTIC:
-        fail(f"pydantic {pydantic.VERSION} is below the declared floor")
+        floor = MINIMUM_PYDANTIC_315
+    else:
+        floor = MINIMUM_PYDANTIC
+    if pydantic_version < floor:
+        fail(f"pydantic {pydantic.VERSION} is below the declared floor {floor}")
     print(
         f"check_installed_package: lark {lark.__version__}, pydantic {pydantic.VERSION}"
     )

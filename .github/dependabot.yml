@@ -11,6 +11,8 @@ updates:
     schedule:
       interval: "weekly"
     # A library's minimum versions are deliberate, and the lowest-direct CI jobs
-    # test them, so only the lock moves. Without this, Dependabot rewrote the
-    # general pydantic requirement to fit the Python 3.15 clause's prerelease.
+    # test them, so only the lock moves. This does not stop Dependabot from
+    # copying the Python 3.15 pydantic clause's specifier onto the general
+    # pydantic requirement without updating the lock's requires-dist (#7, #9),
+    # which fails `uv sync --locked`. Close such pull requests and relock by hand.
     versioning-strategy: "lockfile-only"
