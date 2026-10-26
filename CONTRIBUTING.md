@@ -126,6 +126,9 @@ A maintainer usually reviews pull requests within a few days. Change requests ar
 normal part of the collaborative process. Push any additional commits to the same
 branch; you don't need to force-push or squash unless asked.
 
+The `CI passed` check summarizes every CI job and must be green before a pull request
+merges.
+
 ## Releasing
 
 Maintainers only.
