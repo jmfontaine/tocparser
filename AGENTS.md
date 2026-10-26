@@ -21,3 +21,16 @@ Leave other people's text as it is:
 
 Use strict mypy (`just type-check`). ty was evaluated (0.0.84) and not adopted: it
 does not yet cover all the checks this project relies on.
+
+## Shared workflow
+
+This repository follows the shared workflow: the `github-workflow` skill's repository
+setup describes its GitHub settings, rulesets, labels and templates. Those settings are
+managed as code in the `infra` repository; change them there, never with `gh api` or
+the GitHub web UI.
+
+It is a pull-request repository: every change reaches `main` through a pull request.
+
+### Deviations from the shared workflow
+
+None.
