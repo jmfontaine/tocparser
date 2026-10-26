@@ -31,6 +31,10 @@ the GitHub web UI.
 
 It is a pull-request repository: every change reaches `main` through a pull request.
 
+`CI passed`, the `ci-passed` job in `.github/workflows/ci.yml`, is the only required
+status check. It needs every other job in that workflow, so a job added there must be
+added to its `needs`; no ruleset change is required.
+
 ### Deviations from the shared workflow
 
 None.
