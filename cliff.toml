@@ -23,11 +23,12 @@ split_commits = false
 commit_parsers = [
   { message = "^feat", group = "<!-- 0 -->Features" },
   { message = "^fix", group = "<!-- 1 -->Bug Fixes" },
-  { message = "^refactor", group = "<!-- 2 -->Refactoring" },
-  { message = "^docs", group = "<!-- 3 -->Documentation" },
-  { message = "^test", group = "<!-- 4 -->Testing" },
-  { message = "^build", group = "<!-- 5 -->Build" },
-  { message = "^(chore|ci)", group = "<!-- 6 -->Miscellaneous Tasks" },
+  { message = "^perf", group = "<!-- 2 -->Performance" },
+  { message = "^refactor", group = "<!-- 3 -->Refactoring" },
+  { message = "^docs", group = "<!-- 4 -->Documentation" },
+  { message = "^test", group = "<!-- 5 -->Testing" },
+  { message = "^build", group = "<!-- 6 -->Build" },
+  { message = "^(chore|ci)", group = "<!-- 7 -->Miscellaneous Tasks" },
 ]
 filter_commits = false
 tag_pattern = "v[0-9].*"
