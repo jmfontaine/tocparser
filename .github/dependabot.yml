@@ -4,6 +4,13 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
+    # Scopeless Conventional Commits: "build: bump ...". Both labels are in the
+    # baseline every repository has.
+    commit-message:
+      prefix: "build"
+    labels:
+      - "dependencies"
+      - "build"
   # The uv ecosystem updates uv.lock. The pip one would leave it stale, failing
   # CI's `uv sync --locked`.
   - package-ecosystem: "uv"
@@ -16,3 +23,8 @@ updates:
     # pydantic requirement without updating the lock's requires-dist (#7, #9),
     # which fails `uv sync --locked`. Close such pull requests and relock by hand.
     versioning-strategy: "lockfile-only"
+    commit-message:
+      prefix: "build"
+    labels:
+      - "dependencies"
+      - "build"
