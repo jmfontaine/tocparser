@@ -124,7 +124,9 @@ and reports the mismatch, and the comparisons are skipped.
 
 A maintainer usually reviews pull requests within a few days. Change requests are a
 normal part of the collaborative process. Push any additional commits to the same
-branch; you don't need to force-push or squash unless asked.
+branch; there is no need to squash. Pull requests are squash-merged, so the pull
+request title becomes the commit subject on `main`, and git-cliff builds the changelog
+from it: write it as a Conventional Commit.
 
 ## Releasing
 
