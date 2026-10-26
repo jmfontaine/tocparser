@@ -101,8 +101,9 @@ and reports the mismatch, and the comparisons are skipped.
   (`just verify-types`)
 - Use US English in code, comments, docs, and commit messages
 - Follow [Conventional Commits](https://www.conventionalcommits.org/) without a scope,
-  as `<type>: <description>`. Use one of `feat`, `fix`, `refactor`, `chore`, `docs`,
-  `test` or `ci` as the type (e.g., `fix: reject an index at the start of a track`)
+  as `<type>: <description>`. Use one of `feat`, `fix`, `perf`, `refactor`, `docs`,
+  `test`, `build`, `ci` or `chore` as the type (e.g.,
+  `fix: reject an index at the start of a track`)
 
 ## Submitting a Pull Request
 
@@ -124,7 +125,10 @@ and reports the mismatch, and the comparisons are skipped.
 
 A maintainer usually reviews pull requests within a few days. Change requests are a
 normal part of the collaborative process. Push any additional commits to the same
-branch; you don't need to force-push or squash unless asked.
+branch; there is no need to squash. Pull requests are squash-merged, so the pull
+request title becomes the commit subject on `main`, and git-cliff builds the changelog
+from it: write it as a Conventional Commit. The `CI passed` check summarizes every CI
+job and must be green before a pull request merges.
 
 ## Releasing
 
